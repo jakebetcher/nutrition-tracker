@@ -1,3 +1,7 @@
+.hidden {
+	display: none;
+}
+
 .main-header {
 	background-color: lightblue;
 	text-align: center;
@@ -12,20 +16,20 @@ h1 {
 	padding: 10px;
 }
 
-.signup-form {
+.signup-form, .nutrition-search-form {
 	text-align: center;
 }
 
-.signup-legend {
+.signup-legend, .nutrition-search-legend {
 	font-size: 28px;
 	margin-bottom: 10px;
 }
 
-.username-input, .password-input {
+.username-input, .password-input, .search-nutrition-input {
 	margin-bottom: 10px;
 	font-size: 20px;
 }
 
-.main-button {
+.main-button, .food-search-button {
 	font-size: 20px;
 }
