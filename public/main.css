@@ -1,0 +1,31 @@
+.main-header {
+	background-color: lightblue;
+	text-align: center;
+	margin-bottom: 80px;
+}
+
+h1 {
+	font-size: 48px;
+}
+.header-button {
+	font-size: 19px;
+	padding: 10px;
+}
+
+.signup-form {
+	text-align: center;
+}
+
+.signup-legend {
+	font-size: 28px;
+	margin-bottom: 10px;
+}
+
+.username-input, .password-input {
+	margin-bottom: 10px;
+	font-size: 20px;
+}
+
+.main-button {
+	font-size: 20px;
+}

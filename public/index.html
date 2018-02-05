@@ -1,9 +1,32 @@
 <!DOCTYPE html>
-<html>
+<html lang='en'>
 <head>
-	<title></title>
+	<title>Nutrition Tracker</title>
+	<meta charset="utf-8">
+ 	<meta name="viewport" content="width=device-width">
+ 	<link href="main.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
-	<p>Hello World</p>
+	<header role='banner' class='main-header'>
+		<h1>Nutrition Tracker</h1>
+		<div class='options'>
+			<button class='header-button'>Nutrition Search</button>
+			<button class='header-button'>Log In</button>
+		</div>
+	</header>
+	<form class='signup-form'>
+		<legend class='signup-legend'>Sign Up for Nutrition Tracker and start eating healthier today.</legend>
+			<div>
+				<label for='username'>Username: </label>
+				<input name='username' id='username' class='username-input' placeholder='username' required>
+			</div>
+			<div>	
+				<label for='password'>Password: </label>
+				<input name='password' id='password' class='password-input' placeholder='password' required>
+		    </div>
+			<button class='main-button' type="submit">Sign Up</button>
+	</form>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="app.js"></script>
 </body>
 </html>
