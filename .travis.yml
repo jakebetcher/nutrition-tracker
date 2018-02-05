@@ -1,2 +1,9 @@
 language: node_js
 node_js: node
+deploy:
+  provider: heroku
+  api_key:
+    secure: NV61MlisQB5eALSgvdIOAfTKJkUrh3FrUvXUYYi8oxWDuWSqJg7Cme9pbx4F+TzQ79LzCSVUBU0FXmAAyVzvM13+GB05vfdiWQhHE9mmpTrBYXv/MdCoq3LkDqp/gF+U09RhTznahi+gkaPKDJzPxpzoYWa30j0IBuJsoFgrXUrDMhiWL3kj5h+hmVAiNZ+yWnTd7aZYwQCdfr3dcnB81AJusI4IQIlGFvlGphG4B/2ovzSSYJlSqQMAUpEVF+IT/BiTT4zrHT1mMGb1Oeavt8Lrwy3tUApr+OnzX83/QrQyuFOo/dUih08g6z7wQEM57xDswOL1wZLA8e0ejvlSDjnWbgvLx6dAR/nPJvp2p7cRcWdaxl4ZDOwQ8h/FMyZoB7MX6KlxG+9JkqVUgeBTbwVAOsNfVb4xMkOAKABXqQyGR+Wrxb5z0gNXUGlZzcusIQOyhQUA7Zdcl+jYW83Lo52pfxQZHdPfWaeyjpdNWqXobDexd+HJxpnXRdPn2uw0VFb7LWcNVvar2FGqEFatQe1Purav5TOgETb9hN1TN3o9oqu7DNO7aw92rLmgmeAwG9vl3ih/iAAV66X87AiYXaL65B7Y/f0Wd8qs3M4LkbsdBckbJzgMNIgUYUhtN7HmR5CRq4HLgeZFGDl1gUX1FLO7SwxW4ThU/5mwfBhyJRE=
+  app: mighty-waters-49294
+  on:
+    repo: jakebetcher/nutrition-tracker
