@@ -8,6 +8,24 @@
 	margin-bottom: 80px;
 }
 
+.results-div {
+	text-align: center;
+	margin-top: 30px;
+}
+
+.theFoods {
+	margin-bottom: 15px;
+	font-size: 22px;
+}
+
+.food-name {
+	color: blue;
+}
+
+.food-name:hover {
+	color: lightblue;
+}
+
 h1 {
 	font-size: 48px;
 }

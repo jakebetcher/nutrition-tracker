@@ -14,6 +14,7 @@
 			<button class='header-button'>Log In</button>
 		</div>
 	</header>
+	<main role='main'>
 	<form class='signup-form'>
 		<legend class='signup-legend'>Sign Up for Nutrition Tracker and start eating healthier today.</legend>
 			<div>
@@ -26,6 +27,22 @@
 		    </div>
 			<button class='main-button' type="submit">Sign Up</button>
 	</form>
+
+	<form class='nutrition-search-form hidden' onsubmit="return onFoodSearchFormSubmit()">
+		<legend class='nutrition-search-legend'>Search for all kinds of foods and find their nutritional information.</legend>
+			<div>
+				<label for='search-nutrition'>Enter Food Name Here: </label>
+				<input name='search-nutrition' id='search-nutrition' class='search-nutrition-input js-food-query' placeholder="Reese's Puffs" required>
+			</div>
+			<div>
+				<button class='food-search-button' type="submit" onclick="storeTheFood()">Search Foods</button>
+			</div>	
+		</form>
+		<div class='results-div js-results-div'>
+			
+		</div>
+    </main>
+
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
     <script src="app.js"></script>
 </body>
