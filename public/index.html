@@ -11,7 +11,7 @@
 		<h1>Nutrition Tracker</h1>
 		<div class='options'>
 			<button class='nutrition-search-button header-button'>Nutrition Search</button>
-			<button class='header-button'>Log In</button>
+			<button class='header-button log-in-button'>Log In</button>
 		</div>
 	</header>
 	<main role='main'>
@@ -38,8 +38,53 @@
 				<button class='food-search-button' type="submit" onclick="storeTheFood()">Search Foods</button>
 			</div>	
 		</form>
+		<div class='profile-page hidden'>
+			<h2>My Goals</h2>
+
+			<div class='goals-list-div'>
+			</div>
+			<div>
+				<button class='edit-goals-button'>Edit Goals</button>
+			</div>
+			<h2>What I've Eaten today</h2>
+			<div class='nutrition-tracking'>
+			</div>
+		</div>
 		<div class='results-div js-results-div'>
 			
+		</div>
+
+		<div class="pop-outer-goals">
+			<div class='pop-inner-goals'>
+				<form class='nutrients-goals-form'>
+					<legend>Check all the ingredients you want to track.</legend>
+					<div>
+    					<input type="checkbox" id="calories" name="nutrition" value="calories">
+    					<label for="calories">Calories |</label>
+    					<label for='calories-amount'>Amount: </label>
+						<input name='calories-amount' id='calories-amount' type='number'>
+  					</div>
+  					<div>
+    					<input type="checkbox" id="fat" name="nutrition" value="fat">
+    					<label for="fat">Fat |</label>
+    					<label for='fat-amount'>Amount: </label>
+						<input name='fat-amount' id='fat-amount' type='number'>
+  					</div>
+  					<div>
+    					<input type="checkbox" id="protein" name="nutrition" value="protein">
+    					<label for="protein">Protein |</label>
+    					<label for='protein-amount'>Amount: </label>
+						<input name='protein-amount' id='protein-amount' type='number'>
+  					</div>
+  					<div>
+    					<input type="checkbox" id="carbs" name="nutrition" value="carbs">
+    					<label for="carbs">Carbs |</label>
+    					<label for='carbs-amount'>Amount: </label>
+						<input name='carbs-amount' id='carbs-amount' type='number'>
+  					</div>
+  					<button class='change-goals-button' type='submit'>Save Changes</button>
+				</form>
+			</div>
 		</div>
     </main>
 

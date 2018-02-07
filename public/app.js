@@ -13,7 +13,7 @@ function onFoodSearchFormSubmit () {
 function handleNutritionSearchClick() {
 	$('.nutrition-search-button').on('click', function(event) {
 		$('.nutrition-search-form').removeClass('hidden');
-		$('.signup-form').addClass('hidden');
+		$('.signup-form, .profile-page').addClass('hidden');
 	});
 }
 
@@ -21,6 +21,45 @@ function handleSubmitSearchFoods() {
 	$('.nutrition-search-form').submit(function(event) {
 		event.preventDefault();
 		getDataFromAPI(renderFoodResult);
+	});
+}
+
+function displayProfilePage() {
+	$('.log-in-button').on('click', function(event) {
+		$('.nutrition-search-form, .signup-form').addClass('hidden');
+		$('.js-results-div').empty();
+		$('.profile-page').removeClass('hidden');
+	});
+		
+}
+
+function displayGoalsModal() {
+	$('.edit-goals-button').on('click', function(event) {
+		$('.main-header, .profile-page').addClass('transparent-background');
+		$('.pop-outer-goals').fadeIn();
+	});
+}
+
+function handleSaveGoalChanges() {
+	$('.nutrients-goals-form').submit(function(event) {
+		event.preventDefault();
+		$('.nutrition-tracking').empty();
+		$('.goals-list-div').empty();
+		const checkboxValues = [$('#calories').val(), $('#fat').val(), $('#protein').val(), $('#carbs').val()];
+		const checked = [];
+		for (let i=0; i < checkboxValues.length; i++) {
+		if ($(`#${checkboxValues[i]}`).prop('checked')) {
+			$('.nutrition-tracking').append(`<p>${checkboxValues[i]}: <span>0</span></p>`)
+			checked.push(checkboxValues[i]);
+		}
+	}
+	for (let i = 0; i < checked.length; i++) {
+		let nutrient = checked[i];
+		let nutrientAmount = $(`#${nutrient}-amount`).val();
+		$('.goals-list-div').append(`<p><span>${nutrient}: </span><span>${nutrientAmount}</span></p>`)
+	}
+		$('.pop-outer-goals').fadeOut();
+		$('.main-header, .profile-page').removeClass('transparent-background');
 	});
 }
 
@@ -44,6 +83,14 @@ function renderFoodResult(data) {
 		$('.js-results-div').append(`<div class='theFoods'><span>Food Name: </span> <button value=${data.list.item[i].ndbno} class='food-name'>${data.list.item[i].name}</button></div>`);
 	}
 	
+}
+
+function backToHome() {
+	$('h1').on('click', function() {
+		$('.nutrition-search-form, .profile-page').addClass('hidden');
+		$('.js-results-div').empty();
+		$('.signup-form').removeClass('hidden');
+	});
 }
 
 function displayModal() {
@@ -86,8 +133,12 @@ function renderDetailedData(result) {
 
 function initApp() {
  	handleNutritionSearchClick();
+ 	displayProfilePage();
+ 	backToHome();
  	handleSubmitSearchFoods();
  	displayModal();
+ 	displayGoalsModal();
+ 	handleSaveGoalChanges(); 
 }
 
 $(initApp);
@@ -128,33 +179,10 @@ $(initApp);
 
 
 
-/*function renderProfilePage() {
-	return `
-
-	`;
-}
-
-function backToHome() {
-	$('h1').on('click', function() {
-		$('.nutrition-search-form').addClass('hidden');
-		$('.signup-form').removeClass('hidden');
-	});
-}
-
-function handleNutritionSearchClick() {
-	$('.nutrition-search-button').on('click', function() {
-		$('.signup-form').addClass('hidden');
-		$('body').append(renderNutritionSearchPage());
-	});
-	backToHome();
-	handleSearchFoods();
-}
 
 
-function handleSearchFoods() {
-	$('.nutrition-search-form').submit(function() {
-		$('body').append('<p>yay</p>');
-	});
-}
 
-//handleNutritionSearchClick();*/
+
+
+
+
