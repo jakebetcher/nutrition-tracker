@@ -5,22 +5,35 @@ mongoose.Promise = global.Promise;
 
 const goalsSchema = mongoose.Schema({
 	calories: {
-		amount: {type: Number, default: 0},
-		isTracked: {type: Boolean, default: false}
+		goal-amount: {type: Number, default: 0},
+		isTracked: {type: Boolean, default: false},
+		range: {type: Number, default: 0},
+		consumed-amount: {type: Number, default: 0},
+		metGoal: {type: Boolean, default: false}
 	},
 	fat: {
-		amount: {type: Number, default: 0},
-		isTracked: {type: Boolean, default: false}
+		goal-amount: {type: Number, default: 0},
+		isTracked: {type: Boolean, default: false},
+		range: {type: Number, default: 0},
+		consumed-amount: {type: Number, default: 0},
+		metGoal: {type: Boolean, default: false}
 	},
 	protein: {
-		amount: {type: Number, default: 0},
-		isTracked: {type: Boolean, default: false}
+		goal-amount: {type: Number, default: 0},
+		isTracked: {type: Boolean, default: false},
+		range: {type: Number, default: 0},
+		consumed-amount: {type: Number, default: 0},
+		metGoal: {type: Boolean, default: false}
 	},
 	carbs: {
-		amount: {type: Number, default: 0},
-		isTracked: {type: Boolean, default: false}
+		goal-amount: {type: Number, default: 0},
+		isTracked: {type: Boolean, default: false},
+		range: {type: Number, default: 0},
+		consumed-amount: {type: Number, default: 0},
+		metGoal: {type: Boolean, default: false}
 	}
 });
+
 
 goalsSchema.methods.serialize = function() {
   return {
