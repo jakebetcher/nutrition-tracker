@@ -1,4 +1,14 @@
-'use strict'
+
+
+
+	const STATE = {
+		calories: 0,
+		fat: 0,
+		protein: 0,
+		carbs: 0
+	};
+	
+
 
 function storeTheFood() {
 	let theFood = $('.js-food-query').val();
@@ -20,7 +30,10 @@ function handleNutritionSearchClick() {
 function handleSubmitSearchFoods() {
 	$('.nutrition-search-form').submit(function(event) {
 		event.preventDefault();
+		$('.js-results-div').empty();
 		getDataFromAPI(renderFoodResult);
+		const queryTarget = $(this).find('.js-food-query');
+        queryTarget.val("");
 	});
 }
 
@@ -41,27 +54,40 @@ function displayGoalsModal() {
 }
 
 function handleSaveGoalChanges() {
+	//const nutrientsForTracking = Object.keys(STATE);
+	$('.nutrition-tracking').append(`
+			<p><span>Calories: </span><span>${STATE.calories}</span></p>
+			<p><span>Fat: </span><span>${STATE.fat}</span></p>
+			<p><span>Protein: </span><span>${STATE.protein}</span></p>
+			<p><span>Carbs: </span><span>${STATE.carbs}</span></p>
+	`);
+	console.log(STATE.calories);
 	$('.nutrients-goals-form').submit(function(event) {
 		event.preventDefault();
-		$('.nutrition-tracking').empty();
+		//$('.nutrition-tracking').empty();
 		$('.goals-list-div').empty();
 		const checkboxValues = [$('#calories').val(), $('#fat').val(), $('#protein').val(), $('#carbs').val()];
 		const checked = [];
 		for (let i=0; i < checkboxValues.length; i++) {
 		if ($(`#${checkboxValues[i]}`).prop('checked')) {
-			$('.nutrition-tracking').append(`<p>${checkboxValues[i]}: <span>0</span></p>`)
+			
+			
+			//$('.nutrition-tracking').append(`<p>${checkboxValues[i]}: <span class=${checkboxValues[i]}>${objectString}</span></p>`)
 			checked.push(checkboxValues[i]);
 		}
 	}
 	for (let i = 0; i < checked.length; i++) {
 		let nutrient = checked[i];
 		let nutrientAmount = $(`#${nutrient}-amount`).val();
-		$('.goals-list-div').append(`<p><span>${nutrient}: </span><span>${nutrientAmount}</span></p>`)
+		$('.goals-list-div').append(`<p><span>${nutrient}: </span><span class='${nutrient}-amount-span'>${nutrientAmount}</span></p>`)
 	}
 		$('.pop-outer-goals').fadeOut();
 		$('.main-header, .profile-page').removeClass('transparent-background');
 	});
+	
 }
+
+
 
 function getDataFromAPI(callback) {
 	const food = storeTheFood();
@@ -104,7 +130,7 @@ function displayModal() {
 
 
 function getDetailedDataFromAPI(id, callback) {
-	const theURL = `https://api.nal.usda.gov/ndb/nutrients/?format=json&api_key=70ONpAfW6gpIaUBzICUb8m2mRnXzs0pqI4hel3L3&nutrients=208&nutrients=203&nutrients=204&nutrients=205&nutrients=291&nutrients=269&nutrients=301&nutrients=306&nutrients=401&nutrients=606&nutrients=430&nutrients=303&nutrients=307&nutrients=318&nutrients=324&nutrients=418&nutrients=415&nutrients=431&nutrients=323&ndbno=${id}`;
+	const theURL = `https://api.nal.usda.gov/ndb/nutrients/?format=json&api_key=70ONpAfW6gpIaUBzICUb8m2mRnXzs0pqI4hel3L3&nutrients=208&nutrients=203&nutrients=204&nutrients=205&ndbno=${id}`;
 	const settings = {
 		url: theURL,
 		dataType: 'json',
@@ -115,18 +141,43 @@ function getDetailedDataFromAPI(id, callback) {
 }
 
 function renderDetailedData(result) {
-	let theModal = `<div class='pop-outer'><div class='pop-inner'><button class='close'>X</button><h2>Nutritional Facts</h2>`;
+	let nutrientArray = [];
+	let nutrientAmountArray = [];
+	let theModal = `<div class='pop-outer'><div class='pop-inner'><button class='close'>X</button><h2>Nutritional Facts</h2>`; 
 	for (let i = 0; i < result.report.foods[0].nutrients.length; i++) {
-		theModal += `<p><span>${result.report.foods[0].nutrients[i].nutrient}: </span> <span>${result.report.foods[0].nutrients[i].value} ${result.report.foods[0].nutrients[i].unit}</span></p>`
+		theModal += `<p><span>${result.report.foods[0].nutrients[i].nutrient}: </span> <span>${result.report.foods[0].nutrients[i].value} ${result.report.foods[0].nutrients[i].unit}</span></p>`;
+		nutrientArray.push(result.report.foods[0].nutrients[i].nutrient);
+		nutrientAmountArray.push(result.report.foods[0].nutrients[i].value);
 	}
-	theModal += `<button>Add Food Item</button></div></div>`;
+	theModal += `<button class='add-a-food'>Add Food Item</button></div></div>`;
 	$('.js-results-div').append(theModal);
 	$('.pop-outer').fadeIn();
 	$('.js-results-div').on('click', '.close', function(event) {
     $('.pop-outer').fadeOut();
   });
-}
+	$('.js-results-div').on('click', '.add-a-food', function(event) {
+    	$('.nutrition-tracking').empty();
 
+    	let newCalorieValue = STATE.calories + Number(result.report.foods[0].nutrients[0].value);
+    	STATE.calories = newCalorieValue;
+    	$('.nutrition-tracking').append(`<p><span>Calories: </span><span>${STATE.calories}</span></p>`);
+    	
+    	let newFatValue = STATE.fat + Number(result.report.foods[0].nutrients[1].value);
+    	STATE.fat = newFatValue;
+    	$('.nutrition-tracking').append(`<p><span>Fat: </span><span>${STATE.fat}</span></p>`);
+
+    	let newProteinValue = STATE.protein + Number(result.report.foods[0].nutrients[2].value);
+    	STATE.protein = newProteinValue;
+    	$('.nutrition-tracking').append(`<p><span>Protein: </span><span>${STATE.protein}</span></p>`)
+    	
+    	let newCarbsValue = STATE.carbs + Number(result.report.foods[0].nutrients[3].value);
+    	STATE.carbs = newCarbsValue;
+    	$('.nutrition-tracking').append(`<p><span>Carbs: </span><span>${STATE.carbs}</span></p>`)
+
+    	$('.pop-outer').fadeOut();
+    });
+		
+ }
 
 
 
@@ -143,7 +194,7 @@ function initApp() {
 
 $(initApp);
 
-
+console.log(STATE.calories);
 
 
 
