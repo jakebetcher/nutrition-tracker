@@ -5,32 +5,40 @@ mongoose.Promise = global.Promise;
 
 const goalsSchema = mongoose.Schema({
 	calories: {
-		goal-amount: {type: Number, default: 0},
+		goalAmount: {type: Number, default: 0},
 		isTracked: {type: Boolean, default: false},
 		range: {type: Number, default: 0},
-		consumed-amount: {type: Number, default: 0},
-		metGoal: {type: Boolean, default: false}
+		consumedAmount: {type: Number, default: 0},
+		metGoal: {type: Boolean, default: false},
+		timesGoalsWereMet: {type: Number, default: 0}
 	},
 	fat: {
-		goal-amount: {type: Number, default: 0},
+		goalAmount: {type: Number, default: 0},
 		isTracked: {type: Boolean, default: false},
 		range: {type: Number, default: 0},
-		consumed-amount: {type: Number, default: 0},
-		metGoal: {type: Boolean, default: false}
+		consumedAmount: {type: Number, default: 0},
+		metGoal: {type: Boolean, default: false},
+		timesGoalsWereMet: {type: Number, default: 0}
 	},
 	protein: {
-		goal-amount: {type: Number, default: 0},
+		goalAmount: {type: Number, default: 0},
 		isTracked: {type: Boolean, default: false},
 		range: {type: Number, default: 0},
-		consumed-amount: {type: Number, default: 0},
-		metGoal: {type: Boolean, default: false}
+		consumedAmount: {type: Number, default: 0},
+		metGoal: {type: Boolean, default: false},
+		timesGoalsWereMet: {type: Number, default: 0}
 	},
 	carbs: {
-		goal-amount: {type: Number, default: 0},
+		goalAmount: {type: Number, default: 0},
 		isTracked: {type: Boolean, default: false},
 		range: {type: Number, default: 0},
-		consumed-amount: {type: Number, default: 0},
-		metGoal: {type: Boolean, default: false}
+		consumedAmount: {type: Number, default: 0},
+		metGoal: {type: Boolean, default: false},
+		timesGoalsWereMet: {type: Number, default: 0}
+	},
+	allNutrients: {
+		metAllGoals: Boolean: {type: Boolean, default: false},
+		timesAllGoalsWereMet: {type: Number, default: 0}
 	}
 });
 
