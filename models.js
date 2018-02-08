@@ -3,10 +3,9 @@
 const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 
-const goalsSchema = mongoose.Schema({
+const goalSchema = mongoose.Schema({
 	calories: {
 		goalAmount: {type: Number, default: 0},
-		isTracked: {type: Boolean, default: false},
 		range: {type: Number, default: 0},
 		consumedAmount: {type: Number, default: 0},
 		metGoal: {type: Boolean, default: false},
@@ -14,7 +13,6 @@ const goalsSchema = mongoose.Schema({
 	},
 	fat: {
 		goalAmount: {type: Number, default: 0},
-		isTracked: {type: Boolean, default: false},
 		range: {type: Number, default: 0},
 		consumedAmount: {type: Number, default: 0},
 		metGoal: {type: Boolean, default: false},
@@ -22,7 +20,6 @@ const goalsSchema = mongoose.Schema({
 	},
 	protein: {
 		goalAmount: {type: Number, default: 0},
-		isTracked: {type: Boolean, default: false},
 		range: {type: Number, default: 0},
 		consumedAmount: {type: Number, default: 0},
 		metGoal: {type: Boolean, default: false},
@@ -30,7 +27,6 @@ const goalsSchema = mongoose.Schema({
 	},
 	carbs: {
 		goalAmount: {type: Number, default: 0},
-		isTracked: {type: Boolean, default: false},
 		range: {type: Number, default: 0},
 		consumedAmount: {type: Number, default: 0},
 		metGoal: {type: Boolean, default: false},
@@ -38,7 +34,9 @@ const goalsSchema = mongoose.Schema({
 	},
 	allNutrients: {
 		metAllGoals: Boolean: {type: Boolean, default: false},
-		timesAllGoalsWereMet: {type: Number, default: 0}
+		numberOfGoalsMet: {type: Number, default: 0},
+		timesAllGoalsWereMet: {type: Number, default: 0},
+		daysGoalsHaveBeenTracked: {type: Number, default: 0}
 	}
 });
 
@@ -49,11 +47,12 @@ goalsSchema.methods.serialize = function() {
     calories: this.calories,
     fat: this.fat,
     protein: this.protein,
-    carbs: this.carbs
+    carbs: this.carbs,
+    allNutrients: this.allNutrients 
   };
 };
 
-const Goals = mongoose.model('Goals', goalSchema);
+const Goal = mongoose.model('Goal', goalSchema);
 
-module.exports = {Goals};
+module.exports = {Goal};
 
