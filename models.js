@@ -34,8 +34,9 @@ const goalSchema = mongoose.Schema({
 	},
 	allNutrients: {
 		metAllGoals: Boolean: {type: Boolean, default: false},
-		numberOfGoalsMet: {type: Number, default: 0},
+		metAtLeastOneGoal: {type: Boolean, default: false},
 		timesAllGoalsWereMet: {type: Number, default: 0},
+		timesAtLeastOneGoalWasMet: {type: Number, default: 0},
 		daysGoalsHaveBeenTracked: {type: Number, default: 0}
 	}
 });

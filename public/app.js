@@ -157,9 +157,11 @@ function renderDetailedData(result) {
   });
 	$('.js-results-div').on('click', '.add-a-food', function(event) {
     	$('.nutrition-tracking').empty();
-
-    	let newCalorieValue = STATE.calories + Number(result.report.foods[0].nutrients[0].value);
-    	STATE.calories = newCalorieValue;
+    	console.log(STATE.calories);
+    	console.log( Number(result.report.foods[0].nutrients[0].value));
+    	console.log(STATE.calories + Number(result.report.foods[0].nutrients[0].value))
+    	
+    	STATE.calories +=  Number(result.report.foods[0].nutrients[0].value);
     	$('.nutrition-tracking').append(`<p><span>Calories: </span><span>${STATE.calories}</span></p>`);
     	
     	let newFatValue = STATE.fat + Number(result.report.foods[0].nutrients[1].value);
