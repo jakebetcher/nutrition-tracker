@@ -74,7 +74,7 @@ function generateGoalData() {
 		};
 	}
 
-describe('goals API resource', function() {
+/*describe('goals API resource', function() {
 	 
   before(function () {
     return runServer(TEST_DATABASE_URL);
@@ -101,7 +101,6 @@ describe('POST Endpoint', function() {
 		.post('/goals')
 		.send(newGoal)
 		.then(function(res) {
-			console.log(res.body);
 			res.should.have.status(201);
       		res.should.be.json;
       		res.body.should.be.a('object');
@@ -114,7 +113,7 @@ describe('POST Endpoint', function() {
 			goal.calories.metGoal.should.equal(newGoal.calories.metGoal);
 		});
 	});
-});
+});*/
 
 
 /*describe('test', function() {

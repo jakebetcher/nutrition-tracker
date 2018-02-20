@@ -3,7 +3,7 @@
 const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 
-const goalSchema = mongoose.Schema({
+/*const goalSchema = mongoose.Schema({
 	calories: {
 		goalAmount: {type: Number, default: 0},
 		range: {type: Number, default: 0},
@@ -39,17 +39,23 @@ const goalSchema = mongoose.Schema({
 		timesAtLeastOneGoalWasMet: {type: Number, default: 0},
 		daysGoalsHaveBeenTracked: {type: Number, default: 0}
 	}
+});*/
+
+const goalSchema = mongoose.Schema({
+	
+		calories: {type: Number}
+
 });
+
+
+
 
 
 goalSchema.methods.serialize = function() {
   return {
     id: this._id,
-    calories: this.calories,
-    fat: this.fat,
-    protein: this.protein,
-    carbs: this.carbs,
-    allNutrients: this.allNutrients 
+    calories: this.calories
+    
   };
 };
 

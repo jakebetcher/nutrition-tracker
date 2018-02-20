@@ -1,12 +1,36 @@
 const express = require('express');
+const bodyParser = require('body-parser');
+const morgan = require('morgan');
+const mongoose = require('mongoose');
+const jsonParser = bodyParser.json();
+mongoose.Promise = global.Promise;
+
+const { DATABASE_URL, PORT } = require('./config');
+const { Goal } = require('./models');
+
 const app = express();
 
+app.use(morgan('common'));
+app.use(bodyParser.json());
 
-app.get("/", (req, res) => {
-  res.sendFile(__dirname + '/public/index.html');
+
+
+app.use(express.static("public"));
+
+app.post('/goals', (req, res) => {
+  console.log(req.body);
+  Goal
+    .create({
+    		calories: req.body.calories
+    })
+    .then(goal => res.status(201).json(goal.serialize()))
+    .catch(err => {
+      console.error(err);
+      res.status(500).json({ error: 'Something went wrong' });
+    });
+  
+  
 });
-
-
 
 let server;
 
