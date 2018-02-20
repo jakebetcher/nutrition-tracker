@@ -33,7 +33,7 @@ const goalSchema = mongoose.Schema({
 		timesGoalsWereMet: {type: Number, default: 0}
 	},
 	allNutrients: {
-		metAllGoals: Boolean: {type: Boolean, default: false},
+		metAllGoals: {type: Boolean, default: false},
 		metAtLeastOneGoal: {type: Boolean, default: false},
 		timesAllGoalsWereMet: {type: Number, default: 0},
 		timesAtLeastOneGoalWasMet: {type: Number, default: 0},
@@ -42,7 +42,7 @@ const goalSchema = mongoose.Schema({
 });
 
 
-goalsSchema.methods.serialize = function() {
+goalSchema.methods.serialize = function() {
   return {
     id: this._id,
     calories: this.calories,
