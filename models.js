@@ -43,9 +43,25 @@ mongoose.Promise = global.Promise;
 
 const goalSchema = mongoose.Schema({
 	
-		calories: {type: Number}
+		calories: {
+			amount: {type: Number, default: 0},
+			range: {type: Number, default: 0}
+		},
+		fat: {
+			amount: {type: Number, default: 0},
+			range: {type: Number, default: 0}
+		},
+		protein: {
+			amount: {type: Number, default: 0},
+			range: {type: Number, default: 0}
+		},
+		carbs: {
+			amount: {type: Number, default: 0},
+			range: {type: Number, default: 0}
+		}
 
 });
+
 
 
 
@@ -54,7 +70,10 @@ const goalSchema = mongoose.Schema({
 goalSchema.methods.serialize = function() {
   return {
     id: this._id,
-    calories: this.calories
+    calories: this.calories,
+    fat: this.fat,
+    protein: this.protein,
+    carbs: this.carbs
     
   };
 };
