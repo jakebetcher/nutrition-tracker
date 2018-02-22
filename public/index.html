@@ -63,26 +63,34 @@
     					<label for="calories">Calories |</label>
     					<label for='calories-amount'>Amount: </label>
 						<input name='calories-amount' id='calories-amount' type='number'>
+						<label for='calories-range'>Range: </label>
+						<input name='calories-range' id='calories-range' type='number'>
   					</div>
   					<div>
     					<input type="checkbox" id="fat" name="nutrition" value="fat">
     					<label for="fat">Fat |</label>
     					<label for='fat-amount'>Amount: </label>
 						<input name='fat-amount' id='fat-amount' type='number'>
+						<label for='fat-range'>Range: </label>
+						<input name='fat-range' id='fat-range' type='number'>
   					</div>
   					<div>
     					<input type="checkbox" id="protein" name="nutrition" value="protein">
     					<label for="protein">Protein |</label>
     					<label for='protein-amount'>Amount: </label>
 						<input name='protein-amount' id='protein-amount' type='number'>
+						<label for='protein-range'>Range: </label>
+						<input name='protein-range' id='protein-range' type='number'>
   					</div>
   					<div>
     					<input type="checkbox" id="carbs" name="nutrition" value="carbs">
     					<label for="carbs">Carbs |</label>
     					<label for='carbs-amount'>Amount: </label>
 						<input name='carbs-amount' id='carbs-amount' type='number'>
+						<label for='carbs-range'>Range: </label>
+						<input name='carbs-range' id='carbs-range' type='number'>
   					</div>
-  					<button class='change-goals-button' type='submit'>Save Changes</button>
+  					<button class='change-goals-button' type='submit' onclick="storeGoals()">Save Changes</button>
 				</form>
 			</div>
 		</div>

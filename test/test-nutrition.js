@@ -37,44 +37,25 @@ function seedGoalData() {
 function generateGoalData() {
 	return {
 		calories: {
-			goalAmount: faker.random.number(3000),
-			range: faker.random.number(400),
-			consumedAmount: faker.random.number(3200),
-			metGoal: faker.random.boolean(),
-			timesGoalsWereMet: faker.random.number(100)
+		    amount: faker.random.number(3000),
+			range: faker.random.number(400)
 		},
 		fat: {
-			goalAmount: faker.random.number(200),
-			range: faker.random.number(30),
-			consumedAmount: faker.random.number(220),
-			metGoal: faker.random.boolean(),
-			timesGoalsWereMet: faker.random.number(100)
+			amount: faker.random.number(200),
+			range: faker.random.number(30)
 		},
 		protein: {
-			goalAmount: faker.random.number(200),
-			range: faker.random.number(40),
-			consumedAmount: faker.random.number(250),
-			metGoal: faker.random.boolean(),
-			timesGoalsWereMet: faker.random.number(100)
+			amount: faker.random.number(200),
+			range: faker.random.number(40)
 		},
 		carbs: {
-			goalAmount: faker.random.number(200),
-			range: faker.random.number(40),
-			consumedAmount: faker.random.number(230),
-			metGoal: faker.random.boolean(),
-			timesGoalsWereMet: faker.random.number(100)
-		},
-		allNutrients: {
-			metAllGoals: faker.random.boolean(),
-			metAtLeastOneGoal: faker.random.boolean(),
-			timesAllGoalsWereMet: faker.random.number(100),
-			timesAtLeastOneGoalWasMet: faker.random.number(100),
-			daysGoalsHaveBeenTracked: faker.random.number(150)
+			amount: faker.random.number(200),
+			range: faker.random.number(40)
 		}
 		};
 	}
 
-/*describe('goals API resource', function() {
+describe('goals API resource', function() {
 	 
   before(function () {
     return runServer(TEST_DATABASE_URL);
@@ -104,19 +85,22 @@ describe('POST Endpoint', function() {
 			res.should.have.status(201);
       		res.should.be.json;
       		res.body.should.be.a('object');
-      		res.body.should.include.keys('id', 'calories', 'fat', 'protein', 'carbs', 'allNutrients');
-      		return Goal.findById(res.body.id);
+      		res.body.should.include.keys('_id', 'calories', 'fat', 'protein', 'carbs', 'date');
+      		return Goal.findById(res.body._id);
 
 		})
 		.then(function(goal) {
-			goal.calories.goalAmount.should.equal(newGoal.calories.goalAmount);
-			goal.calories.metGoal.should.equal(newGoal.calories.metGoal);
+			goal.calories.amount.should.equal(newGoal.calories.amount);
+			goal.calories.range.should.equal(newGoal.calories.range);
+			goal.fat.range.should.equal(newGoal.fat.range);
+			goal.protein.range.should.equal(newGoal.protein.range);
+			goal.carbs.amount.should.equal(newGoal.carbs.amount);
 		});
 	});
-});*/
+});
 
 
-/*describe('test', function() {
+describe('test', function() {
 
 	it('should display Hello World', function() {
 		let res;
@@ -128,5 +112,5 @@ describe('POST Endpoint', function() {
           res.should.be.html;
 	});
 });
-});*/
+});
 });

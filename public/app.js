@@ -8,7 +8,19 @@
 		carbs: 0
 	};
 	
-
+function storeGoals() {
+	const goals = {
+		caloriesAmount: $('#calories-amount').val(),
+		caloriesRange: $('#calories-range').val(),
+		fatAmount: $('#fat-amount').val(),
+		fatRange: $('#fat-range').val(),
+		proteinAmount: $('#protein-amount').val(),
+		proteinRange: $('#protein-range').val(),
+		carbsAmount: $('#carbs-amount').val(),
+		carbsRange: $('#carbs-range').val()
+	}
+	return goals;
+}
 
 function storeTheFood() {
 	let theFood = $('.js-food-query').val();
@@ -181,7 +193,47 @@ function renderDetailedData(result) {
 		
  }
 
+function postGoalsData() {
+	let theGoals = storeGoals();
+	//console.log(theGoals);
+	const goal = {
+		calories: {
+			amount: theGoals.caloriesAmount,
+			range: theGoals.caloriesRange
+		},
+		fat: {
+			amount: theGoals.fatAmount,
+			range: theGoals.fatRange
+		},
+		protein: {
+			amount: theGoals.proteinAmount,
+			range: theGoals.proteinRange
+		},
+		carbs: {
+			amount: theGoals.carbsAmount,
+			range: theGoals.carbsRange
+		}
 
+	}
+	$.ajax({
+		url: '/goals',
+		dataType: 'json',
+		method: 'POST',
+		contentType: 'application/json',
+		data: JSON.stringify(goal),
+		success: function(data) {
+			console.log(data);
+			$('body').append(`<p>${data}</p>`)
+		}
+
+	});
+}
+
+function handleSubmitGoals() {
+	$('.nutrients-goals-form').submit(function(event) {
+		postGoalsData();
+	});
+}
 
 
 function initApp() {
@@ -191,7 +243,9 @@ function initApp() {
  	handleSubmitSearchFoods();
  	displayModal();
  	displayGoalsModal();
- 	handleSaveGoalChanges(); 
+ 	handleSubmitGoals();
+ 	//handleSaveGoalChanges(); 
+
 }
 
 $(initApp);

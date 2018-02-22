@@ -58,7 +58,8 @@ const goalSchema = mongoose.Schema({
 		carbs: {
 			amount: {type: Number, default: 0},
 			range: {type: Number, default: 0}
-		}
+		},
+		date: {type: Date, default: Date.now}
 
 });
 
