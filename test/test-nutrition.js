@@ -99,6 +99,54 @@ describe('POST Endpoint', function() {
 	});
 });
 
+describe('GET Endpoint', function() {
+	it('should return all existing goals', function() {
+		let res;
+
+		return chai.request(app)
+		.get('/goals')
+		.then(_res => {
+			res = _res;
+			res.should.have.status(200);
+			res.body.should.have.length.of.at.least(1);
+			return Goal.count();
+		})
+		.then(count => {
+			res.body.should.have.length(count);
+		});
+	});
+
+	it('should return goals with the right fields', function() {
+		let resGoals;
+		return chai.request(app)
+		.get('/goals')
+		.then(function(res) {
+			res.should.have.status(200);
+			res.should.be.json;
+			res.body.should.be.a('array');
+			res.body.should.have.length.of.at.least(1);
+
+			res.body.forEach(function(goal) {
+				goal.should.be.a('object');
+				goal.should.include.keys('_id', 'calories', 'fat', 'protein', 'carbs', 'date');
+			});
+			resGoals = res.body[0];
+			return Goal.findById(resGoals._id);
+		})
+		.then(function(goal) {
+			resGoals._id.should.equal(goal._id);
+			resGoals.calories.amount.should.equal(goal.calories.amount);
+			resGoals.calories.range.should.equal(goal.calories.range);
+			resGoals.fat.amount.should.equal(goal.fat.amount);
+			resGoals.fat.range.should.equal(goal.fat.range);
+			resGoals.protein.amount.should.equal(goal.protein.amount);
+			resGoals.protein.range.should.equal(goal.protein.range);
+			resGoals.carbs.amount.should.equal(goal.carbs.amount);
+			resGoals.carbs.range.should.equal(goal.carbs.range);
+		});
+	});
+});
+
 
 describe('test', function() {
 
