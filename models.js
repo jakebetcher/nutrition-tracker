@@ -70,12 +70,12 @@ const goalSchema = mongoose.Schema({
 
 goalSchema.methods.serialize = function() {
   return {
-    id: this._id,
+    _id: this._id,
     calories: this.calories,
     fat: this.fat,
     protein: this.protein,
-    carbs: this.carbs
-    
+    carbs: this.carbs,
+    date: this.date
   };
 };
 

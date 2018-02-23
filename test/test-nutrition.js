@@ -134,7 +134,7 @@ describe('GET Endpoint', function() {
 			return Goal.findById(resGoals._id);
 		})
 		.then(function(goal) {
-			resGoals._id.should.equal(goal._id);
+			resGoals._id.should.equal(`${goal._id}`);
 			resGoals.calories.amount.should.equal(goal.calories.amount);
 			resGoals.calories.range.should.equal(goal.calories.range);
 			resGoals.fat.amount.should.equal(goal.fat.amount);

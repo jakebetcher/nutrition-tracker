@@ -89,7 +89,17 @@ app.post('/goals', (req, res) => {
   
 });
 
-
+app.get('/goals', (req, res) => {
+  Goal
+    .find()
+    .then(goals => {
+      res.json(goals.map(goal => goal));
+    })
+    .catch(err => {
+      console.error(err);
+      res.status(500).json({ error: 'something went terribly wrong' });
+    });
+});
 
 let server;
 
