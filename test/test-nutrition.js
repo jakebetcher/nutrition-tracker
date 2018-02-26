@@ -175,7 +175,26 @@ describe('PUT Endpoint', function() {
 	});
 });
 
+describe('DELETE Endpoint', function() {
+	it('delete a goal by id', function() {
 
+      let goal;
+
+      return Goal
+        .findOne()
+        .then(function(_goal) {
+          goal = _goal;
+          return chai.request(app).delete(`/goals/${goal.id}`);
+        })
+        .then(function(res) {
+          res.should.have.status(204);
+          return Goal.findById(goal.id);
+        })
+        .then(function(_goal) {
+          should.not.exist(_goal);
+        });
+    });
+});
 
 describe('test', function() {
 

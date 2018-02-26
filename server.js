@@ -122,6 +122,18 @@ app.post('/goals/:id', (req, res) => {
   .catch(err => res.status(500).json({ message: 'Something went wrong' }));
 });
 
+app.delete('/goals/:id', (req, res) => {
+  Goal
+    .findByIdAndRemove(req.params.id)
+    .then(() => {
+      res.status(204).json({ message: 'success' });
+    })
+    .catch(err => {
+      console.error(err);
+      res.status(500).json({ error: 'something went terribly wrong' });
+    });
+});
+
 let server;
 
 
