@@ -101,6 +101,27 @@ app.get('/goals', (req, res) => {
     });
 });
 
+app.post('/goals/:id', (req, res) => {
+	if (!(req.params.id && req.body.id && req.params.id === req.body.id)) {
+    res.status(400).json({
+      error: 'Request path id and request body id values must match'
+    });
+  }
+
+  const updated = {};
+  const updateableFields = ['calories', 'fat', 'protein', 'carbs'];
+  updateableFields.forEach(field => {
+  	if (field in req.body) {
+  		update[field] = req.body[field];
+  	}
+  });
+
+  Goal
+  .findByIdAndUpdate(req.params.id, { $set: updated }, { new: true })
+  .then(updatedGoal => res.status(204).end())
+  .catch(err => res.status(500).json({ message: 'Something went wrong' }));
+});
+
 let server;
 
 

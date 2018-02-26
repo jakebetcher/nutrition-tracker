@@ -147,6 +147,35 @@ describe('GET Endpoint', function() {
 	});
 });
 
+describe('PUT Endpoint', function() {
+	it('should update fields you send over', function() {
+		const updateData = {
+			calories: {
+				amount: 3000,
+				range: 300
+			}
+		};
+		return Goal
+		.findOne()
+		then(function(goal) {
+			updateData.id = goal.id;
+
+			return chai.request(app)
+			.put(`/goals/${goal.id}`)
+		})
+		.then(function(res) {
+			res.should.have.status(204);
+
+			return Goal.findById(updateData.id);
+		})
+		.then(function(goal) {
+			goal.calories.amount.should.equal(updateData.calories.amount);
+			goal.calories.range.should.equal(updateData.calories.range);
+		});
+	});
+});
+
+
 
 describe('test', function() {
 
