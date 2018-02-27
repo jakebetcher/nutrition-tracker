@@ -63,6 +63,22 @@ const goalSchema = mongoose.Schema({
 
 });
 
+const entrySchema = monngoose.Schema({
+	consumedCalories: {type: Number, required: true},
+	consumedFat: {type: Number, required: true},
+	consumedProtein: {type: Number, required: true},
+	consumedCarbs: {type: Number, required: true}
+});
+
+const statSchema = mongoose.Schema({
+	timesMetCaloriesGoals: {type: Number, required: true},
+	timesMetFatGoals: {type: Number, required: true},
+	timesMetProteinGoals: {type: Number, required: true},
+	timesMetCarbsGoals: {type: Number, required: true},
+	timesMetAllGoals: {type: Number, required: true},
+	timesMetAtLeastOneGoal: {type: Number, required: true},
+	daysGoalsHaveBeenTracked: {type: Number, required: true}
+});
 
 
 
@@ -80,6 +96,8 @@ goalSchema.methods.serialize = function() {
 };
 
 const Goal = mongoose.model('Goal', goalSchema);
+const Entry = mongoose.model('Entry', entrySchema);
+const Stat = mongoose.model('Stat', statSchema);
 
-module.exports = {Goal};
+module.exports = {Goal, Entry, Stat};
 
