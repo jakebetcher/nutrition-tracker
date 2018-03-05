@@ -19,9 +19,9 @@ const UserSchema = mongoose.Schema({
 	},
 	firstName: {type: String, required: true},
 	lastName: {type: String, required: true},
-	goals: { type: Schema.Types.ObjectId, ref: 'Goal' },
-	entries: { type: Schema.Types.ObjectId, ref: 'Entry' },
-	stats: { type: Schema.Types.ObjectId, ref: 'Stat' }
+	goal: { type: Schema.Types.ObjectId, ref: 'Goal' },
+	entry: { type: Schema.Types.ObjectId, ref: 'Entry' },
+	stat: { type: Schema.Types.ObjectId, ref: 'Stat' }
 });
 
 UserSchema.methods.serialize = function() {

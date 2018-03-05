@@ -63,7 +63,7 @@ const goalSchema = mongoose.Schema({
 
 });
 
-const entrySchema = monngoose.Schema({
+const entrySchema = mongoose.Schema({
 	consumedCalories: {type: Number, required: true},
 	consumedFat: {type: Number, required: true},
 	consumedProtein: {type: Number, required: true},
