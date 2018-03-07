@@ -19,19 +19,20 @@ const UserSchema = mongoose.Schema({
 	},
 	firstName: {type: String, required: true},
 	lastName: {type: String, required: true},
-	goal: { type: Schema.Types.ObjectId, ref: 'Goal' },
-	entry: { type: Schema.Types.ObjectId, ref: 'Entry' },
-	stat: { type: Schema.Types.ObjectId, ref: 'Stat' }
+	//goal: { type: mongoose.Schema.Types.ObjectId, ref: 'Goal' },
+	entry: { type: mongoose.Schema.Types.ObjectId, ref: 'Entry' },
+	stat: { type: mongoose.Schema.Types.ObjectId, ref: 'Stat' }
 });
 
 UserSchema.methods.serialize = function() {
   return {
+  	_id: this._id,
     username: this.username,
     firstName: this.firstName,
     lastName: this.lastName,
-    goals: this.goals,
-    entries: this.entries,
-    stats: this.stats
+    goal: this.goal,
+    entry: this.entry,
+    stat: this.stat
   };
 };
 

@@ -3,6 +3,7 @@
 const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 
+const { User } = require('./users')
 /*const goalSchema = mongoose.Schema({
 	calories: {
 		goalAmount: {type: Number, default: 0},
@@ -42,7 +43,7 @@ mongoose.Promise = global.Promise;
 });*/
 
 const goalSchema = mongoose.Schema({
-	
+		username: { type: String},
 		calories: {
 			amount: {type: Number, default: 0},
 			range: {type: Number, default: 0}

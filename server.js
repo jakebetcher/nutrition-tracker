@@ -1,68 +1,47 @@
+'use strict';
+require('dotenv').config();
+
 const bodyParser = require('body-parser');
 const express = require('express');
 const morgan = require('morgan');
+const passport = require('passport');
+
 const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 
 const { DATABASE_URL, PORT } = require('./config');
-const { Goal } = require('./models');
+const { Goal, Entry, Stat } = require('./models');
+const { User } = require('./users')
 
 const app = express();
+
+const { router: usersRouter } = require('./users');
+const { router: authRouter, localStrategy, jwtStrategy } = require('./auth');
 
 app.use(morgan('common'));
 app.use(bodyParser.json());
 
 
+passport.use(localStrategy);
+passport.use(jwtStrategy);
+
+
+app.use('/api/users/', usersRouter);
+app.use('/api/auth/', authRouter);
 
 app.use(express.static("public"));
 
-app.post('/goals', (req, res) => {
+const jwtAuth = passport.authenticate('jwt', { session: false });
+
+app.post('/goals/protected', jwtAuth, (req, res) => {
   //console.log(req.body);
   //console.log(req.body.calories);
   //const enteredNutrients = Object.keys(req.body);
-  const goalObject = {};
-
-  const nutrients = ['calories', 'fat', 'protein', 'carbs'];
-  /*if ('calories' in req.body) {
-  	goalObject.calories = {
-  		amount: req.body.calories.amount,
-  		range: req.body.calories.range
-  	};
-  } 
-
-  if ('fat' in req.body) {
-  	goalObject.fat = {
-  		amount: req.body.fat.amount,
-  		range: req.body.fat.range
-  	};
-  } 
-
-  if ('protein' in req.body) {
-  	goalObject.protein = {
-  		amount: req.body.protein.amount,
-  		range: req.body.protein.range
-  	};
-  } 
-
-  if ('carbs' in req.body) {
-  	goalObject.carbs = {
-  		amount: req.body.carbs.amount,
-  		range: req.body.carbs.range
-  	};
-  } 
-
-  for (let i=0; i<nutrients.length; i++) {
-  	if (nutrients[i] in req.body) {
-  	let nutrient = nutrients[i];
-  	goalObject.nutrient = {
-  		amount: req.body.nutrient.amount,
-  		range: req.body.nutrient.range
-  	};
-  } 
-  }*/
-
-    Goal
-    .create({
+  
+console.log(req.user)
+  
+    let goal = new Goal({
+    	username: req.user.username,
     	calories: {
     		amount: req.body.calories.amount,
     		range: req.body.calories.range
@@ -79,10 +58,28 @@ app.post('/goals', (req, res) => {
     		amount: req.body.carbs.amount,
     		range: req.body.carbs.range
     	}
-    })
-      .then(goal => res.status(201).json(goal))
+    });
+
+    goal.save()
+    /*.then(goal => {
+    	
+    	
+    	goal
+    	.populate('user')
+    	.exec(function(err, goal) {
+    		if (err) return handleError(err);
+    console.log('The goal is %s', req.user.goal);
+    	});
+    	
+    	
+    })*/
+
+
+
+      .then(user => res.status(201).json(user))
       .catch(err => {
       console.error(err);
+
       res.status(500).json({ error: 'Something went wrong' });
     });
   
@@ -132,6 +129,10 @@ app.delete('/goals/:id', (req, res) => {
       console.error(err);
       res.status(500).json({ error: 'something went terribly wrong' });
     });
+});
+
+app.use('*', (req, res) => {
+  return res.status(404).json({ message: 'Not Found' });
 });
 
 let server;
