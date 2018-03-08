@@ -33,11 +33,24 @@ app.use(express.static("public"));
 
 const jwtAuth = passport.authenticate('jwt', { session: false });
 
+/************************
+	goals routes
+*************************/	
 app.post('/goals/protected', jwtAuth, (req, res) => {
   //console.log(req.body);
   //console.log(req.body.calories);
   //const enteredNutrients = Object.keys(req.body);
   
+const requiredFields = ['calories', 'fat', 'protein', 'carbs'];
+  for (let i = 0; i < requiredFields.length; i++) {
+    const field = requiredFields[i];
+    if (!(field in req.body)) {
+      const message = `Missing \`${field}\` in request body`;
+      console.error(message);
+      return res.status(400).send(message);
+    }
+  }
+
 console.log(req.user)
   
     let goal = new Goal({
@@ -76,7 +89,7 @@ console.log(req.user)
 
 
 
-      .then(user => res.status(201).json(user))
+      .then(goal => res.status(201).json(goal))
       .catch(err => {
       console.error(err);
 
@@ -141,6 +154,143 @@ app.delete('/goals/:id', (req, res) => {
       console.error(err);
       res.status(500).json({ error: 'something went terribly wrong' });
     });
+});
+
+/**********************************
+	entries routes
+***********************************/
+
+app.post('/entries/protected', jwtAuth, (req, res) => {
+	const requiredFields = ['consumedCalories', 'consumedFat', 'consumedProtein', 'consumedCarbs'];
+	for (let i = 0; i < requiredFields.length; i++) {
+    const field = requiredFields[i];
+    if (!(field in req.body)) {
+      const message = `Missing \`${field}\` in request body`;
+      console.error(message);
+      return res.status(400).send(message);
+    }
+  }
+
+  let entry = new Entry({
+  	username: req.user.username,
+  	consumedCalories: req.body.consumedCalories,
+  	consumedFat: req.body.consumedFat,
+  	consumedProtein: req.body.consumedProtein,
+  	consumedCarbs: req.body.consumedCarbs
+  });
+
+  entry.save()
+  .then(entry => res.status(201).json(entry))
+  .catch(err => {
+  	console.log(err);
+
+  	res.status(500).json({error: 'Something went horribly wrong'});
+  })
+});
+
+app.get('/entries/protected', jwtAuth, (req, res) => {
+	Entry
+	.find({username: req.user.username})
+	.then(entry => {
+		res.json(entry);
+	})
+	.catch(err => {
+		console.log(err);
+		res.status(500).json({error: 'Something went horribly wrong'})
+	})
+});
+
+app.put('/entries/protected', jwtAuth, (req, res) => {
+	const updated = {};
+  	const updateableFields = ['consumedCalories', 'consumedFat', 'consumedProtein', 'consumedCarbs'];
+  	updateableFields.forEach(field => {
+  	if (field in req.body) {
+  		updated[field] = req.body[field];
+  	}
+  });
+
+  	Entry
+  .findOneAndUpdate({username: req.user.username}, { $set: updated }, { new: true })
+  .then(updatedEntry => res.status(204).end())
+  .catch(err => res.status(500).json({ message: 'Something went wrong' }));
+
+});
+
+app.delete('/entries/protected', jwtAuth, (req, res) => {
+  Entry
+    .findOneAndRemove({username: req.user.username})
+    .then(() => {
+      res.status(204).json({ message: 'success' });
+    })
+    .catch(err => {
+      console.error(err);
+      res.status(500).json({ error: 'something went terribly wrong' });
+    });
+});
+
+
+
+/**********************************
+	stats routes
+***********************************/
+
+app.post('/stats/protected', jwtAuth, (req, res) => {
+	const requiredFields = ['timesMetCaloriesGoals', 'timesMetFatGoals', 'timesMetProteinGoals', 'timesMetCarbsGoals', 'timesMetAllGoals', 'timesMetAtLeastOneGoal', 'daysGoalsHaveBeenTracked'];
+	for (let i = 0; i < requiredFields.length; i++) {
+    const field = requiredFields[i];
+    if (!(field in req.body)) {
+      const message = `Missing \`${field}\` in request body`;
+      console.error(message);
+      return res.status(400).send(message);
+    }
+  }
+
+  let stat = new Stat({
+  	username: req.user.username,
+  	timesMetCaloriesGoals: req.body.timesMetCaloriesGoals,
+  	timesMetFatGoals: req.body.timesMetFatGoals,
+  	timesMetProteinGoals: req.body.timesMetProteinGoals,
+  	timesMetCarbsGoals: req.body.timesMetCarbsGoals,
+  	timesMetAllGoals: req.body.timesMetAllGoals,
+  	timesMetAtLeastOneGoal: req.body.timesMetAtLeastOneGoal,
+  	daysGoalsHaveBeenTracked: req.body.daysGoalsHaveBeenTracked
+  });
+
+  stat.save()
+  .then(stat => res.status(201).json(stat))
+  .catch(err => {
+  	console.log(err);
+
+  	res.status(500).json({error: 'Something went horribly wrong'});
+  })
+});
+
+app.get('/stats/protected', jwtAuth, (req, res) => {
+	Stat
+	.find({username: req.user.username})
+	.then(stat => {
+		res.json(stat);
+	})
+	.catch(err => {
+		console.log(err);
+		res.status(500).json({error: 'Something went horribly wrong'})
+	})
+});
+
+app.put('/stats/protected', jwtAuth, (req, res) => {
+	const updated = {};
+  	const updateableFields = ['timesMetCaloriesGoals', 'timesMetFatGoals', 'timesMetProteinGoals', 'timesMetCarbsGoals', 'timesMetAllGoals', 'timesMetAtLeastOneGoal', 'daysGoalsHaveBeenTracked'];
+  	updateableFields.forEach(field => {
+  	if (field in req.body) {
+  		updated[field] = req.body[field];
+  	}
+  });
+
+  	Stat
+  .findOneAndUpdate({username: req.user.username}, { $set: updated }, { new: true })
+  .then(updatedEntry => res.status(204).end())
+  .catch(err => res.status(500).json({ message: 'Something went wrong' }));
+
 });
 
 app.use('*', (req, res) => {

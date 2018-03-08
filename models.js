@@ -45,26 +45,27 @@ const { User } = require('./users')
 const goalSchema = mongoose.Schema({
 		username: { type: String},
 		calories: {
-			amount: {type: Number, default: 0},
-			range: {type: Number, default: 0}
+			amount: {type: Number, required: true, default: 0},
+			range: {type: Number, required: true, default: 0}
 		},
 		fat: {
-			amount: {type: Number, default: 0},
-			range: {type: Number, default: 0}
+			amount: {type: Number, required: true, default: 0},
+			range: {type: Number, required: true, default: 0}
 		},
 		protein: {
-			amount: {type: Number, default: 0},
-			range: {type: Number, default: 0}
+			amount: {type: Number, required: true, default: 0},
+			range: {type: Number, required: true, default: 0}
 		},
 		carbs: {
-			amount: {type: Number, default: 0},
-			range: {type: Number, default: 0}
+			amount: {type: Number, required: true, default: 0},
+			range: {type: Number, required: true, default: 0}
 		},
 		date: {type: Date, default: Date.now}
 
 });
 
 const entrySchema = mongoose.Schema({
+	username: { type: String},
 	consumedCalories: {type: Number, required: true},
 	consumedFat: {type: Number, required: true},
 	consumedProtein: {type: Number, required: true},
@@ -72,6 +73,7 @@ const entrySchema = mongoose.Schema({
 });
 
 const statSchema = mongoose.Schema({
+	username: { type: String},
 	timesMetCaloriesGoals: {type: Number, required: true},
 	timesMetFatGoals: {type: Number, required: true},
 	timesMetProteinGoals: {type: Number, required: true},
