@@ -15,14 +15,14 @@ router.post('/', jsonParser, (req, res) => {
 	const requiredFields = ['username', 'password', 'firstName', 'lastName'];
 	const missingField = requiredFields.find(field => !(field in req.body));
 
-	if (missingField) {
-		return res.status(422).json({
-			code: 422,
-			reason: 'ValidationError',
-			message: 'Missing field',
-			location: 'missingField'
-		});
-	}
+  if (missingField) {
+    return res.status(422).json({
+      code: 422,
+      reason: 'ValidationError',
+      message: 'Missing field',
+      location: missingField
+    });
+  }
 
 	const stringFields = ['username', 'password', 'firstName', 'lastName'];
 	const nonStringFields = stringFields.find(
@@ -34,7 +34,7 @@ router.post('/', jsonParser, (req, res) => {
       code: 422,
       reason: 'ValidationError',
       message: 'Incorrect field type: expected string',
-      location: nonStringField
+      location: nonStringFields
     });
   }
 

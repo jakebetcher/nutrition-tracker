@@ -75,7 +75,7 @@ describe('goals API resource', function() {
     return closeServer();
   });
 
-describe('POST Endpoint', function() {
+/*describe('POST Endpoint', function() {
 	it('should add a new set of goals', function() {
 		const newGoal = generateGoalData();
 		return chai.request(app)
@@ -208,5 +208,5 @@ describe('test', function() {
           res.should.be.html;
 	});
 });
-});
+});*/
 });
