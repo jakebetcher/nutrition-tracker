@@ -299,6 +299,9 @@ app.use('*', (req, res) => {
 
 let server;
 
+const config = require('./config');
+console.log(config.JWT_EXPIRY);
+
 
 function runServer(databaseUrl = DATABASE_URL, port = PORT) {
   return new Promise((resolve, reject) => {
