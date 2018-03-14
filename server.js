@@ -99,7 +99,7 @@ console.log(req.user)
   
 });
 
-app.get('/goals', (req, res) => {
+/*app.get('/goals', (req, res) => {
   Goal
     .find()
     .then(goals => {
@@ -109,7 +109,7 @@ app.get('/goals', (req, res) => {
       console.error(err);
       res.status(500).json({ error: 'something went terribly wrong' });
     });
-});
+});*/
 
 app.get('/goals/protected', jwtAuth, (req, res) => {
 	Goal
@@ -144,7 +144,7 @@ app.put('/goals/protected', jwtAuth, (req, res) => {
   .catch(err => res.status(500).json({ message: 'Something went wrong' }));
 });
 
-app.delete('/goals/:id', (req, res) => {
+/*app.delete('/goals/:id', (req, res) => {
   Goal
     .findByIdAndRemove(req.params.id)
     .then(() => {
@@ -154,7 +154,7 @@ app.delete('/goals/:id', (req, res) => {
       console.error(err);
       res.status(500).json({ error: 'something went terribly wrong' });
     });
-});
+});*/
 
 /**********************************
 	entries routes
