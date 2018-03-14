@@ -10,7 +10,7 @@ const expect = chai.expect;
 
 
 
-const { Goal } = require('../models');
+const { Stat } = require('../models');
 const { User } = require('../users');
 const { closeServer, runServer, app } = require('../server');
 const { JWT_SECRET, TEST_DATABASE_URL } = require('../config');
@@ -44,34 +44,25 @@ function tearDownDb() {
   
 
 
-function seedGoalData() {
-  console.info('seeding goal data');
+function seedStatData() {
+  console.info('seeding stats data');
   const seedData = [];
   exampleUsers.forEach(user => {
   	seedData.push({
   		username: user.username,
-  		calories: {
-		    amount: faker.random.number(3000),
-			range: faker.random.number(400)
-		},
-		fat: {
-			amount: faker.random.number(200),
-			range: faker.random.number(30)
-		},
-		protein: {
-			amount: faker.random.number(200),
-			range: faker.random.number(40)
-		},
-		carbs: {
-			amount: faker.random.number(200),
-			range: faker.random.number(40)
-		}
+  		timesMetCaloriesGoals: faker.random.number(100),
+      timesMetFatGoals: faker.random.number(100),
+      timesMetProteinGoals: faker.random.number(100),
+      timesMetCarbsGoals: faker.random.number(100),
+      timesMetAllGoals: faker.random.number(30),
+      timesMetAtLeastOneGoal: faker.random.number(100),
+      daysGoalsHaveBeenTracked: faker.random.number(200)
   	});
   });
   
   //console.log(seedData);
 
-  return Goal.insertMany(seedData);
+  return Stat.insertMany(seedData);
 }
 
 function createUsers() {
@@ -90,14 +81,14 @@ function createUsers() {
 
 
 
-describe('goals API resource', function() {
+describe('stats API resource', function() {
 	 
   before(function () {
     return runServer(TEST_DATABASE_URL);
   });
 
   beforeEach(function () {
-    return seedGoalData();
+    return seedStatData();
   });
 
   beforeEach(function () {
@@ -141,7 +132,7 @@ describe('protected GET Endpoint', function() {
 	it('Should reject requests with no credentials', function () {
       return chai
         .request(app)
-        .get('/goals/protected')
+        .get('/stats/protected')
         .then(() =>
           expect.fail(null, null, 'Request should not succeed')
         )
@@ -174,7 +165,7 @@ it('Should reject requests with an expired token', function () {
 
       return chai
         .request(app)
-        .get('/goals/protected')
+        .get('/stats/protected')
         .set('authorization', `Bearer ${token}`)
         .then(() =>
           expect.fail(null, null, 'Request should not succeed')
@@ -189,7 +180,7 @@ it('Should reject requests with an expired token', function () {
         });
         });
     it('Should send protected data', function () {
-      let resGoals;
+      let resStats;
       const token = jwt.sign(
         {
           user: {
@@ -208,7 +199,7 @@ it('Should reject requests with an expired token', function () {
 
       return chai
         .request(app)
-        .get('/goals/protected')
+        .get('/stats/protected')
 
         .set('authorization', `Bearer ${token}`)
         .then(res => {
@@ -216,24 +207,23 @@ it('Should reject requests with an expired token', function () {
           expect(res).to.have.status(200);
           expect(res.body).to.be.an('array');
 
-          res.body.forEach(function(goal) {
-				expect(goal).to.be.a('object');
-				expect(goal).to.include.keys('_id', 'username', 'calories', 'fat', 'protein', 'carbs', 'date');
+          res.body.forEach(function(stat) {
+				expect(stat).to.be.a('object');
+				expect(stat).to.include.keys('_id', 'username', 'timesMetCaloriesGoals', 'timesMetFatGoals', 'timesMetProteinGoals', 'timesMetCarbsGoals', 'timesMetAllGoals', 'timesMetAtLeastOneGoal', 'daysGoalsHaveBeenTracked');
 			});
-			resGoals = res.body[0];
-			return Goal.findById(resGoals._id);
+			resStats = res.body[0];
+			return Stat.findById(resStats._id);
 		})
-		.then(function(goal) {
-			expect(resGoals.username).to.equal(goal.username);
-			expect(resGoals._id).to.equal(`${goal._id}`);
-			expect(resGoals.calories.amount).to.equal(goal.calories.amount);
-			expect(resGoals.calories.range).to.equal(goal.calories.range);
-			expect(resGoals.fat.amount).to.equal(goal.fat.amount);
-			expect(resGoals.fat.range).to.equal(goal.fat.range);
-			expect(resGoals.protein.amount).to.equal(goal.protein.amount);
-			expect(resGoals.protein.range).to.equal(goal.protein.range);
-			expect(resGoals.carbs.amount).to.equal(goal.carbs.amount);
-			expect(resGoals.carbs.range).to.equal(goal.carbs.range);
+		.then(function(stat) {
+			expect(resStats.username).to.equal(stat.username);
+			expect(resStats._id).to.equal(`${stat._id}`);
+			expect(resStats.timesMetCaloriesGoals).to.equal(stat.timesMetCaloriesGoals);
+			expect(resStats.timesMetFatGoals).to.equal(stat.timesMetFatGoals);
+			expect(resStats.timesMetProteinGoals).to.equal(stat.timesMetProteinGoals);
+			expect(resStats.timesMetCarbsGoals).to.equal(stat.timesMetCarbsGoals);
+			expect(resStats.timesMetAllGoals).to.equal(stat.timesMetAllGoals);
+			expect(resStats.timesMetAtLeastOneGoal).to.equal(stat.timesMetAtLeastOneGoal);
+			expect(resStats.daysGoalsHaveBeenTracked).to.equal(stat.daysGoalsHaveBeenTracked);
 		});
           
         });
@@ -241,29 +231,20 @@ it('Should reject requests with an expired token', function () {
     
 describe('protected POST endpoint', function() {
 	it('should reject requests with no credentials', function() {
-		const newGoal = {
+		const newStat = {
 				username: explicitUsername,
-				calories: {
-		   			 amount: faker.random.number(3000),
-					 range: faker.random.number(400)
-				},
-				fat: {
-					 amount: faker.random.number(200),
-			         range: faker.random.number(30)
-		        },
-				protein: {
-			 		 amount: faker.random.number(200),
-					 range: faker.random.number(40)
-				},
-				carbs: {
-				     amount: faker.random.number(200),
-			         range: faker.random.number(40)
-				}
+				timesMetCaloriesGoals: faker.random.number(100),
+        timesMetFatGoals: faker.random.number(100),
+        timesMetProteinGoals: faker.random.number(100),
+        timesMetCarbsGoals: faker.random.number(100),
+        timesMetAllGoals: faker.random.number(30),
+        timesMetAtLeastOneGoal: faker.random.number(100),
+        daysGoalsHaveBeenTracked: faker.random.number(200)
 			};
 
 		return chai.request(app)
-		.post('/goals/protected')
-		.send(newGoal)
+		.post('/stats/protected')
+		.send(newStat)
 		.then(() =>
           expect.fail(null, null, 'Request should not succeed')
         )
@@ -293,30 +274,21 @@ describe('protected POST endpoint', function() {
         }
       );
 
-		const anotherNewGoal = {
+		const anotherNewStat = {
 			username: explicitUsername,
-				calories: {
-		   			 amount: faker.random.number(3000),
-					 range: faker.random.number(400)
-				},
-				fat: {
-					 amount: faker.random.number(200),
-			         range: faker.random.number(30)
-		        },
-				protein: {
-			 		 amount: faker.random.number(200),
-					 range: faker.random.number(40)
-				},
-				carbs: {
-				     amount: faker.random.number(200),
-			         range: faker.random.number(40)
-				}
+			timesMetCaloriesGoals: faker.random.number(100),
+      timesMetFatGoals: faker.random.number(100),
+      timesMetProteinGoals: faker.random.number(100),
+      timesMetCarbsGoals: faker.random.number(100),
+      timesMetAllGoals: faker.random.number(30),
+      timesMetAtLeastOneGoal: faker.random.number(100),
+      daysGoalsHaveBeenTracked: faker.random.number(200)
 		};
 
 		return chai
         .request(app)
-        .post('/goals/protected')
-        .send(anotherNewGoal)
+        .post('/stats/protected')
+        .send(anotherNewStat)
         .set('authorization', `Bearer ${token}`)
         .then(() =>
           expect.fail(null, null, 'Request should not succeed')
@@ -334,25 +306,16 @@ describe('protected POST endpoint', function() {
 
 	  
 		});
-	it('should create a new goal', function() {
-		const thirdNewGoal = {
+	it('should create a new stat', function() {
+		const thirdNewStat = {
 			username: explicitUsername,
-				calories: {
-		   			 amount: faker.random.number(3000),
-					 range: faker.random.number(400)
-				},
-				fat: {
-					 amount: faker.random.number(200),
-			         range: faker.random.number(30)
-		        },
-				protein: {
-			 		 amount: faker.random.number(200),
-					 range: faker.random.number(40)
-				},
-				carbs: {
-				     amount: faker.random.number(200),
-			         range: faker.random.number(40)
-				}
+			timesMetCaloriesGoals: faker.random.number(100),
+      timesMetFatGoals: faker.random.number(100),
+      timesMetProteinGoals: faker.random.number(100),
+      timesMetCarbsGoals: faker.random.number(100),
+      timesMetAllGoals: faker.random.number(30),
+      timesMetAtLeastOneGoal: faker.random.number(100),
+      daysGoalsHaveBeenTracked: faker.random.number(200)	
 		};
 
 
@@ -375,25 +338,27 @@ describe('protected POST endpoint', function() {
 
 		return chai
         .request(app)
-        .post('/goals/protected')
-        .send(thirdNewGoal)
+        .post('/stats/protected')
+        .send(thirdNewStat)
         .set('authorization', `Bearer ${token}`)
 
         .then(function(res) {
 			expect(res).to.have.status(201);
       		expect(res).to.be.json;
       		expect(res.body).to.be.a('object');
-      		expect(res.body).to.include.keys('_id', 'username', 'calories', 'fat', 'protein', 'carbs', 'date');
-      		return Goal.findById(res.body._id);
+      		expect(res.body).to.include.keys('_id', 'username', 'timesMetCaloriesGoals', 'timesMetFatGoals', 'timesMetProteinGoals', 'timesMetCarbsGoals', 'timesMetAllGoals', 'timesMetAtLeastOneGoal', 'daysGoalsHaveBeenTracked');
+      		return Stat.findById(res.body._id);
 
 		})
-		.then(function(goal) {
-			expect(goal.username).to.equal(thirdNewGoal.username);
-			expect(goal.calories.amount).to.equal(thirdNewGoal.calories.amount);
-			expect(goal.calories.range).to.equal(thirdNewGoal.calories.range);
-			expect(goal.fat.range).to.equal(thirdNewGoal.fat.range);
-			expect(goal.protein.range).to.equal(thirdNewGoal.protein.range);
-			expect(goal.carbs.amount).to.equal(thirdNewGoal.carbs.amount);
+		.then(function(stat) {
+			expect(stat.username).to.equal(thirdNewStat.username);
+			expect(stat.timesMetCaloriesGoals).to.equal(thirdNewStat.timesMetCaloriesGoals);
+			expect(stat.timesMetFatGoals).to.equal(thirdNewStat.timesMetFatGoals);
+			expect(stat.timesMetProteinGoals).to.equal(thirdNewStat.timesMetProteinGoals);
+			expect(stat.timesMetCarbsGoals).to.equal(thirdNewStat.timesMetCarbsGoals);
+			expect(stat.timesMetAllGoals).to.equal(thirdNewStat.timesMetAllGoals);
+      expect(stat.timesMetAtLeastOneGoal).to.equal(thirdNewStat.timesMetAtLeastOneGoal);
+      expect(stat.daysGoalsHaveBeenTracked).to.equal(thirdNewStat.daysGoalsHaveBeenTracked);
 		});
 	});
 
@@ -403,19 +368,18 @@ describe('protected POST endpoint', function() {
 
 	describe('protected PUT Endpoint', function() {
 		it('should reject requests with no credentials', function() {
-			const updatedGoal = {
-				calories: {
-					amount: 2600,
-					range: 300
-				}
+			const updatedStat = {
+				timesMetCaloriesGoals: 50,
+        timesMetAtLeastOneGoal: 55,
+        daysGoalsHaveBeenTracked: 71
 			};
 
-			return Goal
+			return Stat
 			.findOne({username: exampleUsers[0].username})
-			.then(goal => {
+			.then(stat => {
 				return chai.request(app)
-				.put('/goals/protected')
-				.send(updatedGoal)
+				.put('/stats/protected')
+        .send(updatedStat)
 			})
 			.then(() =>
           expect.fail(null, null, 'Request should not succeed')
@@ -430,12 +394,11 @@ describe('protected POST endpoint', function() {
         });
 		});
 		it('should reject requests with an expired token', function() {
-			const updatedGoal = {
-				calories: {
-					amount: 2800,
-					range: 275
-				}
-			};
+			const updatedStat = {
+        timesMetCaloriesGoals: 51,
+        timesMetAtLeastOneGoal: 56,
+        daysGoalsHaveBeenTracked: 72
+      };
 
 			const token = jwt.sign(
         	{
@@ -453,12 +416,12 @@ describe('protected POST endpoint', function() {
         	}
       	);
 
-			return Goal
+			return Stat
 			.findOne({username: exampleUsers[1].username})
-			.then(goal => {
+			.then(stat => {
 				return chai.request(app)
-				.put('/goals/protected')
-				.send(updatedGoal)
+				.put('/stats/protected')
+        .send(updatedStat)
 				.set('authorization', `Bearer ${token}`)
 			})
 			.then(() =>
@@ -476,12 +439,11 @@ describe('protected POST endpoint', function() {
 		});
 
 		it('should update fields you send over', function() {
-			const updatedGoal = {
-				calories: {
-					amount: 2400,
-					range: 201
-				}
-			};
+			const updatedStat = {
+        timesMetCaloriesGoals: 52,
+        timesMetAtLeastOneGoal: 57,
+        daysGoalsHaveBeenTracked: 73
+      };
 
 			const token = jwt.sign(
         {
@@ -499,161 +461,26 @@ describe('protected POST endpoint', function() {
         }
       );
 
-			return Goal
+			return Stat
 			.findOne({username: exampleUsers[2].username})
-			.then(goal => {
-				updatedGoal.id = goal.id;
+			.then(stat => {
 				return chai.request(app)
-				.put('/goals/protected')
-				.send(updatedGoal)
+				.put('/stats/protected')
+				.send(updatedStat)
 				.set('authorization', `Bearer ${token}`)
 			})
 			.then(function(res) {
 			expect(res).to.have.status(204);
 
-			return Goal.findOne({username: exampleUsers[2].username});
+			return Stat.findOne({username: exampleUsers[2].username});
 		})
-		.then(function(goal) {
-			expect(goal.calories.amount).to.equal(updatedGoal.calories.amount);
-			expect(goal.calories.range).to.equal(updatedGoal.calories.range);
+		.then(function(stat) {
+			expect(stat.timesMetCaloriesGoals).to.equal(updatedStat.timesMetCaloriesGoals);
+			expect(stat.timesMetAtLeastOneGoal).to.equal(updatedStat.timesMetAtLeastOneGoal);
+      expect(stat.daysGoalsHaveBeenTracked).to.equal(updatedStat.daysGoalsHaveBeenTracked);
 		});
 
 		});
 	});
 });
-    
-
-/*describe('POST Endpoint', function() {
-	it('should add a new set of goals', function() {
-		const newGoal = generateGoalData();
-		return chai.request(app)
-		.post('/goals')
-		.send(newGoal)
-		.then(function(res) {
-			res.should.have.status(201);
-      		res.should.be.json;
-      		res.body.should.be.a('object');
-      		res.body.should.include.keys('_id', 'calories', 'fat', 'protein', 'carbs', 'date');
-      		return Goal.findById(res.body._id);
-
-		})
-		.then(function(goal) {
-			goal.calories.amount.should.equal(newGoal.calories.amount);
-			goal.calories.range.should.equal(newGoal.calories.range);
-			goal.fat.range.should.equal(newGoal.fat.range);
-			goal.protein.range.should.equal(newGoal.protein.range);
-			goal.carbs.amount.should.equal(newGoal.carbs.amount);
-		});
-	});
-});*/
-
-/*describe('GET Endpoint', function() {
-	it('should return all existing goals', function() {
-		let res;
-
-		return chai.request(app)
-		.get('/goals')
-		.then(_res => {
-			res = _res;
-			res.should.have.status(200);
-			res.body.should.have.length.of.at.least(1);
-			return Goal.count();
-		})
-		.then(count => {
-			res.body.should.have.length(count);
-		});
-	});
-
-	it('should return goals with the right fields', function() {
-		let resGoals;
-		return chai.request(app)
-		.get('/goals')
-		.then(function(res) {
-			res.should.have.status(200);
-			res.should.be.json;
-			res.body.should.be.a('array');
-			res.body.should.have.length.of.at.least(1);
-
-			res.body.forEach(function(goal) {
-				goal.should.be.a('object');
-				goal.should.include.keys('_id', 'calories', 'fat', 'protein', 'carbs', 'date');
-			});
-			resGoals = res.body[0];
-			return Goal.findById(resGoals._id);
-		})
-		.then(function(goal) {
-			resGoals._id.should.equal(`${goal._id}`);
-			resGoals.calories.amount.should.equal(goal.calories.amount);
-			resGoals.calories.range.should.equal(goal.calories.range);
-			resGoals.fat.amount.should.equal(goal.fat.amount);
-			resGoals.fat.range.should.equal(goal.fat.range);
-			resGoals.protein.amount.should.equal(goal.protein.amount);
-			resGoals.protein.range.should.equal(goal.protein.range);
-			resGoals.carbs.amount.should.equal(goal.carbs.amount);
-			resGoals.carbs.range.should.equal(goal.carbs.range);
-		});
-	});
-});
-
-/*describe('PUT Endpoint', function() {
-	it('should update fields you send over', function() {
-		const updateData = {
-			calories: {
-				amount: 3000,
-				range: 300
-			}
-		};
-		return Goal
-		.findOne()
-		then(function(goal) {
-			updateData.id = goal.id;
-
-			return chai.request(app)
-			.put(`/goals/${goal.id}`)
-		})
-		.then(function(res) {
-			res.should.have.status(204);
-
-			return Goal.findById(updateData.id);
-		})
-		.then(function(goal) {
-			goal.calories.amount.should.equal(updateData.calories.amount);
-			goal.calories.range.should.equal(updateData.calories.range);
-		});
-	});
-});
-
-describe('DELETE Endpoint', function() {
-	it('delete a goal by id', function() {
-
-      let goal;
-
-      return Goal
-        .findOne()
-        .then(function(_goal) {
-          goal = _goal;
-          return chai.request(app).delete(`/goals/${goal.id}`);
-        })
-        .then(function(res) {
-          res.should.have.status(204);
-          return Goal.findById(goal.id);
-        })
-        .then(function(_goal) {
-          should.not.exist(_goal);
-        });
-    });
-});
-
-describe('test', function() {
-
-	it('should display Hello World', function() {
-		let res;
-      return chai.request(app)
-        .get('/')
-        .then(_res => {
-          res = _res;
-          res.should.have.status(200);
-          res.should.be.html;
-	});
-});
-});*/
+  
