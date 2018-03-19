@@ -55,7 +55,7 @@ h1 {
 	font-size: 20px;
 }
 
-.pop-outer, .pop-outer-goals {
+.pop-outer, .pop-outer-goals, .pop-outer-goals-put {
   position: fixed;
   top: 0;
   left: 0;
@@ -64,7 +64,7 @@ h1 {
   display: none;
 }
 
-.pop-inner {
+.pop-inner, {
   margin-top: 0px;
   width: 100%;
   padding: 25px;
@@ -74,7 +74,7 @@ h1 {
   color: white;
 }
 
-.pop-inner-goals {
+.pop-inner-goals, .pop-inner-goals-put {
   margin-top: 100px;
   text-align: center;
   /*width: 520px;

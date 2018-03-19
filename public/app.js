@@ -24,6 +24,20 @@ function storeGoals() {
 	return goals;
 }
 
+function storeGoalsPut() {
+	const goals = {
+		caloriesAmount: $('#calories-amount-put').val(),
+		caloriesRange: $('#calories-range-put').val(),
+		fatAmount: $('#fat-amount-put').val(),
+		fatRange: $('#fat-range-put').val(),
+		proteinAmount: $('#protein-amount-put').val(),
+		proteinRange: $('#protein-range-put').val(),
+		carbsAmount: $('#carbs-amount-put').val(),
+		carbsRange: $('#carbs-range-put').val()
+	}
+	return goals;
+}
+
 function storeUserInfo() {
 	let user = 	{
 		username: $('.username-input').val(),
@@ -207,12 +221,12 @@ function displayProfilePage() {
 		
 }
 
-/*function displayGoalsModal() {
+function displayGoalsModal() {
 	$('.edit-goals-button').on('click', function(event) {
 		$('.main-header, .profile-page').addClass('transparent-background');
-		$('.pop-outer-goals').fadeIn();
+		$('.pop-outer-goals-put').fadeIn();
 	});
-}*/
+}
 
 /*function handleSaveGoalChanges() {
 	//const nutrientsForTracking = Object.keys(STATE);
@@ -381,6 +395,45 @@ function postGoalsData() {
 	});
 }
 
+function putGoalsData() {
+	let theGoals = storeGoalsPut();
+	const goal = {
+		calories: {
+			amount: theGoals.caloriesAmount,
+			range: theGoals.caloriesRange
+		},
+		fat: {
+			amount: theGoals.fatAmount,
+			range: theGoals.fatRange
+		},
+		protein: {
+			amount: theGoals.proteinAmount,
+			range: theGoals.proteinRange
+		},
+		carbs: {
+			amount: theGoals.carbsAmount,
+			range: theGoals.carbsRange
+		}
+
+	}
+	$.ajax({
+		url: '/goals/protected',
+		dataType: 'json',
+		method: 'PUT',
+		contentType: 'application/json',
+		headers: {
+			Authorization: `Bearer ${localStorage.getItem('token')}`
+		},
+		data: JSON.stringify(goal),
+		success: function() {
+			console.log('success');
+			getGoals(displayGoals);
+		}
+
+	});
+
+}
+
 function handleSubmitGoals() {
 	$('.nutrients-goals-form').submit(function(event) {
 		event.preventDefault();
@@ -391,6 +444,16 @@ function handleSubmitGoals() {
 	});
 }
 
+function handleEditGoals() {
+	$('.nutrients-goals-form-put').submit(function(event) {
+		event.preventDefault();
+		putGoalsData();
+		$('.pop-outer-goals-put').fadeOut();
+		$('.main-header, .profile-page').removeClass('transparent-background');
+	});
+}
+
+
 
 function initApp() {
 	handleSignUpForm();
@@ -400,10 +463,10 @@ function initApp() {
  	backToHome();
  	handleSubmitSearchFoods();
  	displayModal();
- 	//displayGoalsModal();
+ 	displayGoalsModal();
  	handleSubmitGoals();
  	//handleSaveGoalChanges(); 
-
+ 	handleEditGoals();
 }
 
 $(initApp);
