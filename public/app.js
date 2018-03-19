@@ -109,6 +109,40 @@ function loginFirstTime() {
 	});
 }
 
+function getGoals(callback) {
+	$.ajax({
+		url: '/goals/protected',
+		dataType: 'json',
+		method: 'GET',
+		headers: {
+			Authorization: `Bearer ${localStorage.getItem('token')}`
+		},
+		success: callback
+	});
+}
+
+function displayGoals(data) {
+	console.log(data);
+	$('.goals-list-div').empty();
+	$('.goals-list-div').append(`
+			<h4>Calories:</h4>
+			<p><span>Amount: </span><span>${data[0].calories.amount}</span></p>
+			<p><span>Range: </span><span>${data[0].calories.range}</span></p>
+
+			<h4>Fat:</h4>
+			<p><span>Amount: </span><span>${data[0].fat.amount}</span></p>
+			<p><span>Range: </span><span>${data[0].fat.range}</span></p>
+
+			<h4>Protein:</h4>
+			<p><span>Amount: </span><span>${data[0].protein.amount}</span></p>
+			<p><span>Range: </span><span>${data[0].protein.range}</span></p>
+
+			<h4>Carbs:</h4>
+			<p><span>Amount: </span><span>${data[0].carbs.amount}</span></p>
+			<p><span>Range: </span><span>${data[0].carbs.range}</span></p>
+		`);
+}
+
 
 
 function handleSignUpForm() {
@@ -123,9 +157,7 @@ function handleSignUpForm() {
 	});
 }
 
-function handleCreateGoals() {
 
-}
 
 function handleLogInForm() {
 	$('.login-form').submit(function(event) {
@@ -345,7 +377,6 @@ function postGoalsData() {
 			console.log(data);
 			
 		}
-		//beforeSend: function(xhr, settings) { xhr.setRequestHeader('Authorization','Bearer ' + localStorage.getItem('token')); }
 
 	});
 }
@@ -354,6 +385,7 @@ function handleSubmitGoals() {
 	$('.nutrients-goals-form').submit(function(event) {
 		event.preventDefault();
 		postGoalsData();
+		getGoals(displayGoals);
 		$('.pop-outer-goals').fadeOut();
 		$('.main-header').removeClass('transparent-background');
 	});
