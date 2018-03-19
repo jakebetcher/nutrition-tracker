@@ -7,6 +7,8 @@
 		protein: 0,
 		carbs: 0
 	};
+
+
 	
 function storeGoals() {
 	const goals = {
@@ -22,6 +24,120 @@ function storeGoals() {
 	return goals;
 }
 
+function storeUserInfo() {
+	let user = 	{
+		username: $('.username-input').val(),
+		password: $('.password-input').val(),
+		firstName: $('.first-name-input').val(),
+		lastName: $('.last-name-input').val()
+	}
+	//console.log(user);
+	return user;
+}
+
+
+function onSignupFormSubmit() {
+	$('.signup-form').val('');
+        return true; 
+}
+
+function storeUserInfoLogIn() {
+	return {
+		username: $('.username-input-login').val(),
+		password: $('.password-input-login').val()
+	}
+}
+
+function onLogInFormSubmit() {
+	$('.login-form').val('');
+	return true;
+}
+
+function logIn() {
+	let theUser = storeUserInfoLogIn();
+
+	$.ajax({
+		url: '/api/auth/login',
+		dataType: 'json',
+		method: 'POST',
+		contentType: 'application/json',
+		data: JSON.stringify(theUser),
+		success: function(data) {
+			//alert(data.authToken);
+			console.log('success');
+			localStorage.setItem('token', data.token);
+		}
+
+	});
+
+}
+
+function signUp() {
+	let user = storeUserInfo();
+	$.ajax({
+		url: '/api/users',
+		dataType: 'json',
+		method: 'POST',
+		contentType: 'application/json',
+		data: JSON.stringify(user),
+		success: function(data) {
+			console.log(data);
+			loginFirstTime();
+		}
+
+	});
+}
+
+function loginFirstTime() {
+	let user = {
+		username: $('.username-input').val(),
+		password: $('.password-input').val()
+	};
+
+	$.ajax({
+		url: '/api/auth/login',
+		dataType: 'json',
+		method: 'POST',
+		contentType: 'application/json',
+		data: JSON.stringify(user),
+		success: function(data) {
+			console.log(data);
+			localStorage.setItem('token', data.authToken);
+			console.log(localStorage.getItem('token'));
+		}
+
+	});
+}
+
+
+
+function handleSignUpForm() {
+	$('.signup-form').submit(function(event) {
+		event.preventDefault();
+		signUp();
+		$('.signup-form').addClass('hidden');
+		//$('.login-form').removeClass('hidden');
+		$('.main-header').addClass('transparent-background');
+		$('.pop-outer-goals').fadeIn();
+		$('.profile-page').removeClass('hidden');
+	});
+}
+
+function handleCreateGoals() {
+
+}
+
+function handleLogInForm() {
+	$('.login-form').submit(function(event) {
+		event.preventDefault();
+		logIn();
+		$('.signup-form').addClass('hidden');
+		$('.login-form').addClass('hidden');
+		$('.profile-page').removeClass('hidden');
+	});
+}
+
+
 function storeTheFood() {
 	let theFood = $('.js-food-query').val();
 	return theFood;
@@ -35,7 +151,7 @@ function onFoodSearchFormSubmit () {
 function handleNutritionSearchClick() {
 	$('.nutrition-search-button').on('click', function(event) {
 		$('.nutrition-search-form').removeClass('hidden');
-		$('.signup-form, .profile-page').addClass('hidden');
+		$('.signup-form, .profile-page, .login-form').addClass('hidden');
 	});
 }
 
@@ -53,19 +169,20 @@ function displayProfilePage() {
 	$('.log-in-button').on('click', function(event) {
 		$('.nutrition-search-form, .signup-form').addClass('hidden');
 		$('.js-results-div').empty();
-		$('.profile-page').removeClass('hidden');
+		$('.login-form').removeClass('hidden');
+		//$('.profile-page').removeClass('hidden');
 	});
 		
 }
 
-function displayGoalsModal() {
+/*function displayGoalsModal() {
 	$('.edit-goals-button').on('click', function(event) {
 		$('.main-header, .profile-page').addClass('transparent-background');
 		$('.pop-outer-goals').fadeIn();
 	});
-}
+}*/
 
-function handleSaveGoalChanges() {
+/*function handleSaveGoalChanges() {
 	//const nutrientsForTracking = Object.keys(STATE);
 	$('.nutrition-tracking').append(`
 			<p><span>Calories: </span><span>${STATE.calories}</span></p>
@@ -97,7 +214,7 @@ function handleSaveGoalChanges() {
 		$('.main-header, .profile-page').removeClass('transparent-background');
 	});
 	
-}
+}*/
 
 
 
@@ -216,33 +333,42 @@ function postGoalsData() {
 
 	}
 	$.ajax({
-		url: '/goals',
+		url: '/goals/protected',
 		dataType: 'json',
 		method: 'POST',
 		contentType: 'application/json',
+		headers: {
+			Authorization: `Bearer ${localStorage.getItem('token')}`
+		},
 		data: JSON.stringify(goal),
 		success: function(data) {
 			console.log(data);
-			$('body').append(`<p>${data}</p>`)
+			
 		}
+		//beforeSend: function(xhr, settings) { xhr.setRequestHeader('Authorization','Bearer ' + localStorage.getItem('token')); }
 
 	});
 }
 
 function handleSubmitGoals() {
 	$('.nutrients-goals-form').submit(function(event) {
+		event.preventDefault();
 		postGoalsData();
+		$('.pop-outer-goals').fadeOut();
+		$('.main-header').removeClass('transparent-background');
 	});
 }
 
 
 function initApp() {
+	handleSignUpForm();
+	handleLogInForm()
  	handleNutritionSearchClick();
  	displayProfilePage();
  	backToHome();
  	handleSubmitSearchFoods();
  	displayModal();
- 	displayGoalsModal();
+ 	//displayGoalsModal();
  	handleSubmitGoals();
  	//handleSaveGoalChanges(); 
 

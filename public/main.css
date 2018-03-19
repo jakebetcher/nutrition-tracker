@@ -37,16 +37,16 @@ h1 {
 	padding: 10px;
 }
 
-.signup-form, .nutrition-search-form {
+.signup-form, .nutrition-search-form, .login-form {
 	text-align: center;
 }
 
-.signup-legend, .nutrition-search-legend {
+.signup-legend, .nutrition-search-legend, .login-legend {
 	font-size: 28px;
 	margin-bottom: 10px;
 }
 
-.username-input, .password-input, .search-nutrition-input {
+.username-input, .password-input, .search-nutrition-input, .first-name-input, .last-name-input, .username-input-login, .password-input-login, .first-name-input-login, .last-name-input-login {
 	margin-bottom: 10px;
 	font-size: 20px;
 }
