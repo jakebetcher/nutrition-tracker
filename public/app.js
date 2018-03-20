@@ -1,4 +1,39 @@
+const foodEntry = (function() {
+	const consumedFood = {
+		consumedCalories: 0,
+		consumedFat: 0,
+		consumedProtein: 0,
+		consumedCarbs: 0
+	};
 
+	function getConsumedFood() {
+		return Object.assign({}, consumedFood);
+	}
+
+	function setCalories(calories) {
+		consumedFood.consumedCalories = calories;
+	}
+
+	function setFat(fat) {
+		consumedFood.consumedFat = fat;
+	}
+
+	function setProtein(protein) {
+		consumedFood.consumedProtein = protein;
+	}
+
+	function setCarbs(carbs) {
+		consumedFood.consumedCarbs = carbs;
+	}
+
+	return Object.freeze({
+		getConsumedFood: getConsumedFood,
+		setCalories: setCalories,
+		setFat: setFat,
+		setProtein: setProtein,
+		setCarbs: setCarbs
+	});
+})();
 
 
 	const STATE = {
@@ -78,8 +113,10 @@ function logIn() {
 		data: JSON.stringify(theUser),
 		success: function(data) {
 			//alert(data.authToken);
+			$('.log-in-button').remove();
+			$('.options').append(`<button class='header-button profile-name-button'>${theUser.username}</button>`);
 			console.log('success');
-			localStorage.setItem('token', data.token);
+			localStorage.setItem('token', data.authToken);
 		}
 
 	});
@@ -115,12 +152,23 @@ function loginFirstTime() {
 		contentType: 'application/json',
 		data: JSON.stringify(user),
 		success: function(data) {
+			$('.log-in-button').remove();
+			$('.options').append(`<button class='header-button profile-name-button'>${user.username}</button>`);
+			console.log('success');
 			console.log(data);
 			localStorage.setItem('token', data.authToken);
 			console.log(localStorage.getItem('token'));
 		}
 
 	});
+}
+
+function handleClickProfileButton() {
+	$('.options').on('click', '.profile-name-button', function(event) {
+		$('.js-results-div').empty();
+		$('.profile-page').removeClass('hidden');
+		$('.signup-form, .nutrition-search-form').addClass('hidden');
+	})
 }
 
 function getGoals(callback) {
@@ -167,7 +215,7 @@ function handleSignUpForm() {
 		//$('.login-form').removeClass('hidden');
 		$('.main-header').addClass('transparent-background');
 		$('.pop-outer-goals').fadeIn();
-		$('.profile-page').removeClass('hidden');
+		
 	});
 }
 
@@ -215,6 +263,7 @@ function displayProfilePage() {
 	$('.log-in-button').on('click', function(event) {
 		$('.nutrition-search-form, .signup-form').addClass('hidden');
 		$('.js-results-div').empty();
+
 		$('.login-form').removeClass('hidden');
 		//$('.profile-page').removeClass('hidden');
 	});
@@ -332,7 +381,14 @@ function renderDetailedData(result) {
   });
 	$('.js-results-div').on('click', '.add-a-food', function(event) {
     	$('.nutrition-tracking').empty();
-    	console.log(STATE.calories);
+
+    	foodEntry.setCalories(Number(result.report.foods[0].nutrients[0].value));
+    	foodEntry.setFat(Number(result.report.foods[0].nutrients[1].value));
+    	foodEntry.setProtein(Number(result.report.foods[0].nutrients[2].value));
+    	foodEntry.setCarbs(Number(result.report.foods[0].nutrients[3].value));
+
+    	getEntries(determineHttpMethod);
+    	/*console.log(STATE.calories);
     	console.log( Number(result.report.foods[0].nutrients[0].value));
     	console.log(STATE.calories + Number(result.report.foods[0].nutrients[0].value))
     	
@@ -349,12 +405,94 @@ function renderDetailedData(result) {
     	
     	let newCarbsValue = STATE.carbs + Number(result.report.foods[0].nutrients[3].value);
     	STATE.carbs = newCarbsValue;
-    	$('.nutrition-tracking').append(`<p><span>Carbs: </span><span>${STATE.carbs}</span></p>`)
+    	$('.nutrition-tracking').append(`<p><span>Carbs: </span><span>${STATE.carbs}</span></p>`)*/
 
     	$('.pop-outer').fadeOut();
     });
+	
+}		
+
+function getEntries(callback) {
+	$.ajax({
+		url: '/entries/protected',
+		dataType: 'json',
+		method: 'GET',
+		headers: {
+			Authorization: `Bearer ${localStorage.getItem('token')}`
+		},
+		success: callback
+	});
+}
+
+function determineHttpMethod(data) {
+	if (data.length === 0) {
+		//make a post request
+		let food = foodEntry.getConsumedFood();
+		$.ajax({
+			url: '/entries/protected',
+			dataType: 'json',
+			method: 'POST',
+			contentType: 'application/json',
+			headers: {
+			Authorization: `Bearer ${localStorage.getItem('token')}`
+		},
+			data: JSON.stringify(food),
+			success: function(data) {
+				//console.log(data);
+				getNutritionTrackingData(displayNutritionTrackingData);
+			}
+		});
 		
- }
+	} else {
+		//make a put request
+		let theFood = foodEntry.getConsumedFood();
+
+		
+			console.log(data);
+			theFood.consumedCalories += data[0].consumedCalories;
+			theFood.consumedFat += data[0].consumedFat;
+			theFood.consumedProtein += data[0].consumedProtein;
+			theFood.consumedCarbs += data[0].consumedCarbs;
+				$.ajax({
+					url: '/entries/protected',
+					dataType: 'json',
+					method: 'PUT',
+					contentType: 'application/json',
+					headers: {
+					Authorization: `Bearer ${localStorage.getItem('token')}`
+				},
+					data: JSON.stringify(theFood),
+					success: function(data) {
+						//console.log(data);
+						getNutritionTrackingData(displayNutritionTrackingData);
+					}
+				});
+		
+	}
+}
+
+function getNutritionTrackingData(callback) {
+	$.ajax({
+		url: '/entries/protected',
+		dataType: 'json',
+		method: 'GET',
+		headers: {
+			Authorization: `Bearer ${localStorage.getItem('token')}`
+		},
+		success: callback
+	});
+}
+
+function displayNutritionTrackingData(data) {
+	console.log(data);
+	$('.nutrition-tracking').empty();
+	$('.nutrition-tracking').append(`
+			<p>Calories: ${data[0].consumedCalories}</p>
+			<p>Fat: ${data[0].consumedFat}</p>
+			<p>Protein: ${data[0].consumedProtein}</p>
+			<p>Carbs: ${data[0].consumedCarbs}</p>
+		`);
+}
 
 function postGoalsData() {
 	let theGoals = storeGoals();
@@ -440,6 +578,7 @@ function handleSubmitGoals() {
 		postGoalsData();
 		getGoals(displayGoals);
 		$('.pop-outer-goals').fadeOut();
+		$('.profile-page').removeClass('hidden');
 		$('.main-header').removeClass('transparent-background');
 	});
 }
@@ -457,7 +596,7 @@ function handleEditGoals() {
 
 function initApp() {
 	handleSignUpForm();
-	handleLogInForm()
+	handleLogInForm();
  	handleNutritionSearchClick();
  	displayProfilePage();
  	backToHome();
@@ -467,11 +606,12 @@ function initApp() {
  	handleSubmitGoals();
  	//handleSaveGoalChanges(); 
  	handleEditGoals();
+ 	handleClickProfileButton();
 }
 
 $(initApp);
 
-console.log(STATE.calories);
+
 
 
 
