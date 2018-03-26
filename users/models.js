@@ -19,17 +19,32 @@ const UserSchema = mongoose.Schema({
 	},
 	firstName: {type: String, required: true},
 	lastName: {type: String, required: true},
-	//goal: { type: mongoose.Schema.Types.ObjectId, ref: 'Goal' },
-	//entry: { type: mongoose.Schema.Types.ObjectId, ref: 'Entry' },
-	//stat: { type: mongoose.Schema.Types.ObjectId, ref: 'Stat' }
+	goals: {
+		calories: {
+			amount: {type: Number, default: 0},
+			range: {type: Number, default: 0}
+		},
+		fat: {
+			amount: {type: Number, default: 0},
+			range: {type: Number, default: 0}
+		},
+		protein: {
+			amount: {type: Number, default: 0},
+			range: {type: Number, default: 0}
+		},
+		carbs: {
+			amount: {type: Number, default: 0},
+			range: {type: Number, default: 0}
+		}
+	}
 });
 
 UserSchema.methods.serialize = function() {
   return {
-  	//_id: this._id,
-    username: this.username || '',
-    firstName: this.firstName || '',
-    lastName: this.lastName || '',
+  	id: this.id,
+    username: this.username,
+    firstName: this.firstName,
+    lastName: this.lastName
   };
 };
 

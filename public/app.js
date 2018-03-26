@@ -36,6 +36,8 @@ const foodEntry = (function() {
 })();
 
 
+
+
 	const STATE = {
 		calories: 0,
 		fat: 0,
@@ -387,7 +389,29 @@ function renderDetailedData(result) {
     	foodEntry.setProtein(Number(result.report.foods[0].nutrients[2].value));
     	foodEntry.setCarbs(Number(result.report.foods[0].nutrients[3].value));
 
-    	getEntries(determineHttpMethod);
+    	//getEntries(determineHttpMethod);
+
+    	let food = foodEntry.getConsumedFood();
+		
+		let theDate = new Date();
+		let theDay = theDate.toDateString();
+		food.date = theDate;
+		food.day = theDay;
+		//console.log(food);
+		$.ajax({
+			url: '/entries/protected',
+			dataType: 'json',
+			method: 'POST',
+			contentType: 'application/json',
+			headers: {
+			Authorization: `Bearer ${localStorage.getItem('token')}`
+		},
+			data: JSON.stringify(food),
+			success: function(data) {
+				//console.log(data);
+				getNutritionTrackingData(displayNutritionTrackingData);
+			}
+		});
     	/*console.log(STATE.calories);
     	console.log( Number(result.report.foods[0].nutrients[0].value));
     	console.log(STATE.calories + Number(result.report.foods[0].nutrients[0].value))
@@ -428,6 +452,12 @@ function determineHttpMethod(data) {
 	if (data.length === 0) {
 		//make a post request
 		let food = foodEntry.getConsumedFood();
+		
+		let theDate = new Date();
+		let theDay = theDate.toDateString();
+		food.date = theDate;
+		food.day = theDay;
+		//console.log(food);
 		$.ajax({
 			url: '/entries/protected',
 			dataType: 'json',

@@ -161,7 +161,7 @@ app.put('/goals/protected', jwtAuth, (req, res) => {
 ***********************************/
 
 app.post('/entries/protected', jwtAuth, (req, res) => {
-	const requiredFields = ['consumedCalories', 'consumedFat', 'consumedProtein', 'consumedCarbs'];
+	const requiredFields = ['consumedCalories', 'consumedFat', 'consumedProtein', 'consumedCarbs', 'date', 'day'];
 	for (let i = 0; i < requiredFields.length; i++) {
     const field = requiredFields[i];
     if (!(field in req.body)) {
@@ -171,12 +171,17 @@ app.post('/entries/protected', jwtAuth, (req, res) => {
     }
   }
 
+  console.log(req.user._id);
+
   let entry = new Entry({
-  	username: req.user.username,
+  	user: req.user._id,
   	consumedCalories: req.body.consumedCalories,
   	consumedFat: req.body.consumedFat,
   	consumedProtein: req.body.consumedProtein,
-  	consumedCarbs: req.body.consumedCarbs
+  	consumedCarbs: req.body.consumedCarbs,
+  	date: req.body.date,
+  	day: req.body.day
+
   });
 
   entry.save()
@@ -188,9 +193,44 @@ app.post('/entries/protected', jwtAuth, (req, res) => {
   })
 });
 
-app.get('/entries/protected', jwtAuth, (req, res) => {
+app.get('/entries/test', jwtAuth, (req, res) => {
+	let today = new Date();
+	let day = today.toDateSting();
+	
 	Entry
 	.find({username: req.user.username})
+	.where('day').equals(day)
+	.then(entries => {
+		const totals = {
+			calorieTotal: 0,
+			fatTotal: 0,
+			proteinTotal: 0,
+			carbTotal: 0
+		};
+		//console.log(Date());
+
+		//res.json(entries.map(entry => entry));
+
+		entries.map(entry => {
+			console.log(entry);
+			totals.calorieTotal += entry.consumedCalories;
+			totals.fatTotal += entry.consumedFat;
+			totals.proteinTotal += entry.consumedProtein;
+			totals.carbTotal += entry.consumedCarbs;
+		});
+		res.json(totals);
+		console.log(totals);
+		//res.json(totals);*/
+	})
+	.catch(err => {
+		console.log(err);
+		res.status(500).json({error: 'Something went horribly wrong'})
+	})
+})
+
+app.get('/entries/protected', jwtAuth, (req, res) => {
+	Entry
+	.find({user: req.user._id})
 	.then(entry => {
 		res.json(entry);
 	})

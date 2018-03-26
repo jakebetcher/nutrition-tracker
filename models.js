@@ -65,11 +65,14 @@ const goalSchema = mongoose.Schema({
 });
 
 const entrySchema = mongoose.Schema({
-	username: { type: String},
+	user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+	//foodName: {type: String},
 	consumedCalories: {type: Number, required: true},
 	consumedFat: {type: Number, required: true},
 	consumedProtein: {type: Number, required: true},
-	consumedCarbs: {type: Number, required: true}
+	consumedCarbs: {type: Number, required: true},
+	date: {type: Date, required: true},
+	day: {type: String, required: true}
 });
 
 const statSchema = mongoose.Schema({
@@ -82,6 +85,43 @@ const statSchema = mongoose.Schema({
 	timesMetAtLeastOneGoal: {type: Number, required: true},
 	daysGoalsHaveBeenTracked: {type: Number, required: true}
 });
+
+function getGoals(id)  {
+	
+}
+
+function getEntries(id, date) {
+
+}
+
+function summarizeEntries(id) {
+
+ Entry
+ .aggregate([
+ 		{
+            $group: {
+                _id: '$day',
+                consumedCalories: {$sum: 1},
+                consumedFat: {$sum: 1},
+                consumedProtein: {$sum: 1},
+                consumedCarbs: {$sum: 1}
+            }
+        },
+ 	],
+ 	function (err, result) {
+        if (err) {
+            next(err);
+        } else {
+            res.json(result);
+        }
+    });
+}
+
+function goalResults(id) {
+	const goals = getGoals(id);
+	const entries = getEntries(id);
+}
+
 
 
 
