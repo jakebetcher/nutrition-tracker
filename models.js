@@ -2,7 +2,7 @@
 
 const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
-
+const { closeServer, runServer, app } = require('./server');
 const { User } = require('./users')
 /*const goalSchema = mongoose.Schema({
 	calories: {
@@ -86,40 +86,124 @@ const statSchema = mongoose.Schema({
 	daysGoalsHaveBeenTracked: {type: Number, required: true}
 });
 
+const Goal = mongoose.model('Goal', goalSchema);
+const Entry = mongoose.model('Entry', entrySchema);
+const Stat = mongoose.model('Stat', statSchema);
+
+
 function getGoals(id)  {
+	User
+	.find({_id: id})
+	.exec(function(err, user) {
+		if (err) return handleError(err);
+		return user;
+	});
+	
 	
 }
+
+//console.log(getGoals('5ab937ecd6cc5883b9bfd8ef'));
+
+/*function a() {
+let goals = getGoals('5ab937ecd6cc5883b9bfd8ef');
+console.log(goals);
+}
+
+a();*/
 
 function getEntries(id, date) {
 
 }
 
 function summarizeEntries(id) {
-
- Entry
- .aggregate([
+	Entry.aggregate([
+ 		{
+ 			$match: {
+ 				user: mongoose.Types.ObjectId(id) 
+ 			}
+ 		},
  		{
             $group: {
                 _id: '$day',
-                consumedCalories: {$sum: 1},
-                consumedFat: {$sum: 1},
-                consumedProtein: {$sum: 1},
-                consumedCarbs: {$sum: 1}
+                consumedCalories: {$sum: "$consumedCalories"},
+                consumedFat: {$sum: "$consumedFat"},
+                consumedProtein: {$sum: "$consumedProtein"},
+                consumedCarbs: {$sum: "$consumedCarbs"}
             }
-        },
- 	],
- 	function (err, result) {
-        if (err) {
-            next(err);
-        } else {
-            res.json(result);
-        }
+        }],
+        
+		function (err, result) {
+        	if (err) {
+            	console.log(err);
+            	return;
+        	}
+        console.log(result);
+        goalResults(id, result);
     });
 }
 
-function goalResults(id) {
-	const goals = getGoals(id);
-	const entries = getEntries(id);
+summarizeEntries("5ab96dfb2c4f1b8619a875f8");
+
+function goalResults(id, results) {
+	User.findOne({_id: id})
+	.exec(function(err, user) {
+		if (err) console.log(err);
+		let goals = user.goals;
+		let timesMetCaloriesGoals = 0;
+		let timesMetFatGoals = 0;
+		let timesMetProteinGoals= 0;
+		let timesMetCarbsGoals = 0;
+		let timesMetAllGoals = 0;
+		let timesMetAtLeastOneGoal = 0;
+		let daysGoalsHaveBeenTracked = 0;
+
+		results.forEach(result => {
+			let metCalorieGoals;
+			let metFatGoals;
+			let metProteinGoals;
+			let metCarbsGoals;
+			if ((result.consumedCalories >= goals.calories.amount - goals.calories.range) && (result.consumedCalories <= goals.calories.amount + goals.calories.range)) {
+				timesMetCaloriesGoals += 1;
+				metCalorieGoals = true;
+			}
+
+			if ((result.consumedFat >= goals.fat.amount - goals.fat.range) && (result.consumedFat <= goals.fat.amount + goals.fat.range)) {
+				timesMetFatGoals += 1;
+				metFatGoals = true;
+			}
+
+			if ((result.consumedProtein >= goals.protein.amount - goals.protein.range) && (result.consumedProtein <= goals.protein.amount + goals.protein.range)) {
+				timesMetProteinGoals += 1;
+				metProteinGoals = true;
+			}
+
+			if ((result.consumedCarbs >= goals.carbs.amount - goals.carbs.range) && (result.consumedCarbs<= goals.carbs.amount + goals.carbs.range)) {
+				timesMetCarbsGoals += 1;
+				metCarbsGoals = true;
+			}
+			if (metCalorieGoals === true && metFatGoals === true && metProteinGoals === true && metCarbsGoals === true) {
+				timesMetAllGoals += 1;
+			}
+			if (metCalorieGoals === true || metFatGoals === true || metProteinGoals === true || metCarbsGoals === true) {
+				timesMetAtLeastOneGoal += 1;
+			}
+			daysGoalsHaveBeenTracked += 1;
+		});
+
+		let stats = {
+			timesMetCaloriesGoals: timesMetCaloriesGoals,
+			timesMetFatGoals: timesMetFatGoals,
+			timesMetProteinGoals: timesMetProteinGoals,
+			timesMetCarbsGoals: timesMetCarbsGoals,
+			timesMetAllGoals: timesMetAllGoals,
+			timesMetAtLeastOneGoal: timesMetAtLeastOneGoal,
+			daysGoalsHaveBeenTracked: daysGoalsHaveBeenTracked
+		}
+
+		console.log(stats);
+
+	});
+
 }
 
 
@@ -138,9 +222,7 @@ goalSchema.methods.serialize = function() {
   };
 };
 
-const Goal = mongoose.model('Goal', goalSchema);
-const Entry = mongoose.model('Entry', entrySchema);
-const Stat = mongoose.model('Stat', statSchema);
+
 
 module.exports = {Goal, Entry, Stat};
 
