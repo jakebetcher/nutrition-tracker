@@ -408,7 +408,7 @@ function renderDetailedData(result) {
 		},
 			data: JSON.stringify(food),
 			success: function(data) {
-				//console.log(data);
+				console.log(data);
 				getNutritionTrackingData(displayNutritionTrackingData);
 			}
 		});
@@ -566,6 +566,7 @@ function postGoalsData() {
 function putGoalsData() {
 	let theGoals = storeGoalsPut();
 	const goal = {
+		goals: {
 		calories: {
 			amount: theGoals.caloriesAmount,
 			range: theGoals.caloriesRange
@@ -582,7 +583,7 @@ function putGoalsData() {
 			amount: theGoals.carbsAmount,
 			range: theGoals.carbsRange
 		}
-
+}
 	}
 	$.ajax({
 		url: '/goals/protected',
@@ -595,7 +596,7 @@ function putGoalsData() {
 		data: JSON.stringify(goal),
 		success: function() {
 			console.log('success');
-			getGoals(displayGoals);
+			//getGoals(displayGoals);
 		}
 
 	});

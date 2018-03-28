@@ -43,7 +43,7 @@ const { User } = require('./users')
 });*/
 
 const goalSchema = mongoose.Schema({
-		username: { type: String},
+		user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
 		calories: {
 			amount: {type: Number, required: true, default: 0},
 			range: {type: Number, required: true, default: 0}
@@ -65,6 +65,7 @@ const goalSchema = mongoose.Schema({
 });
 
 const entrySchema = mongoose.Schema({
+	goal: { type: mongoose.Schema.Types.ObjectId, ref: 'Goal' },
 	user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
 	//foodName: {type: String},
 	consumedCalories: {type: Number, required: true},
@@ -116,6 +117,7 @@ function getEntries(id, date) {
 }
 
 function summarizeEntries(id) {
+	
 	Entry.aggregate([
  		{
  			$match: {
@@ -142,13 +144,14 @@ function summarizeEntries(id) {
     });
 }
 
-summarizeEntries("5ab96dfb2c4f1b8619a875f8");
+//summarizeEntries("5aba9024a2cf1707bdcd0b11");
 
 function goalResults(id, results) {
 	User.findOne({_id: id})
 	.exec(function(err, user) {
 		if (err) console.log(err);
 		let goals = user.goals;
+		console.log(user.goals);
 		let timesMetCaloriesGoals = 0;
 		let timesMetFatGoals = 0;
 		let timesMetProteinGoals= 0;
@@ -206,9 +209,94 @@ function goalResults(id, results) {
 
 }
 
+function returnGoalStats(id) {
+	Goal.find({user: id})
+	.sort({date: -1})
+	.limit(1)
+	.exec(function(err, goal) {
+		if (err) {console.log(error)}
+		let goalId = goal[0]._id;
+	console.log(goal);
+		Entry.aggregate([
+ 		{
+ 			$match: {
+ 				user: mongoose.Types.ObjectId(id),
+ 				goal: mongoose.Types.ObjectId(goalId) 			}
+ 		},
+ 		{
+            $group: {
+                _id: '$day',
+                consumedCalories: {$sum: "$consumedCalories"},
+                consumedFat: {$sum: "$consumedFat"},
+                consumedProtein: {$sum: "$consumedProtein"},
+                consumedCarbs: {$sum: "$consumedCarbs"}
+            }
+        }],
+        
+		function (err, result) {
+        	if (err) {
+            	console.log(err);
+            	return;
+        	}
+        console.log(result);
+        let goals = goal[0];
+		let timesMetCaloriesGoals = 0;
+		let timesMetFatGoals = 0;
+		let timesMetProteinGoals= 0;
+		let timesMetCarbsGoals = 0;
+		let timesMetAllGoals = 0;
+		let timesMetAtLeastOneGoal = 0;
+		let daysGoalsHaveBeenTracked = 0;
+        
+        result.forEach(result => {
+			let metCalorieGoals;
+			let metFatGoals;
+			let metProteinGoals;
+			let metCarbsGoals;
+			if ((result.consumedCalories >= goals.calories.amount - goals.calories.range) && (result.consumedCalories <= goals.calories.amount + goals.calories.range)) {
+				timesMetCaloriesGoals += 1;
+				metCalorieGoals = true;
+			}
 
+			if ((result.consumedFat >= goals.fat.amount - goals.fat.range) && (result.consumedFat <= goals.fat.amount + goals.fat.range)) {
+				timesMetFatGoals += 1;
+				metFatGoals = true;
+			}
 
+			if ((result.consumedProtein >= goals.protein.amount - goals.protein.range) && (result.consumedProtein <= goals.protein.amount + goals.protein.range)) {
+				timesMetProteinGoals += 1;
+				metProteinGoals = true;
+			}
 
+			if ((result.consumedCarbs >= goals.carbs.amount - goals.carbs.range) && (result.consumedCarbs<= goals.carbs.amount + goals.carbs.range)) {
+				timesMetCarbsGoals += 1;
+				metCarbsGoals = true;
+			}
+			if (metCalorieGoals === true && metFatGoals === true && metProteinGoals === true && metCarbsGoals === true) {
+				timesMetAllGoals += 1;
+			}
+			if (metCalorieGoals === true || metFatGoals === true || metProteinGoals === true || metCarbsGoals === true) {
+				timesMetAtLeastOneGoal += 1;
+			}
+			daysGoalsHaveBeenTracked += 1;
+		});
+
+		let stats = {
+			timesMetCaloriesGoals: timesMetCaloriesGoals,
+			timesMetFatGoals: timesMetFatGoals,
+			timesMetProteinGoals: timesMetProteinGoals,
+			timesMetCarbsGoals: timesMetCarbsGoals,
+			timesMetAllGoals: timesMetAllGoals,
+			timesMetAtLeastOneGoal: timesMetAtLeastOneGoal,
+			daysGoalsHaveBeenTracked: daysGoalsHaveBeenTracked
+		}
+
+		console.log(stats);
+    });
+	})
+}
+
+returnGoalStats("5abbd84ca1297f0e92fd7a64");
 
 
 goalSchema.methods.serialize = function() {

@@ -18,8 +18,8 @@ const UserSchema = mongoose.Schema({
 		required: true
 	},
 	firstName: {type: String, required: true},
-	lastName: {type: String, required: true},
-	goals: {
+	lastName: {type: String, required: true}
+	/*goals: {
 		calories: {
 			amount: {type: Number, default: 0},
 			range: {type: Number, default: 0}
@@ -35,8 +35,9 @@ const UserSchema = mongoose.Schema({
 		carbs: {
 			amount: {type: Number, default: 0},
 			range: {type: Number, default: 0}
-		}
-	}
+		},
+		startDate: {type: Date, default: Date.now}
+	}*/
 });
 
 UserSchema.methods.serialize = function() {

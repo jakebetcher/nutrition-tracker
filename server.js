@@ -54,7 +54,7 @@ const requiredFields = ['calories', 'fat', 'protein', 'carbs'];
 console.log(req.user)
   
     let goal = new Goal({
-    	username: req.user.username,
+    	user: req.user._id,
     	calories: {
     		amount: req.body.calories.amount,
     		range: req.body.calories.range
@@ -74,21 +74,7 @@ console.log(req.user)
     });
 
     goal.save()
-    /*.then(goal => {
-    	
-    	
-    	goal
-    	.populate('user')
-    	.exec(function(err, goal) {
-    		if (err) return handleError(err);
-    console.log('The goal is %s', req.user.goal);
-    	});
-    	
-    	
-    })*/
-
-
-
+    
       .then(goal => res.status(201).json(goal))
       .catch(err => {
       console.error(err);
@@ -113,7 +99,7 @@ console.log(req.user)
 
 app.get('/goals/protected', jwtAuth, (req, res) => {
 	Goal
-	.find({username: req.user.username})
+	.find({user: req.user._id})
 	.then(goal => {
 		res.json(goal);
 	})
@@ -131,7 +117,7 @@ app.put('/goals/protected', jwtAuth, (req, res) => {
   }*/
 
   const updated = {};
-  const updateableFields = ['calories', 'fat', 'protein', 'carbs'];
+  const updateableFields = ['goals'];
   updateableFields.forEach(field => {
   	if (field in req.body) {
   		updated[field] = req.body[field];
@@ -139,7 +125,7 @@ app.put('/goals/protected', jwtAuth, (req, res) => {
   });
 
   Goal
-  .findOneAndUpdate({username: req.user.username}, { $set: updated }, { new: true })
+  .findOneAndUpdate({user: req.user._id}, { $set: updated }, { new: true })
   .then(updatedGoal => res.status(204).end())
   .catch(err => res.status(500).json({ message: 'Something went wrong' }));
 });
@@ -173,7 +159,14 @@ app.post('/entries/protected', jwtAuth, (req, res) => {
 
   console.log(req.user._id);
 
-  let entry = new Entry({
+  Goal
+  .find({user: req.user._id})
+  .sort({"date": -1})
+  .limit(1)
+  .then(theGoal => {
+  	
+  	let entry = new Entry({
+  	goal: theGoal[0]._id,
   	user: req.user._id,
   	consumedCalories: req.body.consumedCalories,
   	consumedFat: req.body.consumedFat,
@@ -184,7 +177,9 @@ app.post('/entries/protected', jwtAuth, (req, res) => {
 
   });
 
-  entry.save()
+  entry.save();
+  return entry;
+})
   .then(entry => res.status(201).json(entry))
   .catch(err => {
   	console.log(err);
