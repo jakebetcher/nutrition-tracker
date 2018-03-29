@@ -26,7 +26,7 @@ passport.use(jwtStrategy);
 
 const jwtAuth = passport.authenticate('jwt', { session: false });
 
-router.post('/create', jsonParser, jwtAuth, (req, res) => {
+router.post('/', jsonParser, jwtAuth, (req, res) => {
   const requiredFields = ['consumedCalories', 'consumedFat', 'consumedProtein', 'consumedCarbs', 'date', 'day'];
   for (let i = 0; i < requiredFields.length; i++) {
     const field = requiredFields[i];
@@ -78,7 +78,8 @@ router.get('/list', jwtAuth, (req, res) => {
   .sort({date: -1})
   .limit(1)
   .then(goal => {
-    Entry
+
+    return Entry
     .find({user: req.user._id})
     .where({goal: goal[0]._id})
     .where({day: day})
@@ -100,7 +101,7 @@ router.get('/total', jwtAuth, (req, res) => {
   .sort({date: -1})
   .limit(1)
   .then(goal => {
-    Entry.aggregate([
+    return Entry.aggregate([
         {
           $match: {
             user: mongoose.Types.ObjectId(req.user._id),

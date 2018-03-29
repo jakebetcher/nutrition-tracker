@@ -399,7 +399,7 @@ function renderDetailedData(result) {
 		food.day = theDay;
 		//console.log(food);
 		$.ajax({
-			url: '/entries/protected',
+			url: '/entries/',
 			dataType: 'json',
 			method: 'POST',
 			contentType: 'application/json',
@@ -408,8 +408,10 @@ function renderDetailedData(result) {
 		},
 			data: JSON.stringify(food),
 			success: function(data) {
-				console.log(data);
-				getNutritionTrackingData(displayNutritionTrackingData);
+				
+				//getNutritionTrackingData(displayNutritionTrackingData);
+				getEntriesList(displayEntriesList);
+				getEntriesTotal(displayEntriesTotal);
 			}
 		});
     	/*console.log(STATE.calories);
@@ -436,9 +438,9 @@ function renderDetailedData(result) {
 	
 }		
 
-function getEntries(callback) {
+function getEntriesList(callback) {
 	$.ajax({
-		url: '/entries/protected',
+		url: '/entries/list',
 		dataType: 'json',
 		method: 'GET',
 		headers: {
@@ -446,6 +448,42 @@ function getEntries(callback) {
 		},
 		success: callback
 	});
+}
+
+function displayEntriesList(data) {
+	$('.nutrition-tracking').empty();
+	$('.nutrition-tracking').append(`<div>${data}</div>`)
+	data.forEach(entry => {
+		$('.nutrition-tracking').append(`
+			<div>
+			<p>Calories: ${entry.consumedCalories}</p>
+			<p>Fat: ${entry.consumedFat}</p>
+			<p>Protein: ${entry.consumedProtein}</p>
+			<p>Carbs: ${entry.consumedCarbs}</p>
+			</div>
+		`);
+	})
+}
+
+function getEntriesTotal(callback) {
+	$.ajax({
+		url: '/entries/total',
+		dataType: 'json',
+		method: 'GET',
+		headers: {
+			Authorization: `Bearer ${localStorage.getItem('token')}`
+		},
+		success: callback
+	});
+}
+
+function displayEntriesTotal(data) {
+	$('.nutrition-tracking').append(`
+		<div>Calories Eaten Today: ${data[0].consumedCalories}</div>
+		<div>Fat Eaten Today: ${data[0].consumedFat}</div>
+		<div>Protein Eaten Today: ${data[0].consumedProtein}</div>
+		<div>Carbs Eaten Today: ${data[0].consumedCarbs}</div>
+	`);
 }
 
 function determineHttpMethod(data) {
