@@ -209,7 +209,11 @@ function goalResults(id, results) {
 
 }
 
-function returnGoalStats(id) {
+
+
+
+const statObject = {
+returnGoalStats(id, callback) {
 	Goal.find({user: id})
 	.sort({date: -1})
 	.limit(1)
@@ -221,7 +225,8 @@ function returnGoalStats(id) {
  		{
  			$match: {
  				user: mongoose.Types.ObjectId(id),
- 				goal: mongoose.Types.ObjectId(goalId) 			}
+ 				goal: mongoose.Types.ObjectId(goalId) 			
+ 			}
  		},
  		{
             $group: {
@@ -292,10 +297,11 @@ function returnGoalStats(id) {
 		}
 
 		console.log(stats);
+		callback(stats);
     });
 	})
 }
-
+}
 returnGoalStats("5abbd84ca1297f0e92fd7a64");
 
 
@@ -312,5 +318,5 @@ goalSchema.methods.serialize = function() {
 
 
 
-module.exports = {Goal, Entry, Stat};
+module.exports = {Goal, Entry, Stat, statObject};
 
