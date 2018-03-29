@@ -26,12 +26,12 @@ passport.use(jwtStrategy);
 
 const jwtAuth = passport.authenticate('jwt', { session: false });
 
-router.get('/stats', jwtAuth, (req, res) => {
+router.get('/', jwtAuth, (req, res) => {
 	function sendStats(stats) {
 		res.json(stats);
 	}
 
-	statObject(req.user._id, sendStats);
+	statObject.returnGoalStats(req.user._id, sendStats);
 })
 
 module.exports = {router};

@@ -412,6 +412,7 @@ function renderDetailedData(result) {
 				//getNutritionTrackingData(displayNutritionTrackingData);
 				getEntriesList(displayEntriesList);
 				getEntriesTotal(displayEntriesTotal);
+				getStats(displayStats);
 			}
 		});
     	/*console.log(STATE.calories);
@@ -436,7 +437,33 @@ function renderDetailedData(result) {
     	$('.pop-outer').fadeOut();
     });
 	
-}		
+}	
+
+function getStats(callback) {
+	$.ajax({
+		url: '/stats',
+		dataType: 'json',
+		method: 'GET',
+		headers: {
+			Authorization: `Bearer ${localStorage.getItem('token')}`
+		},
+		success: callback
+	});
+}
+
+function displayStats(data) {
+	$('.nutrition-tracking').append(`
+			<div>
+				<p>Met Calories Goals: ${data.timesMetCaloriesGoals} times</p>
+				<p>Met Fat Goals: ${data.timesMetFatGoals} times</p>
+				<p>Met Protein Goals: ${data.timesMetProteinGoals} times</p>
+				<p>Met Carbs Goals: ${data.timesMetCarbsGoals} times</p>
+				<p>Met All Goals: ${data.timesMetAllGoals} times</p>
+				<p>Met At Least One Goal: ${data.timesMetAtLeastOneGoal} times</p>
+				<p>Days I've Been Tracking Current Goal: ${data.daysGoalsHaveBeenTracked} times</p>
+			</div>
+		`);
+}
 
 function getEntriesList(callback) {
 	$.ajax({
