@@ -15,23 +15,14 @@ const { User } = require('./users')
 
 const router = express.Router();
 
+const { localStrategy, jwtStrategy } = require('./auth');
 
-const { router: usersRouter } = require('./users');
-const { router: authRouter, localStrategy, jwtStrategy } = require('./auth');
 
-app.use(morgan('common'));
-app.use(bodyParser.json());
+const jsonParser = bodyParser.json();
 
 
 passport.use(localStrategy);
 passport.use(jwtStrategy);
-
-
-app.use('/api/users/', usersRouter);
-app.use('/api/auth/', authRouter);
-
-app.use(express.static("public"));
-
 
 const jwtAuth = passport.authenticate('jwt', { session: false });
 
@@ -42,3 +33,5 @@ router.get('/stats', jwtAuth, (req, res) => {
 
 	statObject(req.user._id, sendStats);
 })
+
+module.exports = {router};

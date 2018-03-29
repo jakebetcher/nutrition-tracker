@@ -302,7 +302,7 @@ returnGoalStats(id, callback) {
 	})
 }
 }
-returnGoalStats("5abbd84ca1297f0e92fd7a64");
+//returnGoalStats("5abbd84ca1297f0e92fd7a64");
 
 
 goalSchema.methods.serialize = function() {

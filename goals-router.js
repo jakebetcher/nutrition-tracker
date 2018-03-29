@@ -10,34 +10,25 @@ const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 
 const { DATABASE_URL, PORT } = require('./config');
-const { Goal, Entry, Stat } = require('./models');
+const { Goal } = require('./models');
 const { User } = require('./users')
 
 const router = express.Router();
 
-const { router: usersRouter } = require('./users');
-const { router: authRouter, localStrategy, jwtStrategy } = require('./auth');
+const { localStrategy, jwtStrategy } = require('./auth');
 
-app.use(morgan('common'));
-app.use(bodyParser.json());
+
+const jsonParser = bodyParser.json();
 
 
 passport.use(localStrategy);
 passport.use(jwtStrategy);
 
 
-app.use('/api/users/', usersRouter);
-app.use('/api/auth/', authRouter);
-
-app.use(express.static("public"));
-
 const jwtAuth = passport.authenticate('jwt', { session: false });
 
-router.post('/', jwtAuth, (req, res) => {
-  //console.log(req.body);
-  //console.log(req.body.calories);
-  //const enteredNutrients = Object.keys(req.body);
-  
+router.post('/', jsonParser, jwtAuth, (req, res) => {
+
 const requiredFields = ['calories', 'fat', 'protein', 'carbs'];
   for (let i = 0; i < requiredFields.length; i++) {
     const field = requiredFields[i];
@@ -82,21 +73,12 @@ console.log(req.user)
   
 });
 
-/*app.get('/goals', (req, res) => {
-  Goal
-    .find()
-    .then(goals => {
-      res.json(goals.map(goal => goal));
-    })
-    .catch(err => {
-      console.error(err);
-      res.status(500).json({ error: 'something went terribly wrong' });
-    });
-});*/
 
-router.get('/goals', jwtAuth, (req, res) => {
+router.get('/', jwtAuth, (req, res) => {
 	Goal
 	.find({user: req.user._id})
+	.sort({date: -1})
+  	.limit(1)
 	.then(goal => {
 		res.json(goal);
 	})
@@ -106,4 +88,5 @@ router.get('/goals', jwtAuth, (req, res) => {
     });
 });
 
+module.exports = {router};
 

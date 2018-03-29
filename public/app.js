@@ -175,7 +175,7 @@ function handleClickProfileButton() {
 
 function getGoals(callback) {
 	$.ajax({
-		url: '/goals/protected',
+		url: '/goals',
 		dataType: 'json',
 		method: 'GET',
 		headers: {
@@ -547,7 +547,7 @@ function postGoalsData() {
 
 	}
 	$.ajax({
-		url: '/goals/protected',
+		url: '/goals',
 		dataType: 'json',
 		method: 'POST',
 		contentType: 'application/json',

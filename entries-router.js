@@ -15,26 +15,18 @@ const { User } = require('./users')
 
 const router = express.Router();
 
+const { localStrategy, jwtStrategy } = require('./auth');
 
-const { router: usersRouter } = require('./users');
-const { router: authRouter, localStrategy, jwtStrategy } = require('./auth');
 
-app.use(morgan('common'));
-app.use(bodyParser.json());
+const jsonParser = bodyParser.json();
 
 
 passport.use(localStrategy);
 passport.use(jwtStrategy);
 
-
-app.use('/api/users/', usersRouter);
-app.use('/api/auth/', authRouter);
-
-
-
 const jwtAuth = passport.authenticate('jwt', { session: false });
 
-router.post('/create', jwtAuth, (req, res) => {
+router.post('/create', jsonParser, jwtAuth, (req, res) => {
   const requiredFields = ['consumedCalories', 'consumedFat', 'consumedProtein', 'consumedCarbs', 'date', 'day'];
   for (let i = 0; i < requiredFields.length; i++) {
     const field = requiredFields[i];
@@ -137,6 +129,7 @@ router.get('/total', jwtAuth, (req, res) => {
       })
 
 });
+});
 
 
 
@@ -151,3 +144,5 @@ router.delete('/:id', jwtAuth, (req, res) => {
       res.status(500).json({ error: 'something went terribly wrong' });
     });
 });
+
+module.exports = {router};

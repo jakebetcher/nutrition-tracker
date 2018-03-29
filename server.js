@@ -15,9 +15,9 @@ const { User } = require('./users')
 
 const app = express();
 
-const goalsRouter = require('./goals-router');
-const entriesRouter = require('./entries-router');
-const statsRouter = require('./stats-router');
+const { router: goalsRouter } = require('./goals-router');
+const { router: entriesRouter } = require('./entries-router');
+const { router: statsRouter } = require('./stats-router');
 const { router: usersRouter } = require('./users');
 const { router: authRouter, localStrategy, jwtStrategy } = require('./auth');
 
@@ -38,114 +38,6 @@ app.use(express.static("public"));
 
 const jwtAuth = passport.authenticate('jwt', { session: false });
 
-/************************
-	goals routes
-*************************/	
-app.post('/goals/protected', jwtAuth, (req, res) => {
-  //console.log(req.body);
-  //console.log(req.body.calories);
-  //const enteredNutrients = Object.keys(req.body);
-  
-const requiredFields = ['calories', 'fat', 'protein', 'carbs'];
-  for (let i = 0; i < requiredFields.length; i++) {
-    const field = requiredFields[i];
-    if (!(field in req.body)) {
-      const message = `Missing \`${field}\` in request body`;
-      console.error(message);
-      return res.status(400).send(message);
-    }
-  }
-
-console.log(req.user)
-  
-    let goal = new Goal({
-    	user: req.user._id,
-    	calories: {
-    		amount: req.body.calories.amount,
-    		range: req.body.calories.range
-    	},
-    	fat: {
-    		amount: req.body.fat.amount,
-    		range: req.body.fat.range
-    	},
-    	protein: {
-    		amount: req.body.protein.amount,
-    		range: req.body.protein.range
-    	},
-    	carbs: {
-    		amount: req.body.carbs.amount,
-    		range: req.body.carbs.range
-    	}
-    });
-
-    goal.save()
-    
-      .then(goal => res.status(201).json(goal))
-      .catch(err => {
-      console.error(err);
-
-      res.status(500).json({ error: 'Something went wrong' });
-    });
-  
-  
-});
-
-/*app.get('/goals', (req, res) => {
-  Goal
-    .find()
-    .then(goals => {
-      res.json(goals.map(goal => goal));
-    })
-    .catch(err => {
-      console.error(err);
-      res.status(500).json({ error: 'something went terribly wrong' });
-    });
-});*/
-
-app.get('/goals/protected', jwtAuth, (req, res) => {
-	Goal
-	.find({user: req.user._id})
-	.then(goal => {
-		res.json(goal);
-	})
-	.catch(err => {
-      console.error(err);
-      res.status(500).json({ error: 'something went terribly wrong' });
-    });
-});
-
-app.put('/goals/protected', jwtAuth, (req, res) => {
-	/*if (!(req.params.id && req.body.id && req.params.id === req.body.id)) {
-    res.status(400).json({
-      error: 'Request path id and request body id values must match'
-    });
-  }*/
-
-  const updated = {};
-  const updateableFields = ['goals'];
-  updateableFields.forEach(field => {
-  	if (field in req.body) {
-  		updated[field] = req.body[field];
-  	}
-  });
-
-  Goal
-  .findOneAndUpdate({user: req.user._id}, { $set: updated }, { new: true })
-  .then(updatedGoal => res.status(204).end())
-  .catch(err => res.status(500).json({ message: 'Something went wrong' }));
-});
-
-/*app.delete('/goals/:id', (req, res) => {
-  Goal
-    .findByIdAndRemove(req.params.id)
-    .then(() => {
-      res.status(204).json({ message: 'success' });
-    })
-    .catch(err => {
-      console.error(err);
-      res.status(500).json({ error: 'something went terribly wrong' });
-    });
-});*/
 
 /**********************************
 	entries routes
