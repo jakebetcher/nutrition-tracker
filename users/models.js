@@ -5,8 +5,6 @@ const mongoose = require('mongoose');
 
 mongoose.Promise = global.Promise;
 
-const { Goal, Entry, Stat } = require('../models');
-
 const UserSchema = mongoose.Schema({
 	username: {
 		type: String,
@@ -19,25 +17,6 @@ const UserSchema = mongoose.Schema({
 	},
 	firstName: {type: String, required: true},
 	lastName: {type: String, required: true}
-	/*goals: {
-		calories: {
-			amount: {type: Number, default: 0},
-			range: {type: Number, default: 0}
-		},
-		fat: {
-			amount: {type: Number, default: 0},
-			range: {type: Number, default: 0}
-		},
-		protein: {
-			amount: {type: Number, default: 0},
-			range: {type: Number, default: 0}
-		},
-		carbs: {
-			amount: {type: Number, default: 0},
-			range: {type: Number, default: 0}
-		},
-		startDate: {type: Date, default: Date.now}
-	}*/
 });
 
 UserSchema.methods.serialize = function() {

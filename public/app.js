@@ -1,5 +1,6 @@
 const foodEntry = (function() {
 	const consumedFood = {
+		foodName: '',
 		consumedCalories: 0,
 		consumedFat: 0,
 		consumedProtein: 0,
@@ -8,6 +9,10 @@ const foodEntry = (function() {
 
 	function getConsumedFood() {
 		return Object.assign({}, consumedFood);
+	}
+
+	function setFoodName(food) {
+		consumedFood.foodName = food;
 	}
 
 	function setCalories(calories) {
@@ -31,7 +36,8 @@ const foodEntry = (function() {
 		setCalories: setCalories,
 		setFat: setFat,
 		setProtein: setProtein,
-		setCarbs: setCarbs
+		setCarbs: setCarbs,
+		setFoodName: setFoodName
 	});
 })();
 
@@ -388,7 +394,7 @@ function renderDetailedData(result) {
     	foodEntry.setFat(Number(result.report.foods[0].nutrients[1].value));
     	foodEntry.setProtein(Number(result.report.foods[0].nutrients[2].value));
     	foodEntry.setCarbs(Number(result.report.foods[0].nutrients[3].value));
-
+    	foodEntry.setFoodName(result.report.foods[0].name);
     	//getEntries(determineHttpMethod);
 
     	let food = foodEntry.getConsumedFood();
@@ -483,6 +489,7 @@ function displayEntriesList(data) {
 	data.forEach(entry => {
 		$('.nutrition-tracking').append(`
 			<div>
+			<h2>${entry.foodName}</h2>
 			<p>Calories: ${entry.consumedCalories}</p>
 			<p>Fat: ${entry.consumedFat}</p>
 			<p>Protein: ${entry.consumedProtein}</p>

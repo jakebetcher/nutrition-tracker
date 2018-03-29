@@ -27,7 +27,7 @@ passport.use(jwtStrategy);
 const jwtAuth = passport.authenticate('jwt', { session: false });
 
 router.post('/', jsonParser, jwtAuth, (req, res) => {
-  const requiredFields = ['consumedCalories', 'consumedFat', 'consumedProtein', 'consumedCarbs', 'date', 'day'];
+  const requiredFields = ['foodName', 'consumedCalories', 'consumedFat', 'consumedProtein', 'consumedCarbs', 'date', 'day'];
   for (let i = 0; i < requiredFields.length; i++) {
     const field = requiredFields[i];
     if (!(field in req.body)) {
@@ -36,7 +36,7 @@ router.post('/', jsonParser, jwtAuth, (req, res) => {
       return res.status(400).send(message);
     }
   }
-
+  
   console.log(req.user._id);
 
   Goal
@@ -48,6 +48,7 @@ router.post('/', jsonParser, jwtAuth, (req, res) => {
     let entry = new Entry({
     goal: theGoal[0]._id,
     user: req.user._id,
+    foodName: req.body.foodName,
     consumedCalories: req.body.consumedCalories,
     consumedFat: req.body.consumedFat,
     consumedProtein: req.body.consumedProtein,
@@ -102,32 +103,32 @@ router.get('/total', jwtAuth, (req, res) => {
   .limit(1)
   .then(goal => {
     return Entry.aggregate([
-        {
-          $match: {
-            user: mongoose.Types.ObjectId(req.user._id),
-            goal: mongoose.Types.ObjectId(goal[0]._id),
-            day: day
-          }
-        },
-        {
-          $group: {
-            _id: '$day',
-                consumedCalories: {$sum: "$consumedCalories"},
-                consumedFat: {$sum: "$consumedFat"},
-                consumedProtein: {$sum: "$consumedProtein"},
-                consumedCarbs: {$sum: "$consumedCarbs"}
-          }
+      {
+        $match: {
+          user: mongoose.Types.ObjectId(req.user._id),
+          goal: mongoose.Types.ObjectId(goal[0]._id),
+          day: day
         }
+      },
+      {
+        $group: {
+          _id: '$day',
+          consumedCalories: {$sum: "$consumedCalories"},
+          consumedFat: {$sum: "$consumedFat"},
+          consumedProtein: {$sum: "$consumedProtein"},
+          consumedCarbs: {$sum: "$consumedCarbs"}
+        }
+      }
       ],
 
       function (err, result) {
-          if (err) {
-              console.log(err);
-              return;
-          }
-          console.log(result);
-          res.json(result);
-      })
+        if (err) {
+          console.log(err);
+          return;
+        }
+        console.log(result);
+        res.json(result);
+      });
 
 });
 });

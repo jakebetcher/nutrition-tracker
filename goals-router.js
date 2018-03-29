@@ -38,39 +38,33 @@ const requiredFields = ['calories', 'fat', 'protein', 'carbs'];
       return res.status(400).send(message);
     }
   }
-
-console.log(req.user)
   
-    let goal = new Goal({
-    	user: req.user._id,
-    	calories: {
-    		amount: req.body.calories.amount,
-    		range: req.body.calories.range
-    	},
-    	fat: {
-    		amount: req.body.fat.amount,
-    		range: req.body.fat.range
-    	},
-    	protein: {
-    		amount: req.body.protein.amount,
-    		range: req.body.protein.range
-    	},
-    	carbs: {
-    		amount: req.body.carbs.amount,
-    		range: req.body.carbs.range
-    	}
-    });
+  let goal = new Goal({
+    user: req.user._id,
+    calories: {
+    	amount: req.body.calories.amount,
+    	range: req.body.calories.range
+    },
+    fat: {
+    	amount: req.body.fat.amount,
+    	range: req.body.fat.range
+    },
+    protein: {
+    	amount: req.body.protein.amount,
+    	range: req.body.protein.range
+    },
+    carbs: {
+    	amount: req.body.carbs.amount,
+    	range: req.body.carbs.range
+    }
+   });
 
-    goal.save()
-    
-      .then(goal => res.status(201).json(goal))
-      .catch(err => {
+   goal.save()
+   .then(goal => res.status(201).json(goal))
+   .catch(err => {
       console.error(err);
-
       res.status(500).json({ error: 'Something went wrong' });
-    });
-  
-  
+    }); 
 });
 
 
