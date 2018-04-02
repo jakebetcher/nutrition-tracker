@@ -365,46 +365,42 @@ function renderDetailedData(result) {
 	$('.js-results-div').on('click', '.close', function(event) {
     $('.pop-outer').fadeOut();
   });
+	
+	foodEntry.setCalories(Number(result.report.foods[0].nutrients[0].value));
+	foodEntry.setFat(Number(result.report.foods[0].nutrients[1].value));
+	foodEntry.setProtein(Number(result.report.foods[0].nutrients[2].value));
+	foodEntry.setCarbs(Number(result.report.foods[0].nutrients[3].value));
+	foodEntry.setFoodName(result.report.foods[0].name);   	
+}	
+
+function handleAddFood() {
 	$('.js-results-div').on('click', '.add-a-food', function(event) {
-    	$('.nutrition-tracking').empty();
-
-    	foodEntry.setCalories(Number(result.report.foods[0].nutrients[0].value));
-    	foodEntry.setFat(Number(result.report.foods[0].nutrients[1].value));
-    	foodEntry.setProtein(Number(result.report.foods[0].nutrients[2].value));
-    	foodEntry.setCarbs(Number(result.report.foods[0].nutrients[3].value));
-    	foodEntry.setFoodName(result.report.foods[0].name);
-    	//getEntries(determineHttpMethod);
-
-    	let food = foodEntry.getConsumedFood();
-		
-		let theDate = new Date();
+  	let food = foodEntry.getConsumedFood();
+  	let theDate = new Date();
 		let theDay = theDate.toDateString();
 		food.date = theDate;
 		food.day = theDay;
-		//console.log(food);
-		$.ajax({
-			url: '/entries/',
-			dataType: 'json',
-			method: 'POST',
-			contentType: 'application/json',
-			headers: {
+		addFood(food, addFoodCallback);
+  });  	
+}
+
+function addFood(food, callback) {
+	$.ajax({
+		url: '/entries/',
+		dataType: 'json',
+		method: 'POST',
+		contentType: 'application/json',
+		headers: {
 			Authorization: `Bearer ${localStorage.getItem('token')}`
 		},
-			data: JSON.stringify(food),
-			success: function(data) {
-				
-				//getNutritionTrackingData(displayNutritionTrackingData);
-				//getEntriesList(displayEntriesList);
-				//getEntriesTotal(displayEntriesTotal);
-				//getStats(displayStats);
-				console.log(data);
-			}
-		});
-    	
-    	$('.pop-outer').fadeOut();
-    });
-	
-}	
+		data: JSON.stringify(food),
+		success: callback
+	});
+}
+
+function addFoodCallback(data) {
+	$('.pop-outer').fadeOut();
+}
 
 function getStats(callback) {
 	$.ajax({
@@ -741,6 +737,7 @@ function handleEditGoals() {
 
 
 function initApp() {
+	handleAddFood();
 	handleClickMyProgress();
 	handleClickMyGoalsPage();
 	handleSignUpForm();
