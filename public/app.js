@@ -122,7 +122,12 @@ function logIn() {
 		success: function(data) {
 			//alert(data.authToken);
 			$('.log-in-button').remove();
-			$('.options').append(`<button class='header-button profile-name-button'>${theUser.username}</button>`);
+			$('.options').append(`
+					<button class='header-button goals-button'>My Goals</button>
+					<button class='header-button progress-button'>My Progress</button>
+					<button class='header-button food-search-header-button'>Food Search</button>
+				`);
+			//$('.options').append(`<button class='header-button profile-name-button'>${theUser.username}</button>`);
 			console.log('success');
 			localStorage.setItem('token', data.authToken);
 		}
@@ -161,7 +166,12 @@ function loginFirstTime() {
 		data: JSON.stringify(user),
 		success: function(data) {
 			$('.log-in-button').remove();
-			$('.options').append(`<button class='header-button profile-name-button'>${user.username}</button>`);
+			$('.options').append(`
+					<button class='header-button goals-button'>My Goals</button>
+					<button class='header-button progress-button'>My Progress</button>
+					<button class='header-button food-search-header-button'>Food Search</button>
+				`);
+			//$('.options').append(`<button class='header-button profile-name-button'>${user.username}</button>`);
 			console.log('success');
 			console.log(data);
 			localStorage.setItem('token', data.authToken);
