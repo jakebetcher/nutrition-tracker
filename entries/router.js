@@ -1,5 +1,4 @@
 'use strict';
-require('dotenv').config();
 
 const bodyParser = require('body-parser');
 const express = require('express');
@@ -9,13 +8,14 @@ const passport = require('passport');
 const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 
-const { DATABASE_URL, PORT } = require('./config');
-const { Goal, Entry } = require('./models');
-const { User } = require('./users')
+const { DATABASE_URL, PORT } = require('../config');
+const { Goal } = require('../goals');
+const { Entry } = require('./models');
+const { User } = require('../users');
 
 const router = express.Router();
 
-const { localStrategy, jwtStrategy } = require('./auth');
+const { localStrategy, jwtStrategy } = require('../auth');
 
 
 const jsonParser = bodyParser.json();

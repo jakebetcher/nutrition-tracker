@@ -10,14 +10,16 @@ const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 
 const { DATABASE_URL, PORT } = require('./config');
-const { Goal, Entry, Stat } = require('./models');
+const { Goal } = require('./goals');
+const { Entry } = require('./entries');
+const { statObject } = require('./stats');
 const { User } = require('./users')
 
 const app = express();
 
-const { router: goalsRouter } = require('./goals-router');
-const { router: entriesRouter } = require('./entries-router');
-const { router: statsRouter } = require('./stats-router');
+const { router: goalsRouter } = require('./goals');
+const { router: entriesRouter } = require('./entries');
+const { router: statsRouter } = require('./stats');
 const { router: usersRouter } = require('./users');
 const { router: authRouter, localStrategy, jwtStrategy } = require('./auth');
 

@@ -1,4 +1,4 @@
-'use strict';
+/*'use strict';
 
 const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
@@ -131,5 +131,5 @@ const statObject = {
 }
 }
 
-module.exports = {Goal, Entry, statObject};
+module.exports = {Goal, Entry, statObject};*/
 
