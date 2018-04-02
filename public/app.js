@@ -181,6 +181,8 @@ function loginFirstTime() {
 	});
 }
 
+
+
 function handleClickProfileButton() {
 	$('.options').on('click', '.profile-name-button', function(event) {
 		$('.js-results-div').empty();
@@ -261,9 +263,9 @@ function onFoodSearchFormSubmit () {
     }
 
 function handleNutritionSearchClick() {
-	$('.nutrition-search-button').on('click', function(event) {
+	$('.main-header').on('click', '.food-search-header-button', function(event) {
 		$('.nutrition-search-form').removeClass('hidden');
-		$('.signup-form, .profile-page, .login-form').addClass('hidden');
+		$('.signup-form, .goals-page, .login-form, .progress-page').addClass('hidden');
 	});
 }
 
@@ -294,40 +296,6 @@ function displayGoalsModal() {
 		$('.pop-outer-goals-put').fadeIn();
 	});
 }
-
-/*function handleSaveGoalChanges() {
-	//const nutrientsForTracking = Object.keys(STATE);
-	$('.nutrition-tracking').append(`
-			<p><span>Calories: </span><span>${STATE.calories}</span></p>
-			<p><span>Fat: </span><span>${STATE.fat}</span></p>
-			<p><span>Protein: </span><span>${STATE.protein}</span></p>
-			<p><span>Carbs: </span><span>${STATE.carbs}</span></p>
-	`);
-	console.log(STATE.calories);
-	$('.nutrients-goals-form').submit(function(event) {
-		event.preventDefault();
-		//$('.nutrition-tracking').empty();
-		$('.goals-list-div').empty();
-		const checkboxValues = [$('#calories').val(), $('#fat').val(), $('#protein').val(), $('#carbs').val()];
-		const checked = [];
-		for (let i=0; i < checkboxValues.length; i++) {
-		if ($(`#${checkboxValues[i]}`).prop('checked')) {
-			
-			
-			//$('.nutrition-tracking').append(`<p>${checkboxValues[i]}: <span class=${checkboxValues[i]}>${objectString}</span></p>`)
-			checked.push(checkboxValues[i]);
-		}
-	}
-	for (let i = 0; i < checked.length; i++) {
-		let nutrient = checked[i];
-		let nutrientAmount = $(`#${nutrient}-amount`).val();
-		$('.goals-list-div').append(`<p><span>${nutrient}: </span><span class='${nutrient}-amount-span'>${nutrientAmount}</span></p>`)
-	}
-		$('.pop-outer-goals').fadeOut();
-		$('.main-header, .profile-page').removeClass('transparent-background');
-	});
-	
-}*/
 
 
 
@@ -426,30 +394,13 @@ function renderDetailedData(result) {
 			success: function(data) {
 				
 				//getNutritionTrackingData(displayNutritionTrackingData);
-				getEntriesList(displayEntriesList);
-				getEntriesTotal(displayEntriesTotal);
-				getStats(displayStats);
+				//getEntriesList(displayEntriesList);
+				//getEntriesTotal(displayEntriesTotal);
+				//getStats(displayStats);
+				console.log(data);
 			}
 		});
-    	/*console.log(STATE.calories);
-    	console.log( Number(result.report.foods[0].nutrients[0].value));
-    	console.log(STATE.calories + Number(result.report.foods[0].nutrients[0].value))
     	
-    	STATE.calories +=  Number(result.report.foods[0].nutrients[0].value);
-    	$('.nutrition-tracking').append(`<p><span>Calories: </span><span>${STATE.calories}</span></p>`);
-    	
-    	let newFatValue = STATE.fat + Number(result.report.foods[0].nutrients[1].value);
-    	STATE.fat = newFatValue;
-    	$('.nutrition-tracking').append(`<p><span>Fat: </span><span>${STATE.fat}</span></p>`);
-
-    	let newProteinValue = STATE.protein + Number(result.report.foods[0].nutrients[2].value);
-    	STATE.protein = newProteinValue;
-    	$('.nutrition-tracking').append(`<p><span>Protein: </span><span>${STATE.protein}</span></p>`)
-    	
-    	let newCarbsValue = STATE.carbs + Number(result.report.foods[0].nutrients[3].value);
-    	STATE.carbs = newCarbsValue;
-    	$('.nutrition-tracking').append(`<p><span>Carbs: </span><span>${STATE.carbs}</span></p>`)*/
-
     	$('.pop-outer').fadeOut();
     });
 	
@@ -469,15 +420,15 @@ function getStats(callback) {
 
 function displayStats(data) {
 	$('.nutrition-tracking').append(`
-			<div>
-				<p>Met Calories Goals: ${data.timesMetCaloriesGoals} times</p>
-				<p>Met Fat Goals: ${data.timesMetFatGoals} times</p>
-				<p>Met Protein Goals: ${data.timesMetProteinGoals} times</p>
-				<p>Met Carbs Goals: ${data.timesMetCarbsGoals} times</p>
-				<p>Met All Goals: ${data.timesMetAllGoals} times</p>
-				<p>Met At Least One Goal: ${data.timesMetAtLeastOneGoal} times</p>
-				<p>Days I've Been Tracking Current Goal: ${data.daysGoalsHaveBeenTracked} times</p>
-			</div>
+		<div>
+			<p>Met Calories Goals: ${data.timesMetCaloriesGoals} times</p>
+			<p>Met Fat Goals: ${data.timesMetFatGoals} times</p>
+			<p>Met Protein Goals: ${data.timesMetProteinGoals} times</p>
+			<p>Met Carbs Goals: ${data.timesMetCarbsGoals} times</p>
+			<p>Met All Goals: ${data.timesMetAllGoals} times</p>
+			<p>Met At Least One Goal: ${data.timesMetAtLeastOneGoal} times</p>
+			<p>Days I've Been Tracking Current Goal: ${data.daysGoalsHaveBeenTracked} times</p>
+		</div>
 		`);
 }
 
@@ -685,13 +636,95 @@ function putGoalsData() {
 
 }
 
+function getTodayProgressData(callback) {
+	$.ajax({
+		url: '/entries/total',
+		dataType: 'json',
+		method: 'GET',
+		contentType: 'application/json',
+		headers: {
+			Authorization: `Bearer ${localStorage.getItem('token')}`
+		},
+		success: callback
+	});
+}
+
+function displayTodayProgressData(data) {
+	if (data.length === 0) {
+		$('.nutrition-tracking').empty();
+		$('.nutrition-tracking').append(`
+		<p>Calories: 0</p>
+		<p>Fat: 0 g</p>
+		<p>Protein: 0 g</p>
+		<p>Carbs: 0 g</p>
+	`);
+	} else {
+			$('.nutrition-tracking').empty();
+			$('.nutrition-tracking').append(`
+			<p>Calories: ${data[0].consumedCalories}</p>
+			<p>Fat: ${data[0].consumedFat} g</p>
+			<p>Protein: ${data[0].consumedProtein} g</p>
+			<p>Carbs: ${data[0].consumedCarbs} g</p>
+		`);
+	}		
+}
+
+function getLongTermProgressData(callback) {
+	$.ajax({
+		url: '/stats',
+		dataType: 'json',
+		method: 'GET',
+		contentType: 'application/json',
+		headers: {
+			Authorization: `Bearer ${localStorage.getItem('token')}`
+		},
+		success: callback
+	});
+}
+
+function displayLongTermProgressData(data) {
+	$('.long-term-progress').empty();
+	$('.long-term-progress').append(`
+		<div>
+			<p>Met Calories Goals: ${data.timesMetCaloriesGoals} times</p>
+			<p>Met Fat Goals: ${data.timesMetFatGoals} times</p>
+			<p>Met Protein Goals: ${data.timesMetProteinGoals} times</p>
+			<p>Met Carbs Goals: ${data.timesMetCarbsGoals} times</p>
+			<p>Met All Goals: ${data.timesMetAllGoals} times</p>
+			<p>Met At Least One Goal: ${data.timesMetAtLeastOneGoal} times</p>
+			<p>Days I've Been Tracking Current Goal: ${data.daysGoalsHaveBeenTracked} days</p>
+		</div>
+	`);
+}
+
+function handleClickMyProgress() {
+	$('.main-header').on('click', '.progress-button', function(event) {
+		$('.goals-page').addClass('hidden');
+		$('.nutrition-search-form').addClass('hidden');
+		$('.js-results-div').empty();
+		getTodayProgressData(displayTodayProgressData);
+		getLongTermProgressData(displayLongTermProgressData);
+		$('.progress-page').removeClass('hidden');
+	});
+	
+}
+
+function handleClickMyGoalsPage() {
+	$('.main-header').on('click', 'goals-button', function(event) {
+		$('.nutrition-search-form').addClass('hidden');
+		$('.progress-page').addClass('hidden');
+		$('.js-results-div').empty();
+		$('.goals-page').removeClass('hidden');
+	});
+}
+
 function handleSubmitGoals() {
 	$('.nutrients-goals-form').submit(function(event) {
 		event.preventDefault();
 		postGoalsData();
 		getGoals(displayGoals);
 		$('.pop-outer-goals').fadeOut();
-		$('.profile-page').removeClass('hidden');
+		$('.goals-page').removeClass('hidden');
 		$('.main-header').removeClass('transparent-background');
 	});
 }
@@ -708,6 +741,8 @@ function handleEditGoals() {
 
 
 function initApp() {
+	handleClickMyProgress();
+	handleClickMyGoalsPage();
 	handleSignUpForm();
 	handleLogInForm();
  	handleNutritionSearchClick();

@@ -87,7 +87,7 @@ h1 {
   font-size: 30px;
 }
 
-.profile-page {
+.goals-page, .progess-page, .nutrition-tracking, .long-term-progress, .progress-page-header {
 	text-align: center;
 }
 
