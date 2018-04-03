@@ -1,11 +1,22 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+	background-color: #DADDD8;
+}
+
 .hidden {
 	display: none;
 }
 
 .main-header {
-	background-color: lightblue;
+	background-color: #C7D59F;
 	text-align: center;
 	margin-bottom: 80px;
+	color: #4B5842;
+	border: 2px solid #4B5842;
+	border-radius: 6px;
 }
 
 .results-div {
@@ -20,7 +31,7 @@
 
 .food-name {
 	background:none;
-  	border:none;
+  border:none;
 	color: blue;
 	font-size: 22px;
 }
@@ -30,18 +41,87 @@
 }
 
 h1 {
+	/*display: inline-block;
+	padding: 5px;*/
 	font-size: 48px;
+	/*background-color: #B7CE63;
+	border: .5px solid #4B5842;
+	border-radius: 6px;*/
 }
 .header-button {
 	font-size: 19px;
-	padding: 10px;
+	padding: 13px;
+	background-color: #8FB339;
+	color: #4B5842;
+	border: 1.5px solid #4B5842;
+	border-radius: 6px;
+	margin-bottom: 10px;
+	text-shadow: 1px 1px #DADDD8;
+	font-weight: bold;
+}
+
+.header-button:hover, .main-button:hover {
+	background-color: #C7D59F;
+}
+
+.main-button, .change-goals-button {
+	margin-top: 40px;
+	font-size: 20px;
+	padding: 13px;
+	background-color: #8FB339;
+	color: #4B5842;
+	border: 1.5px solid #4B5842;
+	border-radius: 6px;
+	text-shadow: 1px 1px #DADDD8;
+	font-weight: bold;
 }
 
 .signup-form, .nutrition-search-form, .login-form {
 	text-align: center;
 }
 
-.signup-legend, .nutrition-search-legend, .login-legend {
+.signup-div {
+	text-align: center;
+}
+
+.signup-label {
+	font-weight: bold;
+	color: #4B5842;
+	font-size: 23px;
+}
+
+.signup-field {
+	margin-bottom: 35px;
+}
+
+.signup-form {
+	border: 2px solid #4B5842;
+	border-radius: 6px;
+	display: inline-block;
+	padding: 40px;
+	background-color: #C7D59F;
+	color: #4B5842;
+}
+
+.signup-legend {
+	font-weight: bold;
+	margin-bottom: 65px;
+	font-size: 28px;
+	color: #4B5842;
+}
+
+.goals-legend {
+	margin-bottom: 65px;
+	color: #4B5842;
+	font-weight: bold;
+}
+
+.signup-input {
+	background-color: #DADDD8;
+	color: #4B5842;
+}
+
+.nutrition-search-legend, .login-legend {
 	font-size: 28px;
 	margin-bottom: 10px;
 }
@@ -87,6 +167,32 @@ h1 {
   font-size: 30px;
 }
 
+.nutrients-goals-form {
+	background-color: #C7D59F;
+	display: inline-block;
+	padding: 25px;
+	width: 100%;
+	font-size: 30px;
+	margin-bottom: 30px;
+	border: 2px solid #4B5842;
+	border-radius: 6px;
+}
+
+.goals-field {
+	margin-bottom: 35px;
+}
+
+.goals-input {
+	font-size: 20px;
+	background-color: #DADDD8;
+	color: #4B5842;
+}
+
+.goals-form-nutrient-header, .goals-label {
+	color: #4B5842;
+	font-size: 27px;
+}
+
 .pop-inner-food-entries {
 	max-height: calc(100vh - 210px);
   overflow-y: auto;
@@ -108,6 +214,9 @@ h1 {
 	color: green;
 }
 
+.see-all-food-button-div {
+	text-align: center;
+}
 
 
 

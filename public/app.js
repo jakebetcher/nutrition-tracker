@@ -195,7 +195,7 @@ function handleSignUpForm() {
 	$('.signup-form').submit(function(event) {
 		event.preventDefault();
 		signUp();
-		$('.signup-form').addClass('hidden');
+		$('.signup-div').addClass('hidden');
 		//$('.login-form').removeClass('hidden');
 		$('.main-header').addClass('transparent-background');
 		$('.pop-outer-goals').fadeIn();
@@ -209,7 +209,7 @@ function handleLogInForm() {
 	$('.login-form').submit(function(event) {
 		event.preventDefault();
 		logIn();
-		$('.signup-form').addClass('hidden');
+		$('.signup-div').addClass('hidden');
 		$('.login-form').addClass('hidden');
 		$('.profile-page').removeClass('hidden');
 	});
@@ -229,7 +229,7 @@ function onFoodSearchFormSubmit () {
 function handleNutritionSearchClick() {
 	$('.main-header').on('click', '.food-search-header-button', function(event) {
 		$('.nutrition-search-form').removeClass('hidden');
-		$('.signup-form, .goals-page, .login-form, .progress-page').addClass('hidden');
+		$('.signup-div, .goals-page, .login-form, .progress-page').addClass('hidden');
 	});
 }
 
@@ -245,7 +245,7 @@ function handleSubmitSearchFoods() {
 
 function displayLogInPage() {
 	$('.log-in-button').on('click', function(event) {
-		$('.nutrition-search-form, .signup-form').addClass('hidden');
+		$('.nutrition-search-form, .signup-div').addClass('hidden');
 		$('.js-results-div').empty();
 		$('.login-form').removeClass('hidden');
 	});
@@ -287,7 +287,7 @@ function backToHome() {
 	$('h1').on('click', function() {
 		$('.nutrition-search-form, .profile-page').addClass('hidden');
 		$('.js-results-div').empty();
-		$('.signup-form').removeClass('hidden');
+		$('.signup-div').removeClass('hidden');
 	});
 }
 
