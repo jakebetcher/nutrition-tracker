@@ -126,8 +126,49 @@ router.get('/total', jwtAuth, (req, res) => {
           console.log(err);
           return;
         }
-        console.log(result);
+        let theResult = result;
+        let caloriesGoalLowerBound = goal[0].calories.amount - goal[0].calories.range;
+        console.log(goal[0].calories.amount);
+        console.log(goal[0].calories.range);
+        console.log(goal[0].calories.amount - goal[0].calories.range);
+        console.log(caloriesGoalLowerBound);
+        let caloriesGoalUpperBound = goal[0].calories.amount + goal[0].calories.range;
+        let fatGoalLowerBound = goal[0].fat.amount - goal[0].fat.range;
+        let fatGoalUpperBound = goal[0].fat.amount + goal[0].fat.range;
+        let proteinGoalLowerBound = goal[0].protein.amount - goal[0].protein.range;
+        let proteinGoalUpperBound = goal[0].protein.amount + goal[0].protein.range;
+        let carbsGoalLowerBound = goal[0].carbs.amount - goal[0].carbs.range;
+        let carbsGoalUpperBound = goal[0].carbs.amount + goal[0].carbs.range;
+
+        
+        if (result.length === 0) {
+          res.json(result);
+        } else {
+          if ((result[0].consumedCalories >= caloriesGoalLowerBound) && (result[0].consumedCalories <= caloriesGoalUpperBound)) {
+          result[0].caloriesResult = true;
+        } else {
+          result[0].caloriesResult = false;
+        }
+
+        if ((result[0].consumedFat >= fatGoalLowerBound) && (result[0].consumedFat <= fatGoalUpperBound)) {
+          result[0].fatResult = true;
+        } else {
+          result[0].fatResult = false;
+        }
+
+        if ((result[0].consumedProtein >= proteinGoalLowerBound) && (result[0].consumedProtein <= proteinGoalUpperBound)) {
+          result[0].proteinResult = true;
+        } else {
+          result[0].proteinResult = false;
+        }
+
+        if ((result[0].consumedCarbs >= carbsGoalLowerBound) && (result[0].consumedCarbs <= carbsGoalUpperBound)) {
+          result[0].carbsResult = true;
+        } else {
+          result[0].carbsResult = false;
+        }
         res.json(result);
+        }
       });
 
 });

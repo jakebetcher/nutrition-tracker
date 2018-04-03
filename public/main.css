@@ -55,7 +55,7 @@ h1 {
 	font-size: 20px;
 }
 
-.pop-outer, .pop-outer-goals, .pop-outer-goals-put {
+.pop-outer, .pop-outer-goals, .pop-outer-food-entries {
   position: fixed;
   top: 0;
   left: 0;
@@ -76,7 +76,7 @@ h1 {
   color: white;
 }
 
-.pop-inner-goals, .pop-inner-goals-put {
+.pop-inner-goals, .pop-inner-food-entries {
   margin-top: 100px;
   text-align: center;
   /*width: 520px;
@@ -87,12 +87,25 @@ h1 {
   font-size: 30px;
 }
 
+.pop-inner-food-entries {
+	max-height: calc(100vh - 210px);
+  overflow-y: auto;
+}
+
 .goals-page, .progess-page, .nutrition-tracking, .long-term-progress, .progress-page-header {
 	text-align: center;
 }
 
 .transparent-background {
 	opacity: 0;
+}
+
+.red-color {
+	color: red;
+}
+
+.green-color {
+	color: green;
 }
 
 

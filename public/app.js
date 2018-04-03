@@ -41,18 +41,6 @@ const foodEntry = (function() {
 	});
 })();
 
-
-
-
-	const STATE = {
-		calories: 0,
-		fat: 0,
-		protein: 0,
-		carbs: 0
-	};
-
-
-	
 function storeGoals() {
 	const goals = {
 		caloriesAmount: $('#calories-amount').val(),
@@ -63,20 +51,6 @@ function storeGoals() {
 		proteinRange: $('#protein-range').val(),
 		carbsAmount: $('#carbs-amount').val(),
 		carbsRange: $('#carbs-range').val()
-	}
-	return goals;
-}
-
-function storeGoalsPut() {
-	const goals = {
-		caloriesAmount: $('#calories-amount-put').val(),
-		caloriesRange: $('#calories-range-put').val(),
-		fatAmount: $('#fat-amount-put').val(),
-		fatRange: $('#fat-range-put').val(),
-		proteinAmount: $('#protein-amount-put').val(),
-		proteinRange: $('#protein-range-put').val(),
-		carbsAmount: $('#carbs-amount-put').val(),
-		carbsRange: $('#carbs-range-put').val()
 	}
 	return goals;
 }
@@ -181,16 +155,6 @@ function loginFirstTime() {
 	});
 }
 
-
-
-function handleClickProfileButton() {
-	$('.options').on('click', '.profile-name-button', function(event) {
-		$('.js-results-div').empty();
-		$('.profile-page').removeClass('hidden');
-		$('.signup-form, .nutrition-search-form').addClass('hidden');
-	})
-}
-
 function getGoals(callback) {
 	$.ajax({
 		url: '/goals',
@@ -279,21 +243,19 @@ function handleSubmitSearchFoods() {
 	});
 }
 
-function displayProfilePage() {
+function displayLogInPage() {
 	$('.log-in-button').on('click', function(event) {
 		$('.nutrition-search-form, .signup-form').addClass('hidden');
 		$('.js-results-div').empty();
-
 		$('.login-form').removeClass('hidden');
-		//$('.profile-page').removeClass('hidden');
 	});
 		
 }
 
 function displayGoalsModal() {
 	$('.edit-goals-button').on('click', function(event) {
-		$('.main-header, .profile-page').addClass('transparent-background');
-		$('.pop-outer-goals-put').fadeIn();
+		$('.main-header, .goals-page').addClass('transparent-background');
+		$('.pop-outer-goals').fadeIn();
 	});
 }
 
@@ -402,160 +364,8 @@ function addFoodCallback(data) {
 	$('.pop-outer').fadeOut();
 }
 
-function getStats(callback) {
-	$.ajax({
-		url: '/stats',
-		dataType: 'json',
-		method: 'GET',
-		headers: {
-			Authorization: `Bearer ${localStorage.getItem('token')}`
-		},
-		success: callback
-	});
-}
-
-function displayStats(data) {
-	$('.nutrition-tracking').append(`
-		<div>
-			<p>Met Calories Goals: ${data.timesMetCaloriesGoals} times</p>
-			<p>Met Fat Goals: ${data.timesMetFatGoals} times</p>
-			<p>Met Protein Goals: ${data.timesMetProteinGoals} times</p>
-			<p>Met Carbs Goals: ${data.timesMetCarbsGoals} times</p>
-			<p>Met All Goals: ${data.timesMetAllGoals} times</p>
-			<p>Met At Least One Goal: ${data.timesMetAtLeastOneGoal} times</p>
-			<p>Days I've Been Tracking Current Goal: ${data.daysGoalsHaveBeenTracked} times</p>
-		</div>
-		`);
-}
-
-function getEntriesList(callback) {
-	$.ajax({
-		url: '/entries/list',
-		dataType: 'json',
-		method: 'GET',
-		headers: {
-			Authorization: `Bearer ${localStorage.getItem('token')}`
-		},
-		success: callback
-	});
-}
-
-function displayEntriesList(data) {
-	$('.nutrition-tracking').empty();
-	$('.nutrition-tracking').append(`<div>${data}</div>`)
-	data.forEach(entry => {
-		$('.nutrition-tracking').append(`
-			<div>
-			<h2>${entry.foodName}</h2>
-			<p>Calories: ${entry.consumedCalories}</p>
-			<p>Fat: ${entry.consumedFat}</p>
-			<p>Protein: ${entry.consumedProtein}</p>
-			<p>Carbs: ${entry.consumedCarbs}</p>
-			</div>
-		`);
-	})
-}
-
-function getEntriesTotal(callback) {
-	$.ajax({
-		url: '/entries/total',
-		dataType: 'json',
-		method: 'GET',
-		headers: {
-			Authorization: `Bearer ${localStorage.getItem('token')}`
-		},
-		success: callback
-	});
-}
-
-function displayEntriesTotal(data) {
-	$('.nutrition-tracking').append(`
-		<div>Calories Eaten Today: ${data[0].consumedCalories}</div>
-		<div>Fat Eaten Today: ${data[0].consumedFat}</div>
-		<div>Protein Eaten Today: ${data[0].consumedProtein}</div>
-		<div>Carbs Eaten Today: ${data[0].consumedCarbs}</div>
-	`);
-}
-
-function determineHttpMethod(data) {
-	if (data.length === 0) {
-		//make a post request
-		let food = foodEntry.getConsumedFood();
-		
-		let theDate = new Date();
-		let theDay = theDate.toDateString();
-		food.date = theDate;
-		food.day = theDay;
-		//console.log(food);
-		$.ajax({
-			url: '/entries/protected',
-			dataType: 'json',
-			method: 'POST',
-			contentType: 'application/json',
-			headers: {
-			Authorization: `Bearer ${localStorage.getItem('token')}`
-		},
-			data: JSON.stringify(food),
-			success: function(data) {
-				//console.log(data);
-				getNutritionTrackingData(displayNutritionTrackingData);
-			}
-		});
-		
-	} else {
-		//make a put request
-		let theFood = foodEntry.getConsumedFood();
-
-		
-			console.log(data);
-			theFood.consumedCalories += data[0].consumedCalories;
-			theFood.consumedFat += data[0].consumedFat;
-			theFood.consumedProtein += data[0].consumedProtein;
-			theFood.consumedCarbs += data[0].consumedCarbs;
-				$.ajax({
-					url: '/entries/protected',
-					dataType: 'json',
-					method: 'PUT',
-					contentType: 'application/json',
-					headers: {
-					Authorization: `Bearer ${localStorage.getItem('token')}`
-				},
-					data: JSON.stringify(theFood),
-					success: function(data) {
-						//console.log(data);
-						getNutritionTrackingData(displayNutritionTrackingData);
-					}
-				});
-		
-	}
-}
-
-function getNutritionTrackingData(callback) {
-	$.ajax({
-		url: '/entries/protected',
-		dataType: 'json',
-		method: 'GET',
-		headers: {
-			Authorization: `Bearer ${localStorage.getItem('token')}`
-		},
-		success: callback
-	});
-}
-
-function displayNutritionTrackingData(data) {
-	console.log(data);
-	$('.nutrition-tracking').empty();
-	$('.nutrition-tracking').append(`
-			<p>Calories: ${data[0].consumedCalories}</p>
-			<p>Fat: ${data[0].consumedFat}</p>
-			<p>Protein: ${data[0].consumedProtein}</p>
-			<p>Carbs: ${data[0].consumedCarbs}</p>
-		`);
-}
-
 function postGoalsData() {
 	let theGoals = storeGoals();
-	//console.log(theGoals);
 	const goal = {
 		calories: {
 			amount: theGoals.caloriesAmount,
@@ -592,46 +402,6 @@ function postGoalsData() {
 	});
 }
 
-function putGoalsData() {
-	let theGoals = storeGoalsPut();
-	const goal = {
-		goals: {
-		calories: {
-			amount: theGoals.caloriesAmount,
-			range: theGoals.caloriesRange
-		},
-		fat: {
-			amount: theGoals.fatAmount,
-			range: theGoals.fatRange
-		},
-		protein: {
-			amount: theGoals.proteinAmount,
-			range: theGoals.proteinRange
-		},
-		carbs: {
-			amount: theGoals.carbsAmount,
-			range: theGoals.carbsRange
-		}
-}
-	}
-	$.ajax({
-		url: '/goals/protected',
-		dataType: 'json',
-		method: 'PUT',
-		contentType: 'application/json',
-		headers: {
-			Authorization: `Bearer ${localStorage.getItem('token')}`
-		},
-		data: JSON.stringify(goal),
-		success: function() {
-			console.log('success');
-			//getGoals(displayGoals);
-		}
-
-	});
-
-}
-
 function getTodayProgressData(callback) {
 	$.ajax({
 		url: '/entries/total',
@@ -649,19 +419,43 @@ function displayTodayProgressData(data) {
 	if (data.length === 0) {
 		$('.nutrition-tracking').empty();
 		$('.nutrition-tracking').append(`
-		<p>Calories: 0</p>
-		<p>Fat: 0 g</p>
-		<p>Protein: 0 g</p>
-		<p>Carbs: 0 g</p>
+		<p style='color: red'>Calories: 0</p>
+		<p style='color: red'>Fat: 0 g</p>
+		<p style='color: red'>Protein: 0 g</p>
+		<p style='color: red'>Carbs: 0 g</p>
 	`);
 	} else {
 			$('.nutrition-tracking').empty();
 			$('.nutrition-tracking').append(`
-			<p>Calories: ${data[0].consumedCalories}</p>
-			<p>Fat: ${data[0].consumedFat} g</p>
-			<p>Protein: ${data[0].consumedProtein} g</p>
-			<p>Carbs: ${data[0].consumedCarbs} g</p>
+			<p class='calories-today'>Calories: ${data[0].consumedCalories}</p>
+			<p class='fat-today'>Fat: ${data[0].consumedFat} g</p>
+			<p class='protein-today'>Protein: ${data[0].consumedProtein} g</p>
+			<p class='carbs-today'>Carbs: ${data[0].consumedCarbs} g</p>
 		`);
+
+			if (data[0].caloriesResult === true) {
+				$('.calories-today').addClass('green-color');
+			}	else {
+				$('.calories-today').addClass('red-color');
+			}
+
+			if (data[0].fatResult === true) {
+				$('.fat-today').addClass('green-color');
+			}	else {
+				$('.fat-today').addClass('red-color');
+			}
+
+			if (data[0].proteinResult === true) {
+				$('.protein-today').addClass('green-color');
+			}	else {
+				$('.protein-today').addClass('red-color');
+			}
+
+			if (data[0].carbsResult === true) {
+				$('.carbs-today').addClass('green-color');
+			}	else {
+				$('.carbs-today').addClass('red-color');
+			}
 	}		
 }
 
@@ -706,7 +500,7 @@ function handleClickMyProgress() {
 }
 
 function handleClickMyGoalsPage() {
-	$('.main-header').on('click', 'goals-button', function(event) {
+	$('.main-header').on('click', '.goals-button', function(event) {
 		$('.nutrition-search-form').addClass('hidden');
 		$('.progress-page').addClass('hidden');
 		$('.js-results-div').empty();
@@ -721,37 +515,99 @@ function handleSubmitGoals() {
 		getGoals(displayGoals);
 		$('.pop-outer-goals').fadeOut();
 		$('.goals-page').removeClass('hidden');
-		$('.main-header').removeClass('transparent-background');
+		$('.main-header, .goals-page').removeClass('transparent-background');
 	});
 }
 
-function handleEditGoals() {
-	$('.nutrients-goals-form-put').submit(function(event) {
-		event.preventDefault();
-		putGoalsData();
-		$('.pop-outer-goals-put').fadeOut();
-		$('.main-header, .profile-page').removeClass('transparent-background');
+function handleSeeAllFoodButton() {
+	$('.see-all-food-button').on('click', function(event) {
+		$('.food-entries').empty();
+		$('.progress-page, .main-header').addClass('transparent-background');
+		$('.pop-outer-food-entries').fadeIn();
+		getFoodList(displayFoodList);
 	});
 }
 
+function handleCloseFoodList() {
+	$('.close-food-entries').on('click', function(event) {
+		$('.pop-outer-food-entries').fadeOut();
+		$('.progress-page, .main-header').removeClass('transparent-background');
+	});
+}
 
+function getFoodList(callback) {
+	$.ajax({
+		url: '/entries/list',
+		dataType: 'json',
+		method: 'GET',
+		contentType: 'application/json',
+		headers: {
+			Authorization: `Bearer ${localStorage.getItem('token')}`
+		},
+		success: callback
+	});
+}
+
+function displayFoodList(data) {
+	if (data.length === 0) {
+		$('.food-entries').append(`
+			<div>
+				<h2>No Food Eaten Today</h2>
+			</div>	
+	`);
+	} else {
+		data.forEach(food => {
+			$('.food-entries').append(`
+				<div class='food-entry-div'>
+					<h2>${food.foodName}</h2>
+					<button class='delete-food-button' value=${food._id}>delete</button>
+				</div>	
+		`);
+	});
+	}
+}
+
+function handleDeleteEntry() {
+	$('.food-entries').on('click', '.delete-food-button', function(event) {
+		let theId = $(this).val();
+		let entryDiv = $(this).parent('.food-entry-div');
+		deleteEntry(theId, removeEntryFromList, entryDiv);
+	});
+}
+
+function deleteEntry(id, callback, argument) {
+	$.ajax({
+		url: `/entries/${id}`,
+		method: 'DELETE',
+		headers: {
+		Authorization: `Bearer ${localStorage.getItem('token')}`
+		},
+		success: callback(argument)
+	});
+}
+
+function removeEntryFromList(argument) {
+	argument.remove();
+	getTodayProgressData(displayTodayProgressData);
+	getLongTermProgressData(displayLongTermProgressData);
+}
 
 function initApp() {
+	handleDeleteEntry();
+	handleSeeAllFoodButton();
+	handleCloseFoodList();
 	handleAddFood();
 	handleClickMyProgress();
 	handleClickMyGoalsPage();
 	handleSignUpForm();
 	handleLogInForm();
  	handleNutritionSearchClick();
- 	displayProfilePage();
+ 	displayLogInPage();
  	backToHome();
  	handleSubmitSearchFoods();
  	displayModal();
  	displayGoalsModal();
- 	handleSubmitGoals();
- 	//handleSaveGoalChanges(); 
- 	handleEditGoals();
- 	handleClickProfileButton();
+ 	handleSubmitGoals(); 
 }
 
 $(initApp);
