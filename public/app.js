@@ -104,6 +104,18 @@ function logIn() {
 			//$('.options').append(`<button class='header-button profile-name-button'>${theUser.username}</button>`);
 			console.log('success');
 			localStorage.setItem('token', data.authToken);
+			$('.signup-div').addClass('hidden');
+			$('.login-form-div').addClass('hidden');
+			getGoals(displayGoals);
+			$('.goals-page').removeClass('hidden');
+		},
+		error: function(error) {
+			$('.error-results').empty();
+			$('.error-results').append(`
+				<h3 style='color: #4B5842'>Invalid Credentials</h3>
+			`);
+			$('.main-header, .login-form-div').addClass('partially-transparent-background');
+			$('.pop-outer-error-box').fadeIn();
 		}
 
 	});
@@ -121,6 +133,14 @@ function signUp() {
 		success: function(data) {
 			console.log(data);
 			loginFirstTime();
+		},
+		error: function(error) {
+			$('.error-results').empty();
+			$('.error-results').append(`
+				<h3 style='color: #4B5842'>${error.responseJSON.location} ${error.responseJSON.message}</h3>
+			`);
+			$('.main-header, .signup-div').addClass('partially-transparent-background');
+			$('.pop-outer-error-box').fadeIn();
 		}
 
 	});
@@ -150,6 +170,10 @@ function loginFirstTime() {
 			console.log(data);
 			localStorage.setItem('token', data.authToken);
 			console.log(localStorage.getItem('token'));
+			$('.signup-div').addClass('hidden');
+			//$('.login-form').removeClass('hidden');
+			$('.main-header').addClass('transparent-background');
+			$('.pop-outer-goals').fadeIn();
 		}
 
 	});
@@ -200,10 +224,7 @@ function handleSignUpForm() {
 	$('.signup-form').submit(function(event) {
 		event.preventDefault();
 		signUp();
-		$('.signup-div').addClass('hidden');
-		//$('.login-form').removeClass('hidden');
-		$('.main-header').addClass('transparent-background');
-		$('.pop-outer-goals').fadeIn();
+		
 		
 	});
 }
@@ -214,10 +235,6 @@ function handleLogInForm() {
 	$('.login-form').submit(function(event) {
 		event.preventDefault();
 		logIn();
-		$('.signup-div').addClass('hidden');
-		$('.login-form-div').addClass('hidden');
-		getGoals(displayGoals);
-		$('.goals-page').removeClass('hidden');
 	});
 }
 
@@ -274,7 +291,16 @@ function getDataFromAPI(callback) {
         url: nutrientsURL,
         dataType: 'json',
         type: 'GET',
-        success: callback
+        success: callback,
+        error: function(error) {
+        	$('.error-results').empty();
+        	$('.error-results').append(`
+        		<h3 style='color: #4B5842'>No Results Found</h3>
+      		`);
+      		$('.main-header, .signup-div').addClass('partially-transparent-background');
+      		$('.pop-outer-error-box').fadeIn();
+        }
+
         //error: displayErrorMessage()
         };
         $.ajax(settings);
@@ -465,7 +491,7 @@ function displayTodayProgressData(data) {
 			<p class='carbs-today'>Carbs: ${data[0].consumedCarbs} g</p>
 		`);
 
-			if (data[0].caloriesResult === 'met Goal') {
+			if (data[0].caloriesResult === 'met goal') {
 				$('.calories-today').addClass('red-color');
 			}	else if (data[0].caloriesResult === 'below goal') {
 				$('.calories-today').addClass('green-color');

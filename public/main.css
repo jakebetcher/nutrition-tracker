@@ -179,7 +179,7 @@ h1 {
 	font-size: 20px;
 }
 
-.pop-outer, .pop-outer-goals, .pop-outer-food-entries {
+.pop-outer, .pop-outer-goals, .pop-outer-food-entries, .pop-outer-error-box {
   position: fixed;
   top: 0;
   left: 0;
@@ -187,6 +187,12 @@ h1 {
   height: 100%;
   display: none;
 }
+
+.pop-outer-error-box {
+	text-align: center;
+}
+
+
 
 .pop-inner {
   padding: 25px;
@@ -211,7 +217,12 @@ h1 {
 	color: #4B5842;
 }
 
-.pop-inner-content {
+.pop-inner-error-box {
+	display: inline-block;
+	margin-top: 200px;
+}
+
+.pop-inner-content, .pop-inner-error-box {
 	background-color: #DADDD8;
 	padding: 25px;
 	border: 2px solid #4B5842;
@@ -440,6 +451,10 @@ h1 {
 
 .transparent-background {
 	opacity: 0;
+}
+
+.partially-transparent-background {
+	opacity: .6;
 }
 
 .red-color {
