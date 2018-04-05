@@ -322,9 +322,10 @@ function getDetailedDataFromAPI(id, callback) {
 function renderDetailedData(result) {
 	let nutrientArray = [];
 	let nutrientAmountArray = [];
+	let theNutrients = ['Calories', 'Protein', 'Fat', 'Carbs']
 	let theModal = `<div class='pop-outer'><div class='pop-inner'><div class='pop-inner-content'><button class='close'>X</button><h2 class='food-modal-header'>Nutritional Facts</h2>`; 
 	for (let i = 0; i < result.report.foods[0].nutrients.length; i++) {
-		theModal += `<p class='food-modal-text'><span>${result.report.foods[0].nutrients[i].nutrient}: </span> <span>${result.report.foods[0].nutrients[i].value} ${result.report.foods[0].nutrients[i].unit}</span></p>`;
+		theModal += `<p class='food-modal-text'><span>${theNutrients[i]}: </span> <span>${result.report.foods[0].nutrients[i].value} ${result.report.foods[0].nutrients[i].unit}</span></p>`;
 		nutrientArray.push(result.report.foods[0].nutrients[i].nutrient);
 		nutrientAmountArray.push(result.report.foods[0].nutrients[i].value);
 	}
@@ -333,10 +334,26 @@ function renderDetailedData(result) {
 	$('.js-results-div, .nutrition-search-form-div').addClass('transparent-background');
 	$('.pop-outer').fadeIn();
 	
-	foodEntry.setCalories(Number(result.report.foods[0].nutrients[0].value));
-	foodEntry.setProtein(Number(result.report.foods[0].nutrients[1].value));
-	foodEntry.setFat(Number(result.report.foods[0].nutrients[2].value));
-	foodEntry.setCarbs(Number(result.report.foods[0].nutrients[3].value));
+	let calories = Number(result.report.foods[0].nutrients[0].value);
+	let protein = Number(result.report.foods[0].nutrients[1].value);
+	let fat = Number(result.report.foods[0].nutrients[2].value);
+	let carbs = Number(result.report.foods[0].nutrients[3].value);
+	let theNutrientValues = [calories, protein, fat, carbs];
+
+	for (let i = 0; i < theNutrientValues.length; i++) {
+		if (isNaN(theNutrientValues[i]) === true) {
+			theNutrientValues[i] = 0;
+		}
+	}
+	
+
+	console.log(fat);
+	console.log(theNutrientValues);
+
+	foodEntry.setCalories(theNutrientValues[0]);
+	foodEntry.setProtein(theNutrientValues[1]);
+	foodEntry.setFat(theNutrientValues[2]);
+	foodEntry.setCarbs(theNutrientValues[3]);
 	foodEntry.setFoodName(result.report.foods[0].name);   	
 }	
 

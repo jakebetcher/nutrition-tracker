@@ -107,6 +107,11 @@ h1 {
 	color: #4B5842;
 }
 
+.login-form {
+	padding-left: 20%;
+	padding-right: 20%;
+}
+
 .signup-legend {
 	font-weight: bold;
 	margin-bottom: 65px;
@@ -123,6 +128,13 @@ h1 {
 .signup-input, .login-input {
 	background-color: white;
 	color: #4B5842;
+}
+
+.signup-input, .signup-label, .login-label {
+	display: block;
+	margin-bottom: 10px;
+	margin-left: auto;
+	margin-right: auto
 }
 
 .nutrition-search-legend, .login-legend {
@@ -177,7 +189,6 @@ h1 {
 }
 
 .pop-inner {
-  margin-top: 100px;
   padding: 25px;
   text-align: center;
   width: 100%;
@@ -260,7 +271,7 @@ h1 {
 }
 
 .goals-field {
-	margin-bottom: 35px;
+	margin-bottom: 70px;
 }
 
 .goals-input {
@@ -335,6 +346,37 @@ h1 {
 	.goals-page-inner {
 	 	max-width: 640px;
 	 }
+
+	 .signup-label, .signup-input, .login-label, .login-input {
+	 	display: inline;
+	 }
+
+	 .login-form {
+	 	padding: 40px;
+	 }
+}
+
+.goals-input, .goals-label {
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.goals-input {
+	margin-bottom: 20px;
+}
+
+.goals-label {
+	margin-bottom: 10px;
+}
+
+
+
+
+@media only screen and (min-width: 770px) {
+	.goals-input, .goals-label {
+		display: inline;
+	}
 }
 
 @media only screen and (min-width: 960px) {
