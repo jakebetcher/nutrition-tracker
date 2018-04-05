@@ -54,50 +54,63 @@
 			<button class='main-button' type="submit" onclick="storeUserInfoLogIn()">Log In</button>
 	</form>
 
-	<form class='nutrition-search-form hidden' onsubmit="return onFoodSearchFormSubmit()">
-		<legend class='nutrition-search-legend'>Search for all kinds of foods and find their nutritional information.</legend>
-			<div>
-				<label for='search-nutrition'>Enter Food Name Here: </label>
-				<input name='search-nutrition' id='search-nutrition' class='search-nutrition-input js-food-query' placeholder="Reese's Puffs" required>
-			</div>
-			<div>
-				<button class='food-search-button' type="submit" onclick="storeTheFood()">Search Foods</button>
-			</div>	
-		</form>
+	<div class='nutrition-search-form-div hidden'>
+		<form class='nutrition-search-form' onsubmit="return onFoodSearchFormSubmit()">
+			<legend class='nutrition-search-legend'>Search for all kinds of foods and find their nutritional information.</legend>
+				<div class='search-food-div'>
+					<label class='search-nutrition-label' for='search-nutrition'>Enter Food Name Here: </label>
+					<input name='search-nutrition' id='search-nutrition' class='search-nutrition-input js-food-query' placeholder="Reese's Puffs" required>
+				</div>
+				<div>
+					<button class='food-search-button' type="submit" onclick="storeTheFood()">Search Foods</button>
+				</div>	
+			</form>
+	</div>
 
 		<div class='results-div js-results-div'>
 			
 		</div>
 
 		<div class='goals-page hidden'>
-			<h2>My Goals</h2>
+			<div class='goals-page-inner'>	
+				<h2 class='my-goals-header'>My Goals</h2>
 
-			<div class='goals-list-div'>
-			</div>
-			<div>
-				<button class='edit-goals-button'>Edit Goals</button>
-			</div>
+				<div class='goals-list-div'>
+				</div>
+				<div>
+					<button class='edit-goals-button'>Edit Goals</button>
+				</div>
+			</div>	
 		</div>
+
+		<div class='div-for-modal'>
+		</div>	
 
 		<div class='progress-page hidden'>
-			<h2 class='progress-page-header'>What I've Eaten today</h2>
-			<div class='nutrition-tracking'>
+			<div class='progress-page-inner'>
+				<div class='progress-page-inner-section'>
+					<h2 class='progress-page-header'>What I've Eaten today</h2>
+					<div class='nutrition-tracking'>
+					</div>
+					<div class='see-all-food-button-div'>
+						<button class='see-all-food-button'>See All Food Eaten Today</button>
+					</div>
+				</div>	
+				<div class='progress-page-inner-section'>	
+					<h2 class='progress-page-header'>My Long Term Progress</h2>
+					<div class='long-term-progress'>
+					</div>
+				</div>	
 			</div>
-			<div class='see-all-food-button-div'>
-				<button class='see-all-food-button'>see all food eaten today</button>
-			</div>	
-			<h2 class='progress-page-header'>My Long Term Progress</h2>
-			<div class='long-term-progress'>
-			</div>
-		</div>
-		
+		</div>	
+			
 		<div class ='pop-outer-food-entries'>
 			<div class='pop-inner-food-entries'>
 				<button class='close-food-entries'>X</button>
-				<h2>Food Eaten Today</h2>
 				<div class='food-entries'></div>
 			</div>
-		</div>		
+		</div>	
+	</div>		
 
 
 		<div class="pop-outer-goals">

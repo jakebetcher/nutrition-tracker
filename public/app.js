@@ -171,21 +171,26 @@ function displayGoals(data) {
 	console.log(data);
 	$('.goals-list-div').empty();
 	$('.goals-list-div').append(`
-			<h4>Calories:</h4>
-			<p><span>Amount: </span><span>${data[0].calories.amount}</span></p>
-			<p><span>Range: </span><span>${data[0].calories.range}</span></p>
-
-			<h4>Fat:</h4>
-			<p><span>Amount: </span><span>${data[0].fat.amount}</span></p>
-			<p><span>Range: </span><span>${data[0].fat.range}</span></p>
-
-			<h4>Protein:</h4>
-			<p><span>Amount: </span><span>${data[0].protein.amount}</span></p>
-			<p><span>Range: </span><span>${data[0].protein.range}</span></p>
-
-			<h4>Carbs:</h4>
-			<p><span>Amount: </span><span>${data[0].carbs.amount}</span></p>
-			<p><span>Range: </span><span>${data[0].carbs.range}</span></p>
+		<div class='goals-amount-range'>	
+				<h4 class='goals-list-nutrient-header'>Calories:</h4>
+				<p class='goals-list-nutrient-paragraph'><span>Amount: </span><span>${data[0].calories.amount}</span></p>
+				<p class='goals-list-nutrient-paragraph'><span>Range: </span><span>${data[0].calories.range}</span></p>
+		</div>
+		<div class='goals-amount-range'>
+				<h4 class='goals-list-nutrient-header'>Fat:</h4>
+				<p class='goals-list-nutrient-paragraph'><span>Amount: </span><span>${data[0].fat.amount}</span></p>
+				<p class='goals-list-nutrient-paragraph'><span>Range: </span><span>${data[0].fat.range}</span></p>
+		</div>
+		<div class='goals-amount-range'>
+				<h4 class='goals-list-nutrient-header'>Protein:</h4>
+				<p class='goals-list-nutrient-paragraph'><span>Amount: </span><span>${data[0].protein.amount}</span></p>
+				<p class='goals-list-nutrient-paragraph'><span>Range: </span><span>${data[0].protein.range}</span></p>
+    </div>
+    <div class='goals-amount-range'>
+				<h4 class='goals-list-nutrient-header'>Carbs:</h4>
+				<p class='goals-list-nutrient-paragraph'><span>Amount: </span><span>${data[0].carbs.amount}</span></p>
+				<p class='goals-list-nutrient-paragraph'><span>Range: </span><span>${data[0].carbs.range}</span></p>
+		</div>
 		`);
 }
 
@@ -211,7 +216,8 @@ function handleLogInForm() {
 		logIn();
 		$('.signup-div').addClass('hidden');
 		$('.login-form').addClass('hidden');
-		$('.profile-page').removeClass('hidden');
+		getGoals(displayGoals);
+		$('.goals-page').removeClass('hidden');
 	});
 }
 
@@ -228,7 +234,7 @@ function onFoodSearchFormSubmit () {
 
 function handleNutritionSearchClick() {
 	$('.main-header').on('click', '.food-search-header-button', function(event) {
-		$('.nutrition-search-form').removeClass('hidden');
+		$('.nutrition-search-form-div').removeClass('hidden');
 		$('.signup-div, .goals-page, .login-form, .progress-page').addClass('hidden');
 	});
 }
@@ -245,7 +251,7 @@ function handleSubmitSearchFoods() {
 
 function displayLogInPage() {
 	$('.log-in-button').on('click', function(event) {
-		$('.nutrition-search-form, .signup-div').addClass('hidden');
+		$('.nutrition-search-form-div, .signup-div').addClass('hidden');
 		$('.js-results-div').empty();
 		$('.login-form').removeClass('hidden');
 	});
@@ -277,15 +283,16 @@ function getDataFromAPI(callback) {
 
 function renderFoodResult(data) {
 	const foodListLength = data.list.item.length;
+	$('.js-results-div').append(`<h2 class='food-results-header'>Results</h2>`)
 	for (let i = 0; i < foodListLength; i++) {
-		$('.js-results-div').append(`<div class='theFoods'><span>Food Name: </span> <button value=${data.list.item[i].ndbno} class='food-name'>${data.list.item[i].name}</button></div>`);
+		$('.js-results-div').append(`<div class='theFoods'><button value=${data.list.item[i].ndbno} class='food-name'>${data.list.item[i].name}</button></div>`);
 	}
 	
 }
 
 function backToHome() {
 	$('h1').on('click', function() {
-		$('.nutrition-search-form, .profile-page').addClass('hidden');
+		$('.nutrition-search-form-div, .goals-page, .login-form, progress-page').addClass('hidden');
 		$('.js-results-div').empty();
 		$('.signup-div').removeClass('hidden');
 	});
@@ -315,28 +322,34 @@ function getDetailedDataFromAPI(id, callback) {
 function renderDetailedData(result) {
 	let nutrientArray = [];
 	let nutrientAmountArray = [];
-	let theModal = `<div class='pop-outer'><div class='pop-inner'><button class='close'>X</button><h2>Nutritional Facts</h2>`; 
+	let theModal = `<div class='pop-outer'><div class='pop-inner'><div class='pop-inner-content'><button class='close'>X</button><h2 class='food-modal-header'>Nutritional Facts</h2>`; 
 	for (let i = 0; i < result.report.foods[0].nutrients.length; i++) {
-		theModal += `<p><span>${result.report.foods[0].nutrients[i].nutrient}: </span> <span>${result.report.foods[0].nutrients[i].value} ${result.report.foods[0].nutrients[i].unit}</span></p>`;
+		theModal += `<p class='food-modal-text'><span>${result.report.foods[0].nutrients[i].nutrient}: </span> <span>${result.report.foods[0].nutrients[i].value} ${result.report.foods[0].nutrients[i].unit}</span></p>`;
 		nutrientArray.push(result.report.foods[0].nutrients[i].nutrient);
 		nutrientAmountArray.push(result.report.foods[0].nutrients[i].value);
 	}
-	theModal += `<button class='add-a-food'>Add Food Item</button></div></div>`;
-	$('.js-results-div').append(theModal);
+	theModal += `<button class='add-a-food'>Add Food Item</button></div></div></div>`;
+	$('.div-for-modal').append(theModal);
+	$('.js-results-div, .nutrition-search-form-div').addClass('transparent-background');
 	$('.pop-outer').fadeIn();
-	$('.js-results-div').on('click', '.close', function(event) {
-    $('.pop-outer').fadeOut();
-  });
 	
 	foodEntry.setCalories(Number(result.report.foods[0].nutrients[0].value));
-	foodEntry.setFat(Number(result.report.foods[0].nutrients[1].value));
-	foodEntry.setProtein(Number(result.report.foods[0].nutrients[2].value));
+	foodEntry.setProtein(Number(result.report.foods[0].nutrients[1].value));
+	foodEntry.setFat(Number(result.report.foods[0].nutrients[2].value));
 	foodEntry.setCarbs(Number(result.report.foods[0].nutrients[3].value));
 	foodEntry.setFoodName(result.report.foods[0].name);   	
 }	
 
+function handleCloseAddFoodModal() {
+	$('.div-for-modal').on('click', '.close', function(event) {
+   $('.js-results-div, .nutrition-search-form-div').removeClass('transparent-background');
+   $('.pop-outer').fadeOut();
+  });
+	
+}
+
 function handleAddFood() {
-	$('.js-results-div').on('click', '.add-a-food', function(event) {
+	$('.div-for-modal').on('click', '.add-a-food', function(event) {
   	let food = foodEntry.getConsumedFood();
   	let theDate = new Date();
 		let theDay = theDate.toDateString();
@@ -361,7 +374,9 @@ function addFood(food, callback) {
 }
 
 function addFoodCallback(data) {
+	$('.js-results-div, .nutrition-search-form-div').removeClass('transparent-background');
 	$('.pop-outer').fadeOut();
+
 }
 
 function postGoalsData() {
@@ -419,10 +434,10 @@ function displayTodayProgressData(data) {
 	if (data.length === 0) {
 		$('.nutrition-tracking').empty();
 		$('.nutrition-tracking').append(`
-		<p style='color: red'>Calories: 0</p>
-		<p style='color: red'>Fat: 0 g</p>
-		<p style='color: red'>Protein: 0 g</p>
-		<p style='color: red'>Carbs: 0 g</p>
+		<p class='calories-today' style='color: red'>Calories: 0</p>
+		<p class='fat-today' style='color: red'>Fat: 0 g</p>
+		<p class='protein-today' style='color: red'>Protein: 0 g</p>
+		<p class='carbs-today' style='color: red'>Carbs: 0 g</p>
 	`);
 	} else {
 			$('.nutrition-tracking').empty();
@@ -476,13 +491,20 @@ function displayLongTermProgressData(data) {
 	$('.long-term-progress').empty();
 	$('.long-term-progress').append(`
 		<div>
-			<p>Met Calories Goals: ${data.timesMetCaloriesGoals} times</p>
-			<p>Met Fat Goals: ${data.timesMetFatGoals} times</p>
-			<p>Met Protein Goals: ${data.timesMetProteinGoals} times</p>
-			<p>Met Carbs Goals: ${data.timesMetCarbsGoals} times</p>
-			<p>Met All Goals: ${data.timesMetAllGoals} times</p>
-			<p>Met At Least One Goal: ${data.timesMetAtLeastOneGoal} times</p>
-			<p>Days I've Been Tracking Current Goal: ${data.daysGoalsHaveBeenTracked} days</p>
+			<p class='long-term-progress-paragraph long-term-progress-title'>Met Calories Goals: </p>
+			<p class='long-term-progress-paragraph long-term-progress-number'>${data.timesMetCaloriesGoals} times</p>
+			<p class='long-term-progress-paragraph long-term-progress-title'>Met Fat Goals: </p>
+			<p class='long-term-progress-paragraph long-term-progress-number'>${data.timesMetFatGoals} times</p>
+			<p class='long-term-progress-paragraph long-term-progress-title'>Met Protein Goals: </p>
+			<p class='long-term-progress-paragraph long-term-progress-number'>${data.timesMetProteinGoals} times</p>
+			<p class='long-term-progress-paragraph long-term-progress-title'>Met Carbs Goals: </p>
+			<p class='long-term-progress-paragraph long-term-progress-number'>${data.timesMetCarbsGoals} times</p>
+			<p class='long-term-progress-paragraph long-term-progress-title'>Met All Goals: </p>
+			<p class='long-term-progress-paragraph long-term-progress-number'>${data.timesMetAllGoals} times</p>
+			<p class='long-term-progress-paragraph long-term-progress-title'>Met At Least One Goal: </p>
+			<p class='long-term-progress-paragraph long-term-progress-number'>${data.timesMetAtLeastOneGoal} times</p>
+			<p class='long-term-progress-paragraph long-term-progress-title'>Days I've Been Tracking Current Goal: ${data.daysGoalsHaveBeenTracked} day(s)</p>
+			<p class='long-term-progress-paragraph long-term-progress-number'>${data.daysGoalsHaveBeenTracked} day(s)</p>
 		</div>
 	`);
 }
@@ -490,7 +512,7 @@ function displayLongTermProgressData(data) {
 function handleClickMyProgress() {
 	$('.main-header').on('click', '.progress-button', function(event) {
 		$('.goals-page').addClass('hidden');
-		$('.nutrition-search-form').addClass('hidden');
+		$('.nutrition-search-form-div').addClass('hidden');
 		$('.js-results-div').empty();
 		getTodayProgressData(displayTodayProgressData);
 		getLongTermProgressData(displayLongTermProgressData);
@@ -501,7 +523,7 @@ function handleClickMyProgress() {
 
 function handleClickMyGoalsPage() {
 	$('.main-header').on('click', '.goals-button', function(event) {
-		$('.nutrition-search-form').addClass('hidden');
+		$('.nutrition-search-form-div').addClass('hidden');
 		$('.progress-page').addClass('hidden');
 		$('.js-results-div').empty();
 		$('.goals-page').removeClass('hidden');
@@ -552,14 +574,21 @@ function displayFoodList(data) {
 	if (data.length === 0) {
 		$('.food-entries').append(`
 			<div>
-				<h2>No Food Eaten Today</h2>
+				<h2 class='food-list-text-header'>No Food Eaten Today</h2>
 			</div>	
 	`);
 	} else {
+		$('.food-entries').append(`
+			<h2 class='food-list-text-header'>Food Eaten Today</h2>
+		`);
 		data.forEach(food => {
 			$('.food-entries').append(`
 				<div class='food-entry-div'>
-					<h2>${food.foodName}</h2>
+					<h3 class='food-list-name'>${food.foodName}</h3>
+					<p class='food-list-paragraph'>Calories: ${food.consumedCalories}</p>
+					<p class='food-list-paragraph'>Fat: ${food.consumedFat} g</p>
+					<p class='food-list-paragraph'>Protein: ${food.consumedProtein} g</p>
+					<p class='food-list-paragraph'>Carbs: ${food.consumedCarbs} g</p>
 					<button class='delete-food-button' value=${food._id}>delete</button>
 				</div>	
 		`);
@@ -593,6 +622,7 @@ function removeEntryFromList(argument) {
 }
 
 function initApp() {
+	handleCloseAddFoodModal();
 	handleDeleteEntry();
 	handleSeeAllFoodButton();
 	handleCloseFoodList();
