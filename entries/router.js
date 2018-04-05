@@ -145,27 +145,35 @@ router.get('/total', jwtAuth, (req, res) => {
           res.json(result);
         } else {
           if ((result[0].consumedCalories >= caloriesGoalLowerBound) && (result[0].consumedCalories <= caloriesGoalUpperBound)) {
-          result[0].caloriesResult = true;
+          result[0].caloriesResult = 'met goal';
+        } else if (result[0].consumedCalories < caloriesGoalLowerBound) {
+          result[0].caloriesResult = 'below goal';
         } else {
-          result[0].caloriesResult = false;
+          result[0].caloriesResult = 'above goal'
         }
 
         if ((result[0].consumedFat >= fatGoalLowerBound) && (result[0].consumedFat <= fatGoalUpperBound)) {
-          result[0].fatResult = true;
+          result[0].fatResult = 'met goal';
+        } else if (result[0].consumedFat < fatGoalLowerBound) {
+          result[0].fatResult = 'below goal';
         } else {
-          result[0].fatResult = false;
+          result[0].fatResult = 'above goal';
         }
 
         if ((result[0].consumedProtein >= proteinGoalLowerBound) && (result[0].consumedProtein <= proteinGoalUpperBound)) {
-          result[0].proteinResult = true;
+          result[0].proteinResult = 'met goal';
+        } else if (result[0].consumedProtein < proteinGoalLowerBound) {
+          result[0].proteinResult = 'below goal';
         } else {
-          result[0].proteinResult = false;
+          result[0].proteinResult = 'above goal';
         }
 
         if ((result[0].consumedCarbs >= carbsGoalLowerBound) && (result[0].consumedCarbs <= carbsGoalUpperBound)) {
-          result[0].carbsResult = true;
+          result[0].carbsResult = 'met goal';
+        } else if (result[0].consumedCarbs < carbsGoalLowerBound) {
+          result[0].carbsResult = 'below goal';
         } else {
-          result[0].carbsResult = false;
+          result[0].carbsResult = 'above goal';
         }
         res.json(result);
         }

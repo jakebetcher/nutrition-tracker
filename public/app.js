@@ -215,7 +215,7 @@ function handleLogInForm() {
 		event.preventDefault();
 		logIn();
 		$('.signup-div').addClass('hidden');
-		$('.login-form').addClass('hidden');
+		$('.login-form-div').addClass('hidden');
 		getGoals(displayGoals);
 		$('.goals-page').removeClass('hidden');
 	});
@@ -253,7 +253,7 @@ function displayLogInPage() {
 	$('.log-in-button').on('click', function(event) {
 		$('.nutrition-search-form-div, .signup-div').addClass('hidden');
 		$('.js-results-div').empty();
-		$('.login-form').removeClass('hidden');
+		$('.login-form-div').removeClass('hidden');
 	});
 		
 }
@@ -292,7 +292,7 @@ function renderFoodResult(data) {
 
 function backToHome() {
 	$('h1').on('click', function() {
-		$('.nutrition-search-form-div, .goals-page, .login-form, progress-page').addClass('hidden');
+		$('.nutrition-search-form-div, .goals-page, .login-form-div, progress-page').addClass('hidden');
 		$('.js-results-div').empty();
 		$('.signup-div').removeClass('hidden');
 	});
@@ -434,10 +434,10 @@ function displayTodayProgressData(data) {
 	if (data.length === 0) {
 		$('.nutrition-tracking').empty();
 		$('.nutrition-tracking').append(`
-		<p class='calories-today' style='color: red'>Calories: 0</p>
-		<p class='fat-today' style='color: red'>Fat: 0 g</p>
-		<p class='protein-today' style='color: red'>Protein: 0 g</p>
-		<p class='carbs-today' style='color: red'>Carbs: 0 g</p>
+		<p class='calories-today' style='color: green'>Calories: 0</p>
+		<p class='fat-today' style='color: green'>Fat: 0 g</p>
+		<p class='protein-today' style='color: green'>Protein: 0 g</p>
+		<p class='carbs-today' style='color: green'>Carbs: 0 g</p>
 	`);
 	} else {
 			$('.nutrition-tracking').empty();
@@ -448,28 +448,36 @@ function displayTodayProgressData(data) {
 			<p class='carbs-today'>Carbs: ${data[0].consumedCarbs} g</p>
 		`);
 
-			if (data[0].caloriesResult === true) {
-				$('.calories-today').addClass('green-color');
-			}	else {
+			if (data[0].caloriesResult === 'met Goal') {
 				$('.calories-today').addClass('red-color');
+			}	else if (data[0].caloriesResult === 'below goal') {
+				$('.calories-today').addClass('green-color');
+			} else {
+				$('.calories-today').addClass('line-through');
 			}
 
-			if (data[0].fatResult === true) {
-				$('.fat-today').addClass('green-color');
-			}	else {
+			if (data[0].fatResult === 'met goal') {
 				$('.fat-today').addClass('red-color');
+			}	else if (data[0].fatResult === 'below goal') {
+				$('.fat-today').addClass('green-color');
+			} else {
+				$('.fat-today').addClass('line-through');
 			}
 
-			if (data[0].proteinResult === true) {
-				$('.protein-today').addClass('green-color');
-			}	else {
+			if (data[0].proteinResult === 'met goal') {
 				$('.protein-today').addClass('red-color');
+			}	else if (data[0].proteinResult === 'below goal') {
+				$('.protein-today').addClass('green-color');
+			} else {
+				$('.protein-today').addClass('line-through');
 			}
 
-			if (data[0].carbsResult === true) {
-				$('.carbs-today').addClass('green-color');
-			}	else {
+			if (data[0].carbsResult === 'met goal') {
 				$('.carbs-today').addClass('red-color');
+			}	else if (data[0].carbsResult === 'below goal') {
+				$('.carbs-today').addClass('green-color');
+			} else {
+				$('.carbs-today').addClass('line-through');
 			}
 	}		
 }

@@ -40,19 +40,21 @@
 		</form>
 	</div>	
 
-	<form class='login-form hidden' onsubmit="return onLogInFormSubmit()" >
-		<legend class='login-legend'>Log In.</legend>
+	<div class='login-form-div hidden'>
+		<form class='login-form' onsubmit="return onLogInFormSubmit()" >
+			<legend class='login-legend'>Log In.</legend>
 
-			<div>
-				<label for='username-login'>Username: </label>
-				<input name='username-login' id='username-login' class='username-input-login' placeholder='username' required>
-			</div>
-			<div>	
-				<label for='password-login'>Password: </label>
-				<input type='password' name='password-login' id='password-login' class='password-input-login' placeholder='password' required>
-		    </div>
-			<button class='main-button' type="submit" onclick="storeUserInfoLogIn()">Log In</button>
-	</form>
+				<div class='login-field'>
+					<label class= 'login-label' for='username-login'>Username: </label>
+					<input name='username-login' id='username-login' class='username-input-login' placeholder='username' required>
+				</div>
+				<div class='login-field'>	
+					<label class= 'login-label' for='password-login'>Password: </label>
+					<input type='password' name='password-login' id='password-login' class='password-input-login' placeholder='password' required>
+			    </div>
+				<button class='main-button' type="submit" onclick="storeUserInfoLogIn()">Log In</button>
+		</form>
+	</div>	
 
 	<div class='nutrition-search-form-div hidden'>
 		<form class='nutrition-search-form' onsubmit="return onFoodSearchFormSubmit()">
