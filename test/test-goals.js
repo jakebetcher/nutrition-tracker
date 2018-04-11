@@ -10,7 +10,7 @@ const expect = chai.expect;
 
 
 
-const { Goal } = require('../models');
+const { Goal } = require('../goals');
 const { User } = require('../users');
 const { closeServer, runServer, app } = require('../server');
 const { JWT_SECRET, TEST_DATABASE_URL } = require('../config');
@@ -31,6 +31,23 @@ function tearDownDb() {
   const explicitFirstName = 'Example';
   const explicitLastName = 'User';
 
+  const theUserId = (function() {
+  	let theId;
+
+  	function getUserId() {
+  		return Object.assign({}, theId);
+  	}
+
+  	function setId(id) {
+  		theId = id;
+  	}
+
+  	return Object.freeze({
+		getUserId: getUserId,
+		setId: setId
+	});
+  })();
+
   const exampleUsers = [];
   for (let i=0; i<10; i++) {
   	exampleUsers.push({
@@ -41,7 +58,29 @@ function tearDownDb() {
   	})
   }
 
-  
+ function createGoals(user) {
+ 	for (let i=0; i<10; i++) {
+ 		Goal.create({
+ 			user: user,
+ 			calories: {
+		    	amount: faker.random.number(3000),
+				range: faker.random.number(400)
+			},
+			fat: {
+				amount: faker.random.number(200),
+				range: faker.random.number(30)
+			},
+			protein: {
+				amount: faker.random.number(200),
+				range: faker.random.number(40)
+			},
+			carbs: {
+				amount: faker.random.number(200),
+				range: faker.random.number(40)
+			}
+ 		});
+ 	}
+ }
 
 
 function seedGoalData() {
@@ -49,7 +88,6 @@ function seedGoalData() {
   const seedData = [];
   exampleUsers.forEach(user => {
   	seedData.push({
-  		username: user.username,
   		calories: {
 		    amount: faker.random.number(3000),
 			range: faker.random.number(400)
@@ -68,27 +106,30 @@ function seedGoalData() {
 		}
   	});
   });
-  
-  //console.log(seedData);
+
 
   return Goal.insertMany(seedData);
 }
 
 function createUsers() {
 	exampleUsers.forEach(user => {
-		return User.hashPassword(user.password).then(password =>
+		return User.hashPassword(user.password).then(password => {
       User.create({
         username: user.username,
         password,
         firstName: user.firstName,
         lastName: user.lastName
-      })
-    );
-	});
+      }).then(user => {
+      	theUserId.setId(user._id);
+      	createGoals(user._id);
+      });
+    });
+    });	
 }
-  
 
-
+function addGoalsToUser() {
+	createUsers()
+}
 
 describe('goals API resource', function() {
 	 
@@ -96,21 +137,15 @@ describe('goals API resource', function() {
     return runServer(TEST_DATABASE_URL);
   });
 
-  beforeEach(function () {
+  /*beforeEach(function () {
     return seedGoalData();
-  });
+  });*/
 
   beforeEach(function () {
-    /*return User.hashPassword(password).then(password =>
-      User.create({
-        username,
-        password,
-        firstName,
-        lastName
-      })
-    );*/
     createUsers();
   });
+
+
 
   beforeEach(function () {
     return User.hashPassword(explicitPassword).then(password =>
@@ -119,6 +154,31 @@ describe('goals API resource', function() {
         password: explicitPassword,
         firstName: explicitFirstName,
         lastName: explicitLastName
+      })
+      .then(user => {
+      	console.log(user);
+      	Goal.create({
+      		user: user._id,
+      		calories: {
+			    amount: faker.random.number(3000),
+				range: faker.random.number(400)
+				},
+			fat: {
+				amount: faker.random.number(200),
+				range: faker.random.number(30)
+			},
+			protein: {
+				amount: faker.random.number(200),
+				range: faker.random.number(40)
+			},
+			carbs: {
+				amount: faker.random.number(200),
+				range: faker.random.number(40)
+			}
+      	})
+      	.then(goal => {
+      		console.log(goal);
+      	})
       })
     );
   });
@@ -141,7 +201,7 @@ describe('protected GET Endpoint', function() {
 	it('Should reject requests with no credentials', function () {
       return chai
         .request(app)
-        .get('/goals/protected')
+        .get('/goals')
         .then(() =>
           expect.fail(null, null, 'Request should not succeed')
         )
@@ -174,7 +234,7 @@ it('Should reject requests with an expired token', function () {
 
       return chai
         .request(app)
-        .get('/goals/protected')
+        .get('/goals')
         .set('authorization', `Bearer ${token}`)
         .then(() =>
           expect.fail(null, null, 'Request should not succeed')
@@ -193,6 +253,7 @@ it('Should reject requests with an expired token', function () {
       const token = jwt.sign(
         {
           user: {
+          	id: theUserId.getUserId(),
             username: exampleUsers[1].username,
             firstName: exampleUsers[1].firstName,
             lastName: exampleUsers[1].lastName
@@ -206,25 +267,25 @@ it('Should reject requests with an expired token', function () {
         }
       );
 
+      console.log(token);
       return chai
         .request(app)
-        .get('/goals/protected')
-
+        .get('/goals')
         .set('authorization', `Bearer ${token}`)
         .then(res => {
-        	//console.log(res.body);
           expect(res).to.have.status(200);
           expect(res.body).to.be.an('array');
 
           res.body.forEach(function(goal) {
 				expect(goal).to.be.a('object');
-				expect(goal).to.include.keys('_id', 'username', 'calories', 'fat', 'protein', 'carbs', 'date');
+				expect(goal).to.include.keys('_id', 'user', 'calories', 'fat', 'protein', 'carbs', 'date');
 			});
+          console.log(res.body.length);
 			resGoals = res.body[0];
 			return Goal.findById(resGoals._id);
 		})
 		.then(function(goal) {
-			expect(resGoals.username).to.equal(goal.username);
+			expect(resGoals.user).to.equal(goal.user);
 			expect(resGoals._id).to.equal(`${goal._id}`);
 			expect(resGoals.calories.amount).to.equal(goal.calories.amount);
 			expect(resGoals.calories.range).to.equal(goal.calories.range);
@@ -239,7 +300,7 @@ it('Should reject requests with an expired token', function () {
         });
     });
     
-describe('protected POST endpoint', function() {
+/*describe('protected POST endpoint', function() {
 	it('should reject requests with no credentials', function() {
 		const newGoal = {
 				username: explicitUsername,
@@ -399,9 +460,9 @@ describe('protected POST endpoint', function() {
 
 
 
-	});
+	});*/
 
-	describe('protected PUT Endpoint', function() {
+	/*describe('protected PUT Endpoint', function() {
 		it('should reject requests with no credentials', function() {
 			const updatedGoal = {
 				calories: {
@@ -520,7 +581,7 @@ describe('protected POST endpoint', function() {
 
 		});
 	});
-});
+});*/
     
 
 /*describe('POST Endpoint', function() {
@@ -655,5 +716,5 @@ describe('test', function() {
           res.should.have.status(200);
           res.should.be.html;
 	});
-});
 });*/
+});

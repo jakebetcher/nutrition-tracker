@@ -4,43 +4,52 @@
 	<title>Nutrition Tracker</title>
 	<meta charset="utf-8">
  	<meta name="viewport" content="width=device-width">
+ 	<link href="https://fonts.googleapis.com/css?family=Fjalla+One|Open+Sans|Roboto" rel="stylesheet">
+
+ 	<link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+ 	<link href="https://fonts.googleapis.com/css?family=Open+Sans|Roboto" rel="stylesheet">
  	<link href="main.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
 	<header role='banner' class='main-header'>
 		<h1>Nutrition Tracker</h1>
-		<div class='options'>
-			<!-- <button class='nutrition-search-button header-button'>Nutrition Search</button> -->
-			<button class='header-button log-in-button'>Log In</button>
-		</div>
+		<nav>
+			<!--<a class='header-link log-in-link' href='#login-div'>Log In</a>-->
+		</nav>
 	</header>
 	<main role='main'>
+
+	<div class='splash-page-div'>
+			<h2 class='splash-page-header'>Set Nutritional Goals for Calories and Macro Nutrients and Track Them on a Daily Basis.</h2>
+			<button class='trigger-signup'>Sign Up</button>
+			<button class='trigger-login'>Log In</button>	
+	</div>
 	
-	<div class='signup-div'>
+	<div class='signup-div hidden'>
 		<form class='signup-form' onsubmit="return onSignupFormSubmit()">
-			<legend class='signup-legend'>Sign Up for Nutrition Tracker and start eating healthier today.</legend>
+			<legend class='signup-legend'>Register Here</legend>
 				<div class='signup-field'>
-					<label class='signup-label' for='first-name'>First Name: </label>
-					<input name='first-name' id='first-name' class='signup-input first-name-input' placeholder='John' required>
+					<!--<label class='signup-label' for='first-name'>First Name: </label>-->
+					<input name='first-name' id='first-name' class='signup-input first-name-input' placeholder='First Name' required>
 				</div>
 				<div class='signup-field'>
-					<label class='signup-label' for='last-name'>Last Name: </label>
-					<input name='last-name' id='last-name' class='signup-input last-name-input' placeholder='Smith' required>
+					<!--<label class='signup-label' for='last-name'>Last Name: </label>-->
+					<input name='last-name' id='last-name' class='signup-input last-name-input' placeholder='Last Name' required>-
 				</div>
 
 				<div class='signup-field'>
-					<label class='signup-label' for='username'>Username: </label>
-					<input name='username' id='username' class='signup-input username-input' placeholder='username' required>
+					<!--<label class='signup-label' for='username'>Username: </label>-->
+					<input name='username' id='username' class='signup-input username-input' placeholder='Username' required>
 				</div>
 				<div class='signup-field'>	
-					<label class='signup-label' for='password'>Password: </label>
-					<input type='password' name='password' id='password' class='signup-input password-input' placeholder='password' required>
+					<!--<label class='signup-label' for='password'>Password: </label>-->
+					<input type='password' name='password' id='password' class='signup-input password-input' placeholder='Password' required>
 			  </div>
 				<button class='main-button' type="submit" onclick="storeUserInfo()">Sign Up</button>
 		</form>
 	</div>	
 
-	<div class='login-form-div hidden'>
+	<div class='login-form-div hidden' id='login-div'>
 		<form class='login-form' onsubmit="return onLogInFormSubmit()" >
 			<legend class='login-legend'>Log In.</legend>
 
@@ -56,7 +65,7 @@
 		</form>
 	</div>	
 
-	<div class='nutrition-search-form-div hidden'>
+	<div class='nutrition-search-form-div hidden' id='food-search-page'>
 		<form class='nutrition-search-form' onsubmit="return onFoodSearchFormSubmit()">
 			<legend class='nutrition-search-legend'>Search for all kinds of foods and find their nutritional information.</legend>
 				<div class='search-food-div'>
@@ -73,7 +82,7 @@
 			
 		</div>
 
-		<div class='goals-page hidden'>
+		<div class='goals-page hidden' id='goals-page'>
 			<div class='goals-page-inner'>	
 				<h2 class='my-goals-header'>My Goals</h2>
 
@@ -88,7 +97,7 @@
 		<div class='div-for-modal'>
 		</div>	
 
-		<div class='progress-page hidden'>
+		<div class='progress-page hidden' id='progress-page'>
 			<div class='progress-page-inner'>
 				<div class='progress-page-inner-section'>
 					<h2 class='progress-page-header'>What I've Eaten today</h2>
@@ -127,34 +136,35 @@
 		<div class="pop-outer-goals">
 			<div class='pop-inner-goals'>
 				<form class='nutrients-goals-form'>
-					<legend class='goals-legend'>Check all the ingredients you want to track.</legend>
+					<button class='close-goals-pop-up'>X</button>
+					<legend class='goals-legend'>Enter Your Goals Here.</legend>
 					<div class='goals-field'>
 						<h3 class='goals-form-nutrient-header'>Calories</h3>
-    				<label class='goals-label' for='calories-amount'>Amount: </label>
-						<input name='calories-amount' id='calories-amount' type='number' class='goals-input' required>
-						<label class='goals-label' for='calories-range'>Range: </label>
-						<input name='calories-range' id='calories-range' type='number' class='goals-input' required>
+    				<!--<label class='goals-label' for='calories-amount'>Amount: </label>-->
+						<input name='calories-amount' id='calories-amount' type='number' class='goals-input' required placeholder='Amount'>
+						<!--<label class='goals-label' for='calories-range'>Range: </label>-->
+						<input name='calories-range' id='calories-range' type='number' class='goals-input' required placeholder="Range">
   				</div>
   				<div class='goals-field'>
   					<h3 class='goals-form-nutrient-header'>Fat</h3>
-    				<label class='goals-label' for='fat-amount'>Amount: </label>
-						<input name='fat-amount' id='fat-amount' type='number' class='goals-input' required>
-						<label class='goals-label' for='fat-range'>Range: </label>
-						<input name='fat-range' id='fat-range' type='number' class='goals-input' required>
+    				<!--<label class='goals-label' for='fat-amount'>Amount: </label>-->
+						<input name='fat-amount' id='fat-amount' type='number' class='goals-input' required placeholder="Amount">
+						<!--<label class='goals-label' for='fat-range'>Range: </label>-->
+						<input name='fat-range' id='fat-range' type='number' class='goals-input' required placeholder="Range">
   				</div>
   				<div class='goals-field'>
   					<h3 class='goals-form-nutrient-header'>Protein</h3>
-    				<label class='goals-label' for='protein-amount'>Amount: </label>
-						<input name='protein-amount' id='protein-amount' type='number' class='goals-input' required>
-						<label class='goals-label' for='protein-range'>Range: </label>
-						<input name='protein-range' id='protein-range' type='number' class='goals-input' required>
+    				<!--<label class='goals-label' for='protein-amount'>Amount: </label>-->
+						<input name='protein-amount' id='protein-amount' type='number' class='goals-input' required placeholder="Amount">
+						<!--<label class='goals-label' for='protein-range'>Range: </label>-->
+						<input name='protein-range' id='protein-range' type='number' class='goals-input' required placeholder="Range">
   				</div>
   				<div class='goals-field'>
   					<h3 class='goals-form-nutrient-header'>Carbs</h3>
-    				<label class='goals-label' for='carbs-amount'>Amount: </label>
-						<input name='carbs-amount' id='carbs-amount' type='number' class='goals-input' required>
-						<label class='goals-label' for='carbs-range'>Range: </label>
-						<input name='carbs-range' id='carbs-range' type='number' class='goals-input' required>
+    				<!--<label class='goals-label' for='carbs-amount'>Amount: </label>-->
+						<input name='carbs-amount' id='carbs-amount' type='number' class='goals-input' required placeholder="Amount">
+						<!--<label class='goals-label' for='carbs-range'>Range: </label>-->
+						<input name='carbs-range' id='carbs-range' type='number' class='goals-input' required placeholder="Range">
   				</div>
   					<button class='change-goals-button' type='submit' onclick="storeGoals()">Save Changes</button>
 				</form>

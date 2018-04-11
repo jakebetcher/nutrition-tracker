@@ -7,16 +7,70 @@
 	display: none;
 }
 
-.main-header {
-	padding-bottom: 15px;
-	background-color: #C7D59F;
+body {
+	margin: 0px;
+	font-family: 'Open Sans', sans-serif;
+	background-image: 
+    linear-gradient(
+      rgba(0, 0, 0, 0.4),
+      rgba(0, 0, 0, 0.4)
+    ),
+    url('https://images.unsplash.com/photo-1517673400267-0251440c45dc?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=f197f4922b3f26ed3f4e3e66a113b67b&auto=format&fit=crop&w=2550&q=80');
+	background-repeat: no-repeat;  
+  background-attachment: fixed;  
+  background-position: 0% 0%;
+  background-size: cover;
+}
+
+.transparent-body {
+	background-image: linear-gradient(
+      rgba(0, 0, 0, 0.7),
+      rgba(0, 0, 0, 0.7)
+    ),
+    url('https://images.unsplash.com/photo-1517673400267-0251440c45dc?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=f197f4922b3f26ed3f4e3e66a113b67b&auto=format&fit=crop&w=2550&q=80'); ;
+}
+
+
+
+.splash-page-div {
 	text-align: center;
-	margin-bottom: 80px;
-	color: #4B5842;
-	border: 2px solid #4B5842;
-	border-radius: 6px;
+	color: white;
+	text-shadow: 1px 1px black;
+	font-size: 22px;
+	max-width: 50%;
 	margin-left: auto;
 	margin-right: auto;
+}
+
+.trigger-login, .trigger-signup {
+	width: 40%;
+	font-size: 18px;
+	color: white;
+	padding: 10px;
+	border-radius: 6px;
+	background-color: darkslategrey;
+}
+
+
+
+
+
+header {
+	margin: 0px;
+	background-color: darkslategrey;
+	text-align: center;
+	margin-bottom: 80px;
+	color: #fff;
+	padding: 10px;
+}
+
+.header-link {
+	color: #fff;
+	text-decoration: none;
+}
+
+a:hover {
+	color: #A7A7A9;
 }
 
 .results-div {
@@ -41,12 +95,11 @@
 }
 
 h1 {
-	/*display: inline-block;
-	padding: 5px;*/
-	font-size: 48px;
-	/*background-color: #B7CE63;
-	border: .5px solid #4B5842;
-	border-radius: 6px;*/
+	font-family: 'Roboto', sans-serif;
+	font-size: 35px;
+	margin-bottom: 0px;
+	margin-top: 0px;
+	padding-top: 5px;
 }
 .header-button, .edit-goals-button, .delete-food-button, .add-a-food, .food-search-button {
 	font-size: 19px;
@@ -64,8 +117,16 @@ h1 {
 	background-color: #C7D59F;
 }
 
-.main-button, .change-goals-button, .see-all-food-button {
-	margin-top: 40px;
+.main-button {
+	width: 100%;
+	background-color: green;
+	color: white;
+	border-radius: 6px;
+	padding-top: 10px;
+	padding-bottom: 10px;
+}
+
+ .change-goals-button, .see-all-food-button {
 	font-size: 20px;
 	padding: 13px;
 	background-color: #8FB339;
@@ -85,17 +146,17 @@ h1 {
 }
 
 .login-field {
-	margin-bottom: 25px;
+	margin-bottom: 15px;
 }
 
 .signup-label {
 	font-weight: bold;
 	color: #4B5842;
-	font-size: 23px;
+	font-size: 16px;
 }
 
 .signup-field {
-	margin-bottom: 35px;
+	margin-bottom: 11px;
 }
 
 .signup-form, .login-form {
@@ -103,7 +164,7 @@ h1 {
 	border-radius: 6px;
 	display: inline-block;
 	padding: 40px;
-	background-color: #C7D59F;
+	background-color: white;
 	color: #4B5842;
 }
 
@@ -114,19 +175,20 @@ h1 {
 
 .signup-legend {
 	font-weight: bold;
-	margin-bottom: 65px;
-	font-size: 28px;
+	margin-bottom: 20px;
+	font-size: 25px;
 	color: #4B5842;
 }
 
 .goals-legend {
-	margin-bottom: 65px;
 	color: #4B5842;
 	font-weight: bold;
+	font-size: 20px;
 }
 
 .signup-input, .login-input {
 	background-color: white;
+	padding: 8px;
 	color: #4B5842;
 }
 
@@ -232,11 +294,8 @@ h1 {
 .pop-inner-goals, .pop-inner-food-entries {
   margin-top: 100px;
   text-align: center;
-  /*width: 520px;
-  height: 420px;*/
   padding: 25px;
   padding-bottom: 50px;
-  /*border: 3px darkgrey solid;*/
   font-size: 30px;
 }
 
@@ -271,10 +330,12 @@ h1 {
 }
 
 .nutrients-goals-form {
-	background-color: #C7D59F;
+	background-color: white;
 	display: inline-block;
 	padding: 25px;
-	width: 100%;
+	padding-left: 10%;
+	padding-right: 10%;
+	/*width: 100%;*/
 	font-size: 30px;
 	margin-bottom: 30px;
 	border: 2px solid #4B5842;
@@ -282,17 +343,19 @@ h1 {
 }
 
 .goals-field {
-	margin-bottom: 70px;
+	margin-bottom: 30px;
 }
 
 .goals-input {
-	font-size: 20px;
+	font-size: 16px;
 	color: #4B5842;
+	display: block;
+	padding: 10px;
 }
 
 .goals-form-nutrient-header, .goals-label {
 	color: #4B5842;
-	font-size: 27px;
+	font-size: 18px;
 }
 
 .pop-inner-food-entries, .pop-inner-goals {
@@ -329,13 +392,14 @@ h1 {
 }
 
 .goals-page-inner {
+	color: black;
 	max-width: 100%;
 	display: inline-block;
 	border: 2px solid #4B5842;
 	border-radius: 6px;
 	text-align: center;
 	padding: 5% 9%;
-	background-color: #C7D59F;
+	background-color: #fff;
 	width: 100%;
 }
 
@@ -345,11 +409,8 @@ h1 {
 
 .nutrition-search-form {
 	text-align: center;
-	/*border: 2px solid #4B5842;
-	border-radius: 6px;*/
 	display: inline-block;
 	padding: 40px;
-	/*background-color: #C7D59F;*/
 	color: #4B5842;
 }
 
@@ -384,11 +445,6 @@ h1 {
 
 
 
-@media only screen and (min-width: 770px) {
-	.goals-input, .goals-label {
-		display: inline;
-	}
-}
 
 @media only screen and (min-width: 960px) {
 	 .progress-page-inner {

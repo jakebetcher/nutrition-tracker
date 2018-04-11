@@ -62,7 +62,6 @@ function storeUserInfo() {
 		firstName: $('.first-name-input').val(),
 		lastName: $('.last-name-input').val()
 	}
-	//console.log(user);
 	return user;
 }
 
@@ -94,15 +93,15 @@ function logIn() {
 		contentType: 'application/json',
 		data: JSON.stringify(theUser),
 		success: function(data) {
-			//alert(data.authToken);
-			$('.log-in-button').remove();
-			$('.options').append(`
-					<button class='header-button goals-button'>My Goals</button>
-					<button class='header-button progress-button'>My Progress</button>
-					<button class='header-button food-search-header-button'>Food Search</button>
+			$('.log-in-link').remove();
+			$('header').removeClass('partially-transparent-background');
+			$('body').removeClass('transparent-body');
+			$('.login-form-div').addClass('hidden');
+			$('nav').append(`
+					<a class='header-link goals-link' href='#goals-page'>My Goals</a>
+					<a class='header-link progress-link' href='#progress-page'>My Progress</a>
+					<a class='header-link food-search-header-link' href='#food-search-page'>Food Search</a>
 				`);
-			//$('.options').append(`<button class='header-button profile-name-button'>${theUser.username}</button>`);
-			console.log('success');
 			localStorage.setItem('token', data.authToken);
 			$('.signup-div').addClass('hidden');
 			$('.login-form-div').addClass('hidden');
@@ -114,12 +113,19 @@ function logIn() {
 			$('.error-results').append(`
 				<h3 style='color: #4B5842'>Invalid Credentials</h3>
 			`);
-			$('.main-header, .login-form-div').addClass('partially-transparent-background');
+			$('header, .login-form-div').addClass('partially-transparent-background');
 			$('.pop-outer-error-box').fadeIn();
 		}
 
 	});
 
+}
+
+function handleCloseErrorMessage() {
+	$('.close-error-message').on('click', function(event) {
+		$('header, .login-form-div, .pop-inner-goals, .signup-div').removeClass('partially-transparent-background');
+		$('.pop-outer-error-box').fadeOut();
+	});
 }
 
 function signUp() {
@@ -139,7 +145,7 @@ function signUp() {
 			$('.error-results').append(`
 				<h3 style='color: #4B5842'>${error.responseJSON.location} ${error.responseJSON.message}</h3>
 			`);
-			$('.main-header, .signup-div').addClass('partially-transparent-background');
+			$('header, .signup-div').addClass('partially-transparent-background');
 			$('.pop-outer-error-box').fadeIn();
 		}
 
@@ -159,20 +165,19 @@ function loginFirstTime() {
 		contentType: 'application/json',
 		data: JSON.stringify(user),
 		success: function(data) {
-			$('.log-in-button').remove();
-			$('.options').append(`
-					<button class='header-button goals-button'>My Goals</button>
-					<button class='header-button progress-button'>My Progress</button>
-					<button class='header-button food-search-header-button'>Food Search</button>
-				`);
-			//$('.options').append(`<button class='header-button profile-name-button'>${user.username}</button>`);
-			console.log('success');
-			console.log(data);
-			localStorage.setItem('token', data.authToken);
-			console.log(localStorage.getItem('token'));
+			$('header').removeClass('partially-transparent-background');
+			//$('body').removeClass('transparent-body');
 			$('.signup-div').addClass('hidden');
-			//$('.login-form').removeClass('hidden');
-			$('.main-header').addClass('transparent-background');
+			$('.log-in-link').remove();
+			$('nav').append(`
+					<a class='header-link goals-link' href='#goals-page'>My Goals</a>
+					<a class='header-link progress-link' href='#progress-page'>My Progress</a>
+					<a class='header-link food-search-header-link' href='#food-search-page'>Food Search</a>
+				`);
+
+			localStorage.setItem('token', data.authToken);
+			$('.signup-div').addClass('hidden');
+			$('header').addClass('transparent-background');
 			$('.pop-outer-goals').fadeIn();
 		}
 
@@ -250,7 +255,7 @@ function onFoodSearchFormSubmit () {
     }
 
 function handleNutritionSearchClick() {
-	$('.main-header').on('click', '.food-search-header-button', function(event) {
+	$('header').on('click', '.food-search-header-link', function(event) {
 		$('.nutrition-search-form-div').removeClass('hidden');
 		$('.signup-div, .goals-page, .login-form, .progress-page').addClass('hidden');
 	});
@@ -267,9 +272,11 @@ function handleSubmitSearchFoods() {
 }
 
 function displayLogInPage() {
-	$('.log-in-button').on('click', function(event) {
-		$('.nutrition-search-form-div, .signup-div').addClass('hidden');
+	$('.trigger-login').on('click', function(event) {
+		$('.nutrition-search-form-div, .signup-div, .splash-page-div').addClass('hidden');
 		$('.js-results-div').empty();
+		$('header').addClass('partially-transparent-background');
+		$('body').addClass('transparent-body');
 		$('.login-form-div').removeClass('hidden');
 	});
 		
@@ -277,7 +284,7 @@ function displayLogInPage() {
 
 function displayGoalsModal() {
 	$('.edit-goals-button').on('click', function(event) {
-		$('.main-header, .goals-page').addClass('transparent-background');
+		$('header, .goals-page').addClass('transparent-background');
 		$('.pop-outer-goals').fadeIn();
 	});
 }
@@ -297,7 +304,7 @@ function getDataFromAPI(callback) {
         	$('.error-results').append(`
         		<h3 style='color: #4B5842'>No Results Found</h3>
       		`);
-      		$('.main-header, .signup-div').addClass('partially-transparent-background');
+      		$('header, .signup-div').addClass('partially-transparent-background');
       		$('.pop-outer-error-box').fadeIn();
         }
 
@@ -453,10 +460,19 @@ function postGoalsData() {
 		},
 		data: JSON.stringify(goal),
 		success: function(data) {
-			console.log(data);
-			
+			getGoals(displayGoals);
+			$('.pop-outer-goals').fadeOut();
+			$('.goals-page').removeClass('hidden');
+			$('header, .goals-page').removeClass('transparent-background');	
 		}
 
+	});
+}
+
+function handleCloseGoalsPopUp() {
+	$('.close-goals-pop-up').on('click', function(event) {
+		$('.goals-page, header').removeClass('transparent-background');
+		$('.pop-outer-goals').fadeOut();
 	});
 }
 
@@ -561,7 +577,7 @@ function displayLongTermProgressData(data) {
 }
 
 function handleClickMyProgress() {
-	$('.main-header').on('click', '.progress-button', function(event) {
+	$('header').on('click', '.progress-link', function(event) {
 		$('.goals-page').addClass('hidden');
 		$('.nutrition-search-form-div').addClass('hidden');
 		$('.js-results-div').empty();
@@ -573,7 +589,7 @@ function handleClickMyProgress() {
 }
 
 function handleClickMyGoalsPage() {
-	$('.main-header').on('click', '.goals-button', function(event) {
+	$('header').on('click', '.goals-link', function(event) {
 		$('.nutrition-search-form-div').addClass('hidden');
 		$('.progress-page').addClass('hidden');
 		$('.js-results-div').empty();
@@ -585,17 +601,14 @@ function handleSubmitGoals() {
 	$('.nutrients-goals-form').submit(function(event) {
 		event.preventDefault();
 		postGoalsData();
-		getGoals(displayGoals);
-		$('.pop-outer-goals').fadeOut();
-		$('.goals-page').removeClass('hidden');
-		$('.main-header, .goals-page').removeClass('transparent-background');
+		
 	});
 }
 
 function handleSeeAllFoodButton() {
 	$('.see-all-food-button').on('click', function(event) {
 		$('.food-entries').empty();
-		$('.progress-page, .main-header').addClass('transparent-background');
+		$('.progress-page, header').addClass('transparent-background');
 		$('.pop-outer-food-entries').fadeIn();
 		getFoodList(displayFoodList);
 	});
@@ -604,7 +617,7 @@ function handleSeeAllFoodButton() {
 function handleCloseFoodList() {
 	$('.close-food-entries').on('click', function(event) {
 		$('.pop-outer-food-entries').fadeOut();
-		$('.progress-page, .main-header').removeClass('transparent-background');
+		$('.progress-page, header').removeClass('transparent-background');
 	});
 }
 
@@ -670,9 +683,21 @@ function removeEntryFromList(argument) {
 	argument.remove();
 	getTodayProgressData(displayTodayProgressData);
 	getLongTermProgressData(displayLongTermProgressData);
+} 
+
+function handleClickSignUp() {
+	$('.trigger-signup').on('click', function(event) {
+		$('.splash-page-div').addClass('hidden');
+		$('header').addClass('partially-transparent-background');
+		$('body').addClass('transparent-body');
+		$('.signup-div').removeClass('hidden');
+	});
 }
 
 function initApp() {
+	handleClickSignUp();
+	handleCloseGoalsPopUp()
+	handleCloseErrorMessage();
 	handleCloseAddFoodModal();
 	handleDeleteEntry();
 	handleSeeAllFoodButton();
