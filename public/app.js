@@ -96,15 +96,15 @@ function logIn() {
 			$('.log-in-link').remove();
 			$('header').removeClass('partially-transparent-background');
 			$('body').removeClass('transparent-body');
-			$('.login-form-div').addClass('hidden');
+			$('.pop-outer-login').fadeOut();
 			$('nav').append(`
-					<a class='header-link goals-link' href='#goals-page'>My Goals</a>
-					<a class='header-link progress-link' href='#progress-page'>My Progress</a>
+					<a class='header-link goals-link' href='#goals-page'>My Goals | </a>
+					<a class='header-link progress-link' href='#progress-page'>My Progress | </a>
 					<a class='header-link food-search-header-link' href='#food-search-page'>Food Search</a>
 				`);
 			localStorage.setItem('token', data.authToken);
 			$('.signup-div').addClass('hidden');
-			$('.login-form-div').addClass('hidden');
+	
 			getGoals(displayGoals);
 			$('.goals-page').removeClass('hidden');
 		},
@@ -165,19 +165,18 @@ function loginFirstTime() {
 		contentType: 'application/json',
 		data: JSON.stringify(user),
 		success: function(data) {
-			$('header').removeClass('partially-transparent-background');
+			//$('header').removeClass('partially-transparent-background');
 			//$('body').removeClass('transparent-body');
-			$('.signup-div').addClass('hidden');
-			$('.log-in-link').remove();
+			$('.pop-outer-signup').fadeOut();
+			//$('.log-in-link').remove();
 			$('nav').append(`
-					<a class='header-link goals-link' href='#goals-page'>My Goals</a>
-					<a class='header-link progress-link' href='#progress-page'>My Progress</a>
+					<a class='header-link goals-link' href='#goals-page'>My Goals | </a>
+					<a class='header-link progress-link' href='#progress-page'>My Progress | </a>
 					<a class='header-link food-search-header-link' href='#food-search-page'>Food Search</a>
 				`);
 
 			localStorage.setItem('token', data.authToken);
-			$('.signup-div').addClass('hidden');
-			$('header').addClass('transparent-background');
+			//$('header').addClass('transparent-background');
 			$('.pop-outer-goals').fadeIn();
 		}
 
@@ -196,10 +195,11 @@ function getGoals(callback) {
 	});
 }
 
-function displayGoals(data) {
+/*function displayGoals(data) {
 	console.log(data);
 	$('.goals-list-div').empty();
 	$('.goals-list-div').append(`
+		<h2 class='my-goals-header'>My Goals</h2>
 		<div class='goals-amount-range'>	
 				<h4 class='goals-list-nutrient-header'>Calories:</h4>
 				<p class='goals-list-nutrient-paragraph'><span>Amount: </span><span>${data[0].calories.amount}</span></p>
@@ -221,8 +221,27 @@ function displayGoals(data) {
 				<p class='goals-list-nutrient-paragraph'><span>Range: </span><span>${data[0].carbs.range}</span></p>
 		</div>
 		`);
-}
+}*/
 
+function displayGoals(data) {
+	let caloriesAmount = data[0].calories.amount;
+	let caloriesRange = data[0].calories.range;
+	let fatAmount = data[0].fat.amount;
+	let fatRange = data[0].fat.range;
+	let proteinAmount = data[0].protein.amount;
+	let proteinRange = data[0].protein.range;
+	let carbsAmount = data[0].carbs.amount;
+	let carbsRange = data[0].carbs.range;
+	$('.goals-list-div').empty();
+	$('.goals-list-div').append(`
+		
+			<div class='my-goals-header-div'><h2 class='my-goals-header'>My Goals</h2><div class='edit-goals-div'><button class='edit-goals-button'></button></div></div>
+			<div class='goal-range-div'><span class='goal-name-span'>Calories: </span><span class='goal-amount-span'>${caloriesAmount - caloriesRange} - ${caloriesAmount + caloriesRange}</span></div>
+			<div class='goal-range-div'><span class='goal-name-span'>Fat: </span><span>${fatAmount - fatRange} - ${fatAmount + fatRange} g</span></div>	
+			<div class='goal-range-div'><span class='goal-name-span'>Protein: </span><span>${proteinAmount - proteinRange} - ${proteinAmount + proteinRange} g</span></div>	
+			<div class='goal-range-div'><span class='goal-name-span'>Carbs: </span><span>${carbsAmount - carbsRange} - ${carbsAmount + carbsRange} g</span></div>		
+	`);
+}
 
 
 function handleSignUpForm() {
@@ -277,14 +296,15 @@ function displayLogInPage() {
 		$('.js-results-div').empty();
 		$('header').addClass('partially-transparent-background');
 		$('body').addClass('transparent-body');
-		$('.login-form-div').removeClass('hidden');
+		$('.pop-outer-login').fadeIn();
 	});
 		
 }
 
 function displayGoalsModal() {
-	$('.edit-goals-button').on('click', function(event) {
-		$('header, .goals-page').addClass('transparent-background');
+	$('.goals-page').on('click', '.edit-goals-button', function(event) {
+		$('header').addClass('partially-transparent-background');
+		$('body').addClass('transparent-body');
 		$('.pop-outer-goals').fadeIn();
 	});
 }
@@ -353,6 +373,7 @@ function getDetailedDataFromAPI(id, callback) {
 }
 
 function renderDetailedData(result) {
+	console.log(result);
 	let nutrientArray = [];
 	let nutrientAmountArray = [];
 	let theNutrients = ['Calories', 'Protein', 'Fat', 'Carbs']
@@ -380,8 +401,7 @@ function renderDetailedData(result) {
 	}
 	
 
-	console.log(fat);
-	console.log(theNutrientValues);
+	
 
 	foodEntry.setCalories(theNutrientValues[0]);
 	foodEntry.setProtein(theNutrientValues[1]);
@@ -463,7 +483,9 @@ function postGoalsData() {
 			getGoals(displayGoals);
 			$('.pop-outer-goals').fadeOut();
 			$('.goals-page').removeClass('hidden');
-			$('header, .goals-page').removeClass('transparent-background');	
+			$('.goals-page').removeClass('transparent-background');	
+			$('header').removeClass('partially-transparent-background');
+			$('body').removeClass('transparent-body');
 		}
 
 	});
@@ -540,6 +562,7 @@ function displayTodayProgressData(data) {
 			}
 	}		
 }
+
 
 function getLongTermProgressData(callback) {
 	$.ajax({
@@ -690,7 +713,7 @@ function handleClickSignUp() {
 		$('.splash-page-div').addClass('hidden');
 		$('header').addClass('partially-transparent-background');
 		$('body').addClass('transparent-body');
-		$('.signup-div').removeClass('hidden');
+		$('.pop-outer-signup').fadeIn();
 	});
 }
 

@@ -5,6 +5,8 @@
 	<meta charset="utf-8">
  	<meta name="viewport" content="width=device-width">
  	<link href="https://fonts.googleapis.com/css?family=Fjalla+One|Open+Sans|Roboto" rel="stylesheet">
+ <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
+
 
  	<link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
  	<link href="https://fonts.googleapis.com/css?family=Open+Sans|Roboto" rel="stylesheet">
@@ -12,7 +14,7 @@
 </head>
 <body>
 	<header role='banner' class='main-header'>
-		<h1>Nutrition Tracker</h1>
+		<h1>NutritionTracker</h1>
 		<nav>
 			<!--<a class='header-link log-in-link' href='#login-div'>Log In</a>-->
 		</nav>
@@ -25,44 +27,48 @@
 			<button class='trigger-login'>Log In</button>	
 	</div>
 	
-	<div class='signup-div hidden'>
-		<form class='signup-form' onsubmit="return onSignupFormSubmit()">
-			<legend class='signup-legend'>Register Here</legend>
-				<div class='signup-field'>
-					<!--<label class='signup-label' for='first-name'>First Name: </label>-->
-					<input name='first-name' id='first-name' class='signup-input first-name-input' placeholder='First Name' required>
-				</div>
-				<div class='signup-field'>
-					<!--<label class='signup-label' for='last-name'>Last Name: </label>-->
-					<input name='last-name' id='last-name' class='signup-input last-name-input' placeholder='Last Name' required>-
-				</div>
+	<div class='pop-outer-signup'>
+		<div class='signup-div'>
+			<form class='signup-form' onsubmit="return onSignupFormSubmit()">
+				<legend class='signup-legend'>Register Here</legend>
+					<div class='signup-field'>
+						<!--<label class='signup-label' for='first-name'>First Name: </label>-->
+						<input name='first-name' id='first-name' class='signup-input first-name-input' placeholder='First Name' required>
+					</div>
+					<div class='signup-field'>
+						<!--<label class='signup-label' for='last-name'>Last Name: </label>-->
+						<input name='last-name' id='last-name' class='signup-input last-name-input' placeholder='Last Name' required>-
+					</div>
 
-				<div class='signup-field'>
-					<!--<label class='signup-label' for='username'>Username: </label>-->
-					<input name='username' id='username' class='signup-input username-input' placeholder='Username' required>
-				</div>
-				<div class='signup-field'>	
-					<!--<label class='signup-label' for='password'>Password: </label>-->
-					<input type='password' name='password' id='password' class='signup-input password-input' placeholder='Password' required>
-			  </div>
-				<button class='main-button' type="submit" onclick="storeUserInfo()">Sign Up</button>
-		</form>
-	</div>	
+					<div class='signup-field'>
+						<!--<label class='signup-label' for='username'>Username: </label>-->
+						<input name='username' id='username' class='signup-input username-input' placeholder='Username' required>
+					</div>
+					<div class='signup-field'>	
+						<!--<label class='signup-label' for='password'>Password: </label>-->
+						<input type='password' name='password' id='password' class='signup-input password-input' placeholder='Password' required>
+				  </div>
+					<button class='main-button' type="submit" onclick="storeUserInfo()">Sign Up</button>
+			</form>
+		</div>
+	</div>		
 
-	<div class='login-form-div hidden' id='login-div'>
-		<form class='login-form' onsubmit="return onLogInFormSubmit()" >
-			<legend class='login-legend'>Log In.</legend>
+	<div class='pop-outer-login'>
+		<div class='login-form-div hidden' id='login-div'>
+			<form class='login-form' onsubmit="return onLogInFormSubmit()" >
+				<legend class='login-legend'>Log In.</legend>
 
-				<div class='login-field'>
-					<label class= 'login-label' for='username-login'>Username: </label>
-					<input name='username-login' id='username-login' class='username-input-login' placeholder='username' required>
-				</div>
-				<div class='login-field'>	
-					<label class= 'login-label' for='password-login'>Password: </label>
-					<input type='password' name='password-login' id='password-login' class='password-input-login' placeholder='password' required>
-			    </div>
-				<button class='main-button' type="submit" onclick="storeUserInfoLogIn()">Log In</button>
-		</form>
+					<div class='login-field'>
+						<!--<label class= 'login-label' for='username-login'>Username: </label>-->
+						<input name='username-login' id='username-login' class='username-input-login' placeholder='username' required>
+					</div>
+					<div class='login-field'>	
+						<!--<label class= 'login-label' for='password-login'>Password: </label>-->
+						<input type='password' name='password-login' id='password-login' class='password-input-login' placeholder='password' required>
+				    </div>
+					<button class='main-button' type="submit" onclick="storeUserInfoLogIn()">Log In</button>
+			</form>
+		</div>	
 	</div>	
 
 	<div class='nutrition-search-form-div hidden' id='food-search-page'>
@@ -84,12 +90,7 @@
 
 		<div class='goals-page hidden' id='goals-page'>
 			<div class='goals-page-inner'>	
-				<h2 class='my-goals-header'>My Goals</h2>
-
 				<div class='goals-list-div'>
-				</div>
-				<div>
-					<button class='edit-goals-button'>Edit Goals</button>
 				</div>
 			</div>	
 		</div>
@@ -99,18 +100,20 @@
 
 		<div class='progress-page hidden' id='progress-page'>
 			<div class='progress-page-inner'>
-				<div class='progress-page-inner-section'>
-					<h2 class='progress-page-header'>What I've Eaten today</h2>
-					<div class='nutrition-tracking'>
-					</div>
-					<div class='see-all-food-button-div'>
-						<button class='see-all-food-button'>See All Food Eaten Today</button>
-					</div>
-				</div>	
-				<div class='progress-page-inner-section'>	
-					<h2 class='progress-page-header'>My Long Term Progress</h2>
-					<div class='long-term-progress'>
-					</div>
+				<div>
+					<div class='progress-page-inner-section'>
+						<h2 class='progress-page-header'>What I've Eaten today</h2>
+						<div class='nutrition-tracking'>
+						</div>
+						<div class='see-all-food-button-div'>
+							<button class='see-all-food-button'>See All Food Eaten Today</button>
+						</div>
+					</div>	
+					<div class='progress-page-inner-section'>	
+						<h2 class='progress-page-header'>My Long Term Progress</h2>
+						<div class='long-term-progress'>
+						</div>
+					</div>	
 				</div>	
 			</div>
 		</div>	
@@ -136,7 +139,6 @@
 		<div class="pop-outer-goals">
 			<div class='pop-inner-goals'>
 				<form class='nutrients-goals-form'>
-					<button class='close-goals-pop-up'>X</button>
 					<legend class='goals-legend'>Enter Your Goals Here.</legend>
 					<div class='goals-field'>
 						<h3 class='goals-form-nutrient-header'>Calories</h3>

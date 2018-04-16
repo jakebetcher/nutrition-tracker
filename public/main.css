@@ -30,16 +30,49 @@ body {
     url('https://images.unsplash.com/photo-1517673400267-0251440c45dc?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=f197f4922b3f26ed3f4e3e66a113b67b&auto=format&fit=crop&w=2550&q=80'); ;
 }
 
+main, .goals-page-inner, .progress-page-inner {
+	display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+
+.goals-page {
+	width: 85%;
+}
+
+.goals-page-inner {
+	width: 100%;
+}
+
+.goals-list-div {
+	padding: 10px;
+	min-width: 100%;
+}
+
+.goal-range-div {
+	padding: 10px;
+	border: 1px silver solid;
+	background-color: white;
+}
+
+.edit-goals-div {
+	display: inline-block;
+	text-align: right;
+}
 
 
 .splash-page-div {
-	text-align: center;
+	font-family: 'Raleway', sans-serif;
 	color: white;
-	text-shadow: 1px 1px black;
-	font-size: 22px;
-	max-width: 50%;
+	text-shadow: 2px 2px black;
+	max-width: 80%;
 	margin-left: auto;
 	margin-right: auto;
+}
+
+.splash-page-header {
+	font-size: 20px
 }
 
 .trigger-login, .trigger-signup {
@@ -51,7 +84,15 @@ body {
 	background-color: darkslategrey;
 }
 
-
+.edit-goals-button {
+	background: url('https://cdn2.iconfinder.com/data/icons/flat-ui-icons-24-px/24/new-24-512.png') no-repeat scroll 0 0 transparent;
+	color: #000000;
+	height: 25px;
+	width: 25px;
+	margin-left: 10px;
+	border: none;
+	background-size: cover;
+}
 
 
 
@@ -59,9 +100,11 @@ header {
 	margin: 0px;
 	background-color: darkslategrey;
 	text-align: center;
-	margin-bottom: 80px;
+	position: absolute;
+	width: 100%;
 	color: #fff;
 	padding: 10px;
+
 }
 
 .header-link {
@@ -101,7 +144,7 @@ h1 {
 	margin-top: 0px;
 	padding-top: 5px;
 }
-.header-button, .edit-goals-button, .delete-food-button, .add-a-food, .food-search-button {
+.header-button, .delete-food-button, .add-a-food, .food-search-button {
 	font-size: 19px;
 	padding: 13px;
 	background-color: #8FB339;
@@ -119,7 +162,7 @@ h1 {
 
 .main-button {
 	width: 100%;
-	background-color: green;
+	background-color: darkslategrey;
 	color: white;
 	border-radius: 6px;
 	padding-top: 10px;
@@ -127,14 +170,12 @@ h1 {
 }
 
  .change-goals-button, .see-all-food-button {
-	font-size: 20px;
+	font-size: 18px;
 	padding: 13px;
-	background-color: #8FB339;
-	color: #4B5842;
+	background-color: darkslategrey;
+	color: white;
 	border: 1.5px solid #4B5842;
 	border-radius: 6px;
-	text-shadow: 1px 1px #DADDD8;
-	font-weight: bold;
 }
 
 .signup-form, .nutrition-search-form, .login-form {
@@ -143,7 +184,12 @@ h1 {
 
 .signup-div, .login-form-div {
 	text-align: center;
+	height: 100vh;
+	display: flex;
+  align-items: center;
+  justify-content: center;
 }
+
 
 .login-field {
 	margin-bottom: 15px;
@@ -181,9 +227,12 @@ h1 {
 }
 
 .goals-legend {
-	color: #4B5842;
+	color: white;
+	background-color: darkslategrey;
+	width: 100%;
 	font-weight: bold;
 	font-size: 20px;
+	padding: 10px;
 }
 
 .signup-input, .login-input {
@@ -237,11 +286,15 @@ h1 {
 	font-size: 20px;
 }
 
+.username-input-login, .password-input-login {
+	padding: 5px;
+}
+
 .main-button, .food-search-button {
 	font-size: 20px;
 }
 
-.pop-outer, .pop-outer-goals, .pop-outer-food-entries, .pop-outer-error-box {
+.pop-outer, .pop-outer-goals, .pop-outer-food-entries, .pop-outer-error-box, .pop-outer-signup, .pop-outer-login {
   position: fixed;
   top: 0;
   left: 0;
@@ -332,10 +385,11 @@ h1 {
 .nutrients-goals-form {
 	background-color: white;
 	display: inline-block;
-	padding: 25px;
-	padding-left: 10%;
-	padding-right: 10%;
+	padding: 0;
+  padding-bottom: 10px;
+  min-width: 40%;
 	/*width: 100%;*/
+	height: 100%;
 	font-size: 30px;
 	margin-bottom: 30px;
 	border: 2px solid #4B5842;
@@ -347,19 +401,21 @@ h1 {
 }
 
 .goals-input {
-	font-size: 16px;
 	color: #4B5842;
 	display: block;
 	padding: 10px;
+	margin-bottom: 5px;
+  font-size: 13px;
 }
 
 .goals-form-nutrient-header, .goals-label {
 	color: #4B5842;
-	font-size: 18px;
+	font-size: 13px;
+  margin-bottom: 0px;
 }
 
 .pop-inner-food-entries, .pop-inner-goals {
-	max-height: calc(100vh - 210px);
+	max-height: calc(100vh - 100px);
   overflow-y: auto;
 }
 
@@ -368,9 +424,17 @@ h1 {
 	text-align: center;
 }
 
+.my-goals-header-div {
+	color: white;
+	margin: 0px;
+	background-color: darkslategrey;
+	padding: 5px;
+}
+
 .my-goals-header {
-	font-size: 48px;
-	color: #4B5842;
+	font-size: 26px;
+	margin: 0px;
+	display: inline-block;
 }
 
 .goals-list-nutrient-header, .food-results-header {
@@ -394,12 +458,7 @@ h1 {
 .goals-page-inner {
 	color: black;
 	max-width: 100%;
-	display: inline-block;
-	border: 2px solid #4B5842;
-	border-radius: 6px;
 	text-align: center;
-	padding: 5% 9%;
-	background-color: #fff;
 	width: 100%;
 }
 
@@ -415,9 +474,14 @@ h1 {
 }
 
 @media only screen and (min-width: 640px) {
-	.goals-page-inner {
-	 	max-width: 640px;
-	 }
+	.goals-list-div {
+	min-width: 80%;
+}
+
+	.splash-page-header {
+	font-size: 30px;
+}
+
 
 	 .signup-label, .signup-input, .login-label, .login-input {
 	 	display: inline;
@@ -426,6 +490,21 @@ h1 {
 	 .login-form {
 	 	padding: 40px;
 	 }
+
+	 .splash-page-div {
+		max-width: 60%;
+	}
+}
+
+
+@media only screen and (min-width: 770px) {
+	.goals-list-div {
+	min-width: 60%;
+}
+
+	.splash-page-div {
+		max-width: 50%;
+	}
 }
 
 .goals-input, .goals-label {
@@ -447,6 +526,15 @@ h1 {
 
 
 @media only screen and (min-width: 960px) {
+	 .goals-list-div {
+	min-width: 60%;
+}
+
+	 .splash-page-div {
+		max-width: 40%;
+	}
+
+
 	 .progress-page-inner {
 		max-width: 960px;
 	 }
@@ -470,20 +558,20 @@ h1 {
 
 .progress-page-inner {
 	text-align: center;
-	display: inline-block;
-	border: 2px solid #4B5842;
+	/*display: inline-block;*/
+	/*border: 2px solid #4B5842;
 	border-radius: 6px;
 	padding: 5% 9%;
 	background-color: #C7D59F;
-	width: 100%;
+	width: 100%;*/
 }
 
 .progress-page-inner-section {
-	background-color: #DADDD8;
+	/*background-color: #DADDD8;
 	padding: 8% 8%;
 	margin-bottom: 40px;
 	border: 2px solid #4B5842;
-	border-radius: 6px;
+	border-radius: 6px;*/
 }
 
 .progress-page {
