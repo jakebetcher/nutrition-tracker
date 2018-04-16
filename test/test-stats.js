@@ -1,4 +1,4 @@
-'use strict';
+/*'use strict';
 
 const chai = require('chai');
 const chaiHttp = require('chai-http');
@@ -99,7 +99,7 @@ describe('stats API resource', function() {
         firstName,
         lastName
       })
-    );*/
+    );
     createUsers();
   });
 
@@ -482,5 +482,5 @@ describe('protected POST endpoint', function() {
 
 		});
 	});
-});
+});*/
   

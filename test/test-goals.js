@@ -248,7 +248,7 @@ it('Should reject requests with an expired token', function () {
           expect(res).to.have.status(401);
         });
         });
-    it('Should send protected data', function () {
+    /*it('Should send protected data', function () {
       let resGoals;
       const token = jwt.sign(
         {
@@ -297,7 +297,7 @@ it('Should reject requests with an expired token', function () {
 			expect(resGoals.carbs.range).to.equal(goal.carbs.range);
 		});
           
-        });
+        });*/
     });
     
 /*describe('protected POST endpoint', function() {

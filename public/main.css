@@ -30,7 +30,7 @@ body {
     url('https://images.unsplash.com/photo-1517673400267-0251440c45dc?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=f197f4922b3f26ed3f4e3e66a113b67b&auto=format&fit=crop&w=2550&q=80'); ;
 }
 
-main, .goals-page-inner, .progress-page-inner {
+main, .goals-page-inner {
 	display: flex;
   align-items: center;
   justify-content: center;
@@ -579,14 +579,15 @@ h1 {
 }
 
 .calories-today, .fat-today, .protein-today, .carbs-today {
-	font-size: 26px;
-	color: #4B5842;
+	font-size: 16px;
+
 }
 
 .progress-page-header {
 	font-size: 35px;
 	color: #4B5842;
 }
+
 
 .long-term-progress-paragraph {
 	font-size: 26px;

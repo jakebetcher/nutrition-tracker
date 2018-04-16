@@ -563,6 +563,17 @@ function displayTodayProgressData(data) {
 	}		
 }
 
+/*function displayTodayProgressData(data) {
+	if (data.length === 0) {
+		$('.nutrition-tracking').empty();
+		$('.nutrition-tracking').append(`
+			<div class='green-color'>Calories: 0</div>
+			<div>Fat: 0 g</div>
+			<div>Protein: 0 g</div>
+			<div>Carbs: 0 g</div>
+		`);
+	}
+}*/
 
 function getLongTermProgressData(callback) {
 	$.ajax({

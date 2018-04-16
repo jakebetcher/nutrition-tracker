@@ -1,4 +1,4 @@
-'use strict';
+/*'use strict';
 
 const chai = require('chai');
 const chaiHttp = require('chai-http');
@@ -56,9 +56,6 @@ function seedEntryData() {
       consumedCarbs: faker.random.number(70)
   	});
   });
-  
-  //console.log(seedData);
-
   return Entry.insertMany(seedData);
 }
 
@@ -96,7 +93,7 @@ describe('entries API resource', function() {
         firstName,
         lastName
       })
-    );*/
+    );
     createUsers();
   });
 
@@ -563,5 +560,5 @@ describe('protected POST endpoint', function() {
       })
     });
   });
-});
+});*/
   
