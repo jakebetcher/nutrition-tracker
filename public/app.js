@@ -515,18 +515,20 @@ function displayTodayProgressData(data) {
 	if (data.length === 0) {
 		$('.nutrition-tracking').empty();
 		$('.nutrition-tracking').append(`
-		<p class='calories-today' style='color: green'>Calories: 0</p>
-		<p class='fat-today' style='color: green'>Fat: 0 g</p>
-		<p class='protein-today' style='color: green'>Protein: 0 g</p>
-		<p class='carbs-today' style='color: green'>Carbs: 0 g</p>
+		<div class='progress-page-header-div'><h2 class='progress-page-header'>What I've Eaten today</h2></div>	
+		<div class='food-today-div'><p class='calories-today' style='color: green'>Calories: 0</p></div>
+		<div class='food-today-div'><p class='fat-today' style='color: green'>Fat: 0g</p></div>
+		<div class='food-today-div'><p class='protein-today' style='color: green'>Protein: 0g</p></div>
+		<div class='food-today-div'><p class='carbs-today' style='color: green'>Carbs: 0g</p></div>
 	`);
 	} else {
 			$('.nutrition-tracking').empty();
 			$('.nutrition-tracking').append(`
-			<p class='calories-today'>Calories: ${data[0].consumedCalories}</p>
-			<p class='fat-today'>Fat: ${data[0].consumedFat} g</p>
-			<p class='protein-today'>Protein: ${data[0].consumedProtein} g</p>
-			<p class='carbs-today'>Carbs: ${data[0].consumedCarbs} g</p>
+			<div class='progress-page-header-div'><h2 class='progress-page-header'>What I've Eaten today</h2></div>	
+			<div class='food-today-div'><p class='calories-today'>Calories: ${data[0].consumedCalories}</p></div>	
+			<div class='food-today-div'><p class='fat-today'>Fat: ${data[0].consumedFat} g</p></div>	
+			<div class='food-today-div'><p class='protein-today'>Protein: ${data[0].consumedProtein} g</p></div>	
+			<div class='food-today-div'><p class='carbs-today'>Carbs: ${data[0].consumedCarbs} g</p></div>	
 		`);
 
 			if (data[0].caloriesResult === 'met goal') {
@@ -591,22 +593,15 @@ function getLongTermProgressData(callback) {
 function displayLongTermProgressData(data) {
 	$('.long-term-progress').empty();
 	$('.long-term-progress').append(`
-		<div>
-			<p class='long-term-progress-paragraph long-term-progress-title'>Met Calories Goals: </p>
-			<p class='long-term-progress-paragraph long-term-progress-number'>${data.timesMetCaloriesGoals} times</p>
-			<p class='long-term-progress-paragraph long-term-progress-title'>Met Fat Goals: </p>
-			<p class='long-term-progress-paragraph long-term-progress-number'>${data.timesMetFatGoals} times</p>
-			<p class='long-term-progress-paragraph long-term-progress-title'>Met Protein Goals: </p>
-			<p class='long-term-progress-paragraph long-term-progress-number'>${data.timesMetProteinGoals} times</p>
-			<p class='long-term-progress-paragraph long-term-progress-title'>Met Carbs Goals: </p>
-			<p class='long-term-progress-paragraph long-term-progress-number'>${data.timesMetCarbsGoals} times</p>
-			<p class='long-term-progress-paragraph long-term-progress-title'>Met All Goals: </p>
-			<p class='long-term-progress-paragraph long-term-progress-number'>${data.timesMetAllGoals} times</p>
-			<p class='long-term-progress-paragraph long-term-progress-title'>Met At Least One Goal: </p>
-			<p class='long-term-progress-paragraph long-term-progress-number'>${data.timesMetAtLeastOneGoal} times</p>
-			<p class='long-term-progress-paragraph long-term-progress-title'>Days I've Been Tracking Current Goal: ${data.daysGoalsHaveBeenTracked} day(s)</p>
-			<p class='long-term-progress-paragraph long-term-progress-number'>${data.daysGoalsHaveBeenTracked} day(s)</p>
-		</div>
+			<div class='progress-page-header-div'><h2 class='progress-page-header'>My Long Term Progress</h2></div>
+			<div class='long-term-goals-div'><p class='long-term-progress-paragraph'>Met Calories Goals: ${data.timesMetCaloriesGoals} times</p></div>
+			<div class='long-term-goals-div'><p class='long-term-progress-paragraph'>Met Fat Goals: ${data.timesMetFatGoals} times</p></div>
+			<div class='long-term-goals-div'><p class='long-term-progress-paragraph'>Met Protein Goals: ${data.timesMetProteinGoals} times</p></div>
+			<div class='long-term-goals-div'><p class='long-term-progress-paragraph'>Met Carbs Goals: ${data.timesMetCarbsGoals} times</p></div>
+			<div class='long-term-goals-div'><p class='long-term-progress-paragraph'>Met All Goals: ${data.timesMetAllGoals} times</p></div>
+			<div class='long-term-goals-div'><p class='long-term-progress-paragraph'>Met At Least One Goal: ${data.timesMetAtLeastOneGoal} times</p></div>
+			<div class='long-term-goals-div'><p class='long-term-progress-paragraph'>Days I've Been Tracking Current Goal: ${data.daysGoalsHaveBeenTracked} day(s)</p></div>
+		
 	`);
 }
 
@@ -684,9 +679,9 @@ function displayFoodList(data) {
 				<div class='food-entry-div'>
 					<h3 class='food-list-name'>${food.foodName}</h3>
 					<p class='food-list-paragraph'>Calories: ${food.consumedCalories}</p>
-					<p class='food-list-paragraph'>Fat: ${food.consumedFat} g</p>
-					<p class='food-list-paragraph'>Protein: ${food.consumedProtein} g</p>
-					<p class='food-list-paragraph'>Carbs: ${food.consumedCarbs} g</p>
+					<p class='food-list-paragraph'>Fat: ${food.consumedFat}g</p>
+					<p class='food-list-paragraph'>Protein: ${food.consumedProtein}g</p>
+					<p class='food-list-paragraph'>Carbs: ${food.consumedCarbs}g</p>
 					<button class='delete-food-button' value=${food._id}>delete</button>
 				</div>	
 		`);

@@ -30,15 +30,22 @@ body {
     url('https://images.unsplash.com/photo-1517673400267-0251440c45dc?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=f197f4922b3f26ed3f4e3e66a113b67b&auto=format&fit=crop&w=2550&q=80'); ;
 }
 
-main, .goals-page-inner {
+.goals-page-inner, .splash-page-flex {
 	display: flex;
   align-items: center;
   justify-content: center;
   height: 100vh;
 }
 
+.splash-page-flex, .splash-page-div {
+	width: 100%;
+	margin: 0px;
+}
+
 .goals-page {
 	width: 85%;
+	margin-left: auto;
+	margin-right: auto;
 }
 
 .goals-page-inner {
@@ -62,7 +69,7 @@ main, .goals-page-inner {
 }
 
 
-.splash-page-div {
+.splash-page-inner {
 	font-family: 'Raleway', sans-serif;
 	color: white;
 	text-shadow: 2px 2px black;
@@ -86,6 +93,8 @@ main, .goals-page-inner {
 
 .edit-goals-button {
 	background: url('https://cdn2.iconfinder.com/data/icons/flat-ui-icons-24-px/24/new-24-512.png') no-repeat scroll 0 0 transparent;
+	background-color: white;
+  border-radius: 2px;
 	color: #000000;
 	height: 25px;
 	width: 25px;
@@ -101,6 +110,8 @@ header {
 	background-color: darkslategrey;
 	text-align: center;
 	position: absolute;
+	left: 0;
+	top: 0;
 	width: 100%;
 	color: #fff;
 	padding: 10px;
@@ -118,7 +129,6 @@ a:hover {
 
 .results-div {
 	text-align: center;
-	margin-top: 30px;
 }
 
 .theFoods {
@@ -129,8 +139,8 @@ a:hover {
 .food-name {
 	background:none;
   border:none;
-	color: #8FB339;
-	font-size: 22px;
+	color: white;
+  font-size: 18px;
 }
 
 .food-name:hover {
@@ -147,13 +157,10 @@ h1 {
 .header-button, .delete-food-button, .add-a-food, .food-search-button {
 	font-size: 19px;
 	padding: 13px;
-	background-color: #8FB339;
-	color: #4B5842;
-	border: 1.5px solid #4B5842;
+	background-color: darkslategrey;
+	color: white;
 	border-radius: 6px;
 	margin-bottom: 10px;
-	text-shadow: 1px 1px #DADDD8;
-	font-weight: bold;
 }
 
 .header-button:hover, .main-button:hover, .delete-food-button:hover, .add-a-food:hover, .food-search-button:hover {
@@ -176,6 +183,11 @@ h1 {
 	color: white;
 	border: 1.5px solid #4B5842;
 	border-radius: 6px;
+}
+
+.see-all-food-button {
+	font-size: 12px;
+	padding: 8px;
 }
 
 .signup-form, .nutrition-search-form, .login-form {
@@ -269,12 +281,19 @@ h1 {
 }
 
 .search-nutrition-label, .search-nutrition-input {
-	color: #4B5842;
+	color: white;
 	font-size: 23px;
 }
 
 .search-nutrition-label {
 	font-weight: bold;
+	margin-bottom: 10px;
+  display: block;
+  text-shadow: 2px 2px black;
+}
+
+.search-nutrition-input {
+	padding: 5px;
 }
 
 .search-food-div {
@@ -439,7 +458,8 @@ h1 {
 
 .goals-list-nutrient-header, .food-results-header {
 	font-size: 35px;
-	color: #4B5842;
+	color: white;
+	text-shadow: 2px 2px black;
 }
 
 .goals-list-nutrient-paragraph {
@@ -464,6 +484,7 @@ h1 {
 
 .nutrition-search-form-div {
 	text-align: center;
+	margin-top: 100px;
 }
 
 .nutrition-search-form {
@@ -491,7 +512,7 @@ h1 {
 	 	padding: 40px;
 	 }
 
-	 .splash-page-div {
+	 .splash-page-inner {
 		max-width: 60%;
 	}
 }
@@ -502,7 +523,7 @@ h1 {
 	min-width: 60%;
 }
 
-	.splash-page-div {
+	.splash-page-inner {
 		max-width: 50%;
 	}
 }
@@ -530,7 +551,7 @@ h1 {
 	min-width: 60%;
 }
 
-	 .splash-page-div {
+	 .splash-page-inner {
 		max-width: 40%;
 	}
 
@@ -552,47 +573,53 @@ h1 {
 	font-weight: bold;
 }
 
-.long-term-progress-number {
-	margin-bottom: 60px;
-}
 
 .progress-page-inner {
+	margin-top: 150px;
 	text-align: center;
-	/*display: inline-block;*/
-	/*border: 2px solid #4B5842;
+	margin-left: auto;
+	margin-right: auto;
+	/*display: inline-block;
+	border: 2px solid #4B5842;
 	border-radius: 6px;
 	padding: 5% 9%;
-	background-color: #C7D59F;
-	width: 100%;*/
+	background-color: #C7D59F;*/
+	width: 85%;
 }
 
-.progress-page-inner-section {
-	/*background-color: #DADDD8;
-	padding: 8% 8%;
-	margin-bottom: 40px;
-	border: 2px solid #4B5842;
-	border-radius: 6px;*/
+.progress-page-header-div {
+	color: white;
+	margin: 0px;
+	background-color: darkslategrey;
+	padding: 5px;
+}
+
+.progress-page-header {
+	font-size: 26px;
+	margin: 0px;
+}
+
+
+.food-today-div, .long-term-goals-div {
+	padding: 10px;
+	border: 1px silver solid;
+	background-color: white;
+	margin: 0px;
 }
 
 .progress-page {
 	text-align: center;
+	width: 100%;
 }
 
-.calories-today, .fat-today, .protein-today, .carbs-today {
+.calories-today, .fat-today, .protein-today, .carbs-today, .long-term-progress-paragraph {
 	font-size: 16px;
-
-}
-
-.progress-page-header {
-	font-size: 35px;
-	color: #4B5842;
+	margin: 0px;
+	padding: 0px;
 }
 
 
-.long-term-progress-paragraph {
-	font-size: 26px;
-	color: #4B5842;
-}
+
 
 .transparent-background {
 	opacity: 0;
@@ -616,6 +643,8 @@ h1 {
 
 .see-all-food-button-div {
 	text-align: center;
+	margin-top: 20px;
+	margin-bottom: 50px;
 }
 
 

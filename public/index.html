@@ -22,9 +22,13 @@
 	<main role='main'>
 
 	<div class='splash-page-div'>
-			<h2 class='splash-page-header'>Set Nutritional Goals for Calories and Macro Nutrients and Track Them on a Daily Basis.</h2>
-			<button class='trigger-signup'>Sign Up</button>
-			<button class='trigger-login'>Log In</button>	
+		<div class='splash-page-flex'>
+			<div class='splash-page-inner'>
+				<h2 class='splash-page-header'>Set Nutritional Goals for Calories and Macro Nutrients and Track Them on a Daily Basis.</h2>
+				<button class='trigger-signup'>Sign Up</button>
+				<button class='trigger-login'>Log In</button>
+			</div>	
+		</div>		
 	</div>
 	
 	<div class='pop-outer-signup'>
@@ -73,7 +77,6 @@
 
 	<div class='nutrition-search-form-div hidden' id='food-search-page'>
 		<form class='nutrition-search-form' onsubmit="return onFoodSearchFormSubmit()">
-			<legend class='nutrition-search-legend'>Search for all kinds of foods and find their nutritional information.</legend>
 				<div class='search-food-div'>
 					<label class='search-nutrition-label' for='search-nutrition'>Enter Food Name Here: </label>
 					<input name='search-nutrition' id='search-nutrition' class='search-nutrition-input js-food-query' placeholder="Reese's Puffs" required>
@@ -100,22 +103,14 @@
 
 		<div class='progress-page hidden' id='progress-page'>
 			<div class='progress-page-inner'>
-				<div class='progress-page-content'>
-					<div class='progress-page-inner-section'>
-						<h2 class='progress-page-header'>What I've Eaten today</h2>
 						<div class='nutrition-tracking'>
 						</div>
 						<div class='see-all-food-button-div'>
 							<button class='see-all-food-button'>See All Food Eaten Today</button>
-						</div>
-					</div>	
-					<div class='progress-page-inner-section'>	
-						<h2 class='progress-page-header'>My Long Term Progress</h2>
+						</div>	
 						<div class='long-term-progress'>
 						</div>
-					</div>
-				</div>		
-				</div>	
+				</div>			
 		</div>	
 			
 		<div class ='pop-outer-food-entries'>
