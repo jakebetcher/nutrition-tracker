@@ -1,6 +1,5 @@
 'use strict';
 
-const bodyParser = require('body-parser');
 const express = require('express');
 const morgan = require('morgan');
 const passport = require('passport');
@@ -17,7 +16,7 @@ const router = express.Router();
 const { localStrategy, jwtStrategy } = require('../auth');
 
 
-const jsonParser = bodyParser.json();
+router.use(express.json());
 
 
 passport.use(localStrategy);
@@ -26,7 +25,7 @@ passport.use(jwtStrategy);
 
 const jwtAuth = passport.authenticate('jwt', { session: false });
 
-router.post('/', jsonParser, jwtAuth, (req, res) => {
+router.post('/', jwtAuth, (req, res) => {
 
 const requiredFields = ['calories', 'fat', 'protein', 'carbs'];
   for (let i = 0; i < requiredFields.length; i++) {
@@ -56,11 +55,11 @@ const requiredFields = ['calories', 'fat', 'protein', 'carbs'];
     	amount: req.body.carbs.amount,
     	range: req.body.carbs.range
     }
-   });
+  });
 
-   goal.save()
-   .then(goal => res.status(201).json(goal))
-   .catch(err => {
+  goal.save()
+    .then(goal => res.status(201).json(goal))
+    .catch(err => {
       console.error(err);
       res.status(500).json({ error: 'Something went wrong' });
     }); 
@@ -69,13 +68,13 @@ const requiredFields = ['calories', 'fat', 'protein', 'carbs'];
 
 router.get('/', jwtAuth, (req, res) => {
 	Goal
-	.find({user: req.user._id})
-	.sort({date: -1})
+    .find({user: req.user._id})
+	  .sort({date: -1})
   	.limit(1)
-	.then(goal => {
-		res.json(goal);
-	})
-	.catch(err => {
+  	.then(goal => {
+  		res.json(goal);
+  	})
+  	.catch(err => {
       console.error(err);
       res.status(500).json({ error: 'something went terribly wrong' });
     });

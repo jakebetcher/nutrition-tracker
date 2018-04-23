@@ -1,7 +1,5 @@
 'use strict';
 
-
-const bodyParser = require('body-parser');
 const express = require('express');
 const morgan = require('morgan');
 const passport = require('passport');
@@ -17,9 +15,7 @@ const router = express.Router();
 
 const { localStrategy, jwtStrategy } = require('../auth');
 
-
-const jsonParser = bodyParser.json();
-
+router.use(express.json());
 
 passport.use(localStrategy);
 passport.use(jwtStrategy);

@@ -1,17 +1,13 @@
 'use strict';
 const express = require('express');
-const bodyParser = require('body-parser');
 
 const {User} = require('./models');
 
 const router = express.Router();
-
-const jsonParser = bodyParser.json();
-
-
+router.use(express.json());
 
 //create a new user
-router.post('/', jsonParser, (req, res) => {
+router.post('/', (req, res) => {
 	const requiredFields = ['username', 'password', 'firstName', 'lastName'];
 	const missingField = requiredFields.find(field => !(field in req.body));
 

@@ -1,6 +1,5 @@
 'use strict';
 
-const bodyParser = require('body-parser');
 const express = require('express');
 const morgan = require('morgan');
 const passport = require('passport');
@@ -14,19 +13,16 @@ const { Entry } = require('./models');
 const { User } = require('../users');
 
 const router = express.Router();
+router.use(express.json());
 
 const { localStrategy, jwtStrategy } = require('../auth');
-
-
-const jsonParser = bodyParser.json();
-
 
 passport.use(localStrategy);
 passport.use(jwtStrategy);
 
 const jwtAuth = passport.authenticate('jwt', { session: false });
 
-router.post('/', jsonParser, jwtAuth, (req, res) => {
+router.post('/', jwtAuth, (req, res) => {
   const requiredFields = ['foodName', 'consumedCalories', 'consumedFat', 'consumedProtein', 'consumedCarbs', 'date', 'day'];
   for (let i = 0; i < requiredFields.length; i++) {
     const field = requiredFields[i];

@@ -1,7 +1,6 @@
 'use strict';
 require('dotenv').config();
 
-const bodyParser = require('body-parser');
 const express = require('express');
 const morgan = require('morgan');
 const passport = require('passport');
@@ -24,8 +23,7 @@ const { router: usersRouter } = require('./users');
 const { router: authRouter, localStrategy, jwtStrategy } = require('./auth');
 
 app.use(morgan('common'));
-app.use(bodyParser.json());
-
+app.use(express.json());
 
 passport.use(localStrategy);
 passport.use(jwtStrategy);
@@ -39,7 +37,6 @@ app.use('/api/auth/', authRouter);
 app.use(express.static("public"));
 
 const jwtAuth = passport.authenticate('jwt', { session: false });
-
 
 app.use('*', (req, res) => {
   return res.status(404).json({ message: 'Not Found' });
@@ -67,7 +64,6 @@ function runServer(databaseUrl = DATABASE_URL, port = PORT) {
   });
 }
 
-
 function closeServer() {
   return mongoose.disconnect().then(() => {
     return new Promise((resolve, reject) => {
@@ -81,7 +77,6 @@ function closeServer() {
     });
   });
 }
-
 
 if (require.main === module) {
   runServer().catch(err => console.error(err));

@@ -54,7 +54,8 @@ body {
 
 .goals-list-div {
 	padding: 10px;
-	min-width: 100%;
+	width: 100%;
+	max-width: 600px;
 }
 
 .goal-range-div {
@@ -127,6 +128,10 @@ a:hover {
 	color: #A7A7A9;
 }
 
+button:hover {
+	opacity: .5;
+}
+
 .results-div {
 	text-align: center;
 }
@@ -143,16 +148,14 @@ a:hover {
   font-size: 18px;
 }
 
-.food-name:hover {
-	color: #C7D59F;
-}
+
 
 h1 {
 	font-family: 'Roboto', sans-serif;
 	font-size: 35px;
 	margin-bottom: 0px;
 	margin-top: 0px;
-	padding-top: 5px;
+	padding: 5px 0;
 }
 .header-button, .delete-food-button, .add-a-food, .food-search-button {
 	font-size: 19px;
@@ -163,9 +166,14 @@ h1 {
 	margin-bottom: 10px;
 }
 
-.header-button:hover, .main-button:hover, .delete-food-button:hover, .add-a-food:hover, .food-search-button:hover {
-	background-color: #C7D59F;
+.add-a-food {
+	margin-top: 20px;
 }
+
+.delete-food-button {
+	margin-top: 20px;
+}
+
 
 .main-button {
 	width: 100%;
@@ -181,7 +189,6 @@ h1 {
 	padding: 13px;
 	background-color: darkslategrey;
 	color: white;
-	border: 1.5px solid #4B5842;
 	border-radius: 6px;
 }
 
@@ -227,8 +234,8 @@ h1 {
 }
 
 .login-form {
-	padding-left: 20%;
-	padding-right: 20%;
+	padding-left: 10%;
+	padding-right: 10%;
 }
 
 .signup-legend {
@@ -313,7 +320,7 @@ h1 {
 	font-size: 20px;
 }
 
-.pop-outer, .pop-outer-goals, .pop-outer-food-entries, .pop-outer-error-box, .pop-outer-signup, .pop-outer-login {
+.pop-outer, .pop-outer-goals, .pop-outer-food-entries, .pop-outer-error-box, .pop-outer-signup, .pop-outer-login, .pop-outer-more-info {
   position: fixed;
   top: 0;
   left: 0;
@@ -329,76 +336,146 @@ h1 {
 
 
 .pop-inner {
-  padding: 25px;
   text-align: center;
   width: 100%;
-  padding: 25px;
-  display: inline-block;
-  border: 2px solid #4B5842;
-	border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: auto;
+  margin-right: auto;
+  height: 100vh;
 	padding: 5% 9%;
-	background-color: #C7D59F;
 	width: 100%;
 }
 
+.close {
+	color: white;
+	font-size: 26px;
+	background: transparent;
+	border: none;
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+	margin-bottom: 10px;
+  font-weight: bold;
+}
+
+
+
+.pop-inner-content {
+	margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+  max-width: 600px;
+}
+
 .food-modal-text {
-	font-size: 32px;
-	color: #4B5842;
+	font-size: 18px;
+  color: black;
+  background-color: white;
+  margin: 0px;
+  padding: 5px;
+  border: 1px solid silver;
 }
 
 .food-modal-header {
-	font-size: 32px;
-	color: #4B5842;
+	font-size: 22px;
+  color: white;
+  margin: 0px;
+  padding: 0px;
 }
 
-.pop-inner-error-box {
-	display: inline-block;
-	margin-top: 200px;
+.food-modal-header-div {
+	background-color: darkslategrey;
+  margin: 0px;
+  padding: 5px;
 }
 
-.pop-inner-content, .pop-inner-error-box {
-	background-color: #DADDD8;
-	padding: 25px;
-	border: 2px solid #4B5842;
-	border-radius: 6px;
+.pop-inner-error-box, .pop-inner-more-info {
+	display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
 }
+
+.error-content, .more-info-content {
+	background-color: white;
+	width: 85%;
+	max-width: 400px;
+	padding: 15px;
+	border: 1px solid silver;
+}
+
+.error-content, .more-info-content {
+	text-align: center;
+}
+
 
 .pop-inner-goals, .pop-inner-food-entries {
-  margin-top: 100px;
   text-align: center;
   padding: 25px;
   padding-bottom: 50px;
   font-size: 30px;
 }
 
+
 .pop-outer-food-entries, .pop-outer {
 	text-align: center;
 }
 
 
+.close-food-entries, .close-goals-modal {
+	color: white;
+  font-size: 26px;
+  font-weight: bold;
+  background: transparent;
+  border: none;
+}
 
+.close-food-entries {
+	margin-bottom: 50px;
+}
+
+.close-goals-modal {
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+}
 
 
 .pop-inner-food-entries {
 	display: inline-block;
-	border: 2px solid #4B5842;
-	border-radius: 6px;
 	text-align: center;
 	padding: 5% 9%;
-	background-color: #C7D59F;
 	width: 100%;
 }
 
 .food-entry-div {
-	background-color: #DADDD8;
-	padding: 8% 8%;
 	margin-bottom: 40px;
-	border: 2px solid #4B5842;
-	border-radius: 6px;
+	width: 85%;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 600px;
 }
 
-.food-list-text-header, .food-list-paragraph, .food-list-name {
+/*.food-list-text-header, .food-list-paragraph, .food-list-name {
 	color: #4B5842;
+}*/
+
+.food-list-name {
+	font-size: 16px;
+  color: white;
+  background-color: darkslategrey;
+  padding: 5px;
+  margin: 0px;
+}
+
+.food-list-paragraph {
+  margin: 0px;
+  font-size: 20px;
+  background-color: white;
+  padding: 5px;
+  border: 1px solid silver;
 }
 
 .nutrients-goals-form {
@@ -433,14 +510,46 @@ h1 {
   margin-bottom: 0px;
 }
 
-.pop-inner-food-entries, .pop-inner-goals {
-	max-height: calc(100vh - 100px);
+ .pop-inner-goals {
+	max-height: 100vh;
   overflow-y: auto;
 }
 
+.pop-inner-food-entries {
+	max-height: 100vh;
+  overflow-y: auto;
+}
+
+.no-food-container {
+	display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+
+.no-food-content {
+	width: 85%;
+	max-width: 400px;
+	background-color: white;
+}
+
+.no-food-header {
+	font-size: 32px;
+}
+
+.close-no-food-header, .close-error-message, .close-more-info {
+	color: black;
+	font-size: 22px;
+	border: none;
+	background: transparent;
+}
 
 .goals-page, .progress-page, .nutrition-tracking, .long-term-progress, .progress-page-header {
 	text-align: center;
+}
+
+.progress-page-header {
+	display: inline-block;
 }
 
 .my-goals-header-div {
@@ -460,6 +569,17 @@ h1 {
 	font-size: 35px;
 	color: white;
 	text-shadow: 2px 2px black;
+}
+
+.food-results-header {
+	margin: 0px;
+}
+
+.food-results-sub-header {
+	margin-top: 0px;
+  color: white;
+  margin-bottom: 40px;
+  text-shadow: 1px 1px black;
 }
 
 .goals-list-nutrient-paragraph {
@@ -495,9 +615,9 @@ h1 {
 }
 
 @media only screen and (min-width: 640px) {
-	.goals-list-div {
+	/*.goals-list-div {
 	min-width: 80%;
-}
+}*/
 
 	.splash-page-header {
 	font-size: 30px;
@@ -519,9 +639,9 @@ h1 {
 
 
 @media only screen and (min-width: 770px) {
-	.goals-list-div {
+	/*.goals-list-div {
 	min-width: 60%;
-}
+}*/
 
 	.splash-page-inner {
 		max-width: 50%;
@@ -547,9 +667,9 @@ h1 {
 
 
 @media only screen and (min-width: 960px) {
-	 .goals-list-div {
+	 /*.goals-list-div {
 	min-width: 60%;
-}
+}*/
 
 	 .splash-page-inner {
 		max-width: 40%;
@@ -564,9 +684,6 @@ h1 {
 	   max-width: 960px;
 	 }
 
-	 .pop-inner {
-	 	 max-width: 960px;
-	 }
 }
 
 .long-term-progress-title {
@@ -575,16 +692,11 @@ h1 {
 
 
 .progress-page-inner {
-	margin-top: 150px;
 	text-align: center;
-	margin-left: auto;
-	margin-right: auto;
-	/*display: inline-block;
-	border: 2px solid #4B5842;
-	border-radius: 6px;
-	padding: 5% 9%;
-	background-color: #C7D59F;*/
+	margin: 150px auto 50px ;
 	width: 85%;
+	max-width: 600px;
+	margin-bottom: 50px;
 }
 
 .progress-page-header-div {
@@ -595,7 +707,7 @@ h1 {
 }
 
 .progress-page-header {
-	font-size: 26px;
+	font-size: 20px;
 	margin: 0px;
 }
 
@@ -626,7 +738,7 @@ h1 {
 }
 
 .partially-transparent-background {
-	opacity: .6;
+	opacity: .3;
 }
 
 .red-color {
@@ -647,7 +759,17 @@ h1 {
 	margin-bottom: 50px;
 }
 
-
+.show-info {
+	border: 1px solid white;
+	color: white;
+	border-radius: 100%;
+	background: transparent;
+	display: inline-block;
+	font-size: 16px;
+	margin-left: 10px;
+	position: relative;
+  bottom: 2px;
+}
 
 
 

@@ -1,3 +1,5 @@
+'use strict'
+
 const foodEntry = (function() {
 	const consumedFood = {
 		foodName: '',
@@ -165,10 +167,7 @@ function loginFirstTime() {
 		contentType: 'application/json',
 		data: JSON.stringify(user),
 		success: function(data) {
-			//$('header').removeClass('partially-transparent-background');
-			//$('body').removeClass('transparent-body');
 			$('.pop-outer-signup').fadeOut();
-			//$('.log-in-link').remove();
 			$('nav').append(`
 					<a class='header-link goals-link' href='#goals-page'>My Goals | </a>
 					<a class='header-link progress-link' href='#progress-page'>My Progress | </a>
@@ -176,7 +175,6 @@ function loginFirstTime() {
 				`);
 
 			localStorage.setItem('token', data.authToken);
-			//$('header').addClass('transparent-background');
 			$('.pop-outer-goals').fadeIn();
 		}
 
@@ -195,34 +193,6 @@ function getGoals(callback) {
 	});
 }
 
-/*function displayGoals(data) {
-	console.log(data);
-	$('.goals-list-div').empty();
-	$('.goals-list-div').append(`
-		<h2 class='my-goals-header'>My Goals</h2>
-		<div class='goals-amount-range'>	
-				<h4 class='goals-list-nutrient-header'>Calories:</h4>
-				<p class='goals-list-nutrient-paragraph'><span>Amount: </span><span>${data[0].calories.amount}</span></p>
-				<p class='goals-list-nutrient-paragraph'><span>Range: </span><span>${data[0].calories.range}</span></p>
-		</div>
-		<div class='goals-amount-range'>
-				<h4 class='goals-list-nutrient-header'>Fat:</h4>
-				<p class='goals-list-nutrient-paragraph'><span>Amount: </span><span>${data[0].fat.amount}</span></p>
-				<p class='goals-list-nutrient-paragraph'><span>Range: </span><span>${data[0].fat.range}</span></p>
-		</div>
-		<div class='goals-amount-range'>
-				<h4 class='goals-list-nutrient-header'>Protein:</h4>
-				<p class='goals-list-nutrient-paragraph'><span>Amount: </span><span>${data[0].protein.amount}</span></p>
-				<p class='goals-list-nutrient-paragraph'><span>Range: </span><span>${data[0].protein.range}</span></p>
-    </div>
-    <div class='goals-amount-range'>
-				<h4 class='goals-list-nutrient-header'>Carbs:</h4>
-				<p class='goals-list-nutrient-paragraph'><span>Amount: </span><span>${data[0].carbs.amount}</span></p>
-				<p class='goals-list-nutrient-paragraph'><span>Range: </span><span>${data[0].carbs.range}</span></p>
-		</div>
-		`);
-}*/
-
 function displayGoals(data) {
 	let caloriesAmount = data[0].calories.amount;
 	let caloriesRange = data[0].calories.range;
@@ -237,9 +207,9 @@ function displayGoals(data) {
 		
 			<div class='my-goals-header-div'><h2 class='my-goals-header'>My Goals</h2><div class='edit-goals-div'><button class='edit-goals-button'></button></div></div>
 			<div class='goal-range-div'><span class='goal-name-span'>Calories: </span><span class='goal-amount-span'>${caloriesAmount - caloriesRange} - ${caloriesAmount + caloriesRange}</span></div>
-			<div class='goal-range-div'><span class='goal-name-span'>Fat: </span><span>${fatAmount - fatRange} - ${fatAmount + fatRange} g</span></div>	
-			<div class='goal-range-div'><span class='goal-name-span'>Protein: </span><span>${proteinAmount - proteinRange} - ${proteinAmount + proteinRange} g</span></div>	
-			<div class='goal-range-div'><span class='goal-name-span'>Carbs: </span><span>${carbsAmount - carbsRange} - ${carbsAmount + carbsRange} g</span></div>		
+			<div class='goal-range-div'><span class='goal-name-span'>Fat: </span><span>${fatAmount - fatRange} - ${fatAmount + fatRange}g</span></div>	
+			<div class='goal-range-div'><span class='goal-name-span'>Protein: </span><span>${proteinAmount - proteinRange} - ${proteinAmount + proteinRange}g</span></div>	
+			<div class='goal-range-div'><span class='goal-name-span'>Carbs: </span><span>${carbsAmount - carbsRange} - ${carbsAmount + carbsRange}g</span></div>		
 	`);
 }
 
@@ -253,15 +223,12 @@ function handleSignUpForm() {
 	});
 }
 
-
-
 function handleLogInForm() {
 	$('.login-form').submit(function(event) {
 		event.preventDefault();
 		logIn();
 	});
 }
-
 
 function storeTheFood() {
 	let theFood = $('.js-food-query').val();
@@ -303,8 +270,10 @@ function displayLogInPage() {
 
 function displayGoalsModal() {
 	$('.goals-page').on('click', '.edit-goals-button', function(event) {
-		$('header').addClass('partially-transparent-background');
+		$('header, .goals-page').addClass('partially-transparent-background');
 		$('body').addClass('transparent-body');
+		$('close-goals-modal-div').empty();
+		$('.close-goals-modal-div').prepend(`<button class='close-goals-modal'>X</button>`);
 		$('.pop-outer-goals').fadeIn();
 	});
 }
@@ -314,33 +283,29 @@ function displayGoalsModal() {
 function getDataFromAPI(callback) {
 	const food = storeTheFood();
 	const nutrientsURL = `https://api.nal.usda.gov/ndb/search/?format=json&q=${food}&sort=n&max=25&offset=0&api_key=70ONpAfW6gpIaUBzICUb8m2mRnXzs0pqI4hel3L3`;
-        const settings = {
-        url: nutrientsURL,
-        dataType: 'json',
-        type: 'GET',
-        success: callback,
-        error: function(error) {
-        	$('.error-results').empty();
-        	$('.error-results').append(`
-        		<h3 style='color: #4B5842'>No Results Found</h3>
-      		`);
-      		$('header, .signup-div').addClass('partially-transparent-background');
-      		$('.pop-outer-error-box').fadeIn();
-        }
-
-        //error: displayErrorMessage()
-        };
-        $.ajax(settings);
+  const settings = {
+	  url: nutrientsURL,
+	  dataType: 'json',
+	  type: 'GET',
+	  success: callback,
+	  error: function(error) {
+	  	$('.error-results').empty();
+	  	$('.error-results').append(`
+	  		<h3 style='color: #4B5842'>No Results Found</h3>
+			`);
+			$('header, .signup-div').addClass('partially-transparent-background');
+			$('.pop-outer-error-box').fadeIn();
+	  }
+  };
+  $.ajax(settings);
 }
-
 
 function renderFoodResult(data) {
 	const foodListLength = data.list.item.length;
-	$('.js-results-div').append(`<h2 class='food-results-header'>Results</h2>`)
+	$('.js-results-div').append(`<h2 class='food-results-header'>Results</h2><h3 class='food-results-sub-header'>Click to view nutritional facts</h3>`)
 	for (let i = 0; i < foodListLength; i++) {
 		$('.js-results-div').append(`<div class='theFoods'><button value=${data.list.item[i].ndbno} class='food-name'>${data.list.item[i].name}</button></div>`);
 	}
-	
 }
 
 function backToHome() {
@@ -353,13 +318,13 @@ function backToHome() {
 
 function displayModal() {
 	$('.js-results-div').on('click', '.food-name', function(event) {
+		$('header').addClass('partially-transparent-background');
+		$('body').addClass('transparent-body');
 		let theId = '';
 		theId = $(this).val();
 		getDetailedDataFromAPI(theId, renderDetailedData);
 	});
 }
-
-
 
 function getDetailedDataFromAPI(id, callback) {
 	const theURL = `https://api.nal.usda.gov/ndb/nutrients/?format=json&api_key=70ONpAfW6gpIaUBzICUb8m2mRnXzs0pqI4hel3L3&nutrients=208&nutrients=203&nutrients=204&nutrients=205&ndbno=${id}`;
@@ -377,7 +342,7 @@ function renderDetailedData(result) {
 	let nutrientArray = [];
 	let nutrientAmountArray = [];
 	let theNutrients = ['Calories', 'Protein', 'Fat', 'Carbs']
-	let theModal = `<div class='pop-outer'><div class='pop-inner'><div class='pop-inner-content'><button class='close'>X</button><h2 class='food-modal-header'>Nutritional Facts</h2>`; 
+	let theModal = `<div class='pop-outer'><div class='pop-inner'><div class='pop-inner-content'><button class='close'>X</button><div class='food-modal-header-div'><h2 class='food-modal-header'>Nutritional Facts</h2></div>`; 
 	for (let i = 0; i < result.report.foods[0].nutrients.length; i++) {
 		theModal += `<p class='food-modal-text'><span>${theNutrients[i]}: </span> <span>${result.report.foods[0].nutrients[i].value} ${result.report.foods[0].nutrients[i].unit}</span></p>`;
 		nutrientArray.push(result.report.foods[0].nutrients[i].nutrient);
@@ -400,9 +365,6 @@ function renderDetailedData(result) {
 		}
 	}
 	
-
-	
-
 	foodEntry.setCalories(theNutrientValues[0]);
 	foodEntry.setProtein(theNutrientValues[1]);
 	foodEntry.setFat(theNutrientValues[2]);
@@ -413,13 +375,17 @@ function renderDetailedData(result) {
 function handleCloseAddFoodModal() {
 	$('.div-for-modal').on('click', '.close', function(event) {
    $('.js-results-div, .nutrition-search-form-div').removeClass('transparent-background');
+   $('header').removeClass('partially-transparent-background');
+   $('body').removeClass('transparent-body');
    $('.pop-outer').fadeOut();
   });
-	
 }
 
 function handleAddFood() {
 	$('.div-for-modal').on('click', '.add-a-food', function(event) {
+		$('header').removeClass('partially-transparent-background');
+		$('body').removeClass('transparent-body');
+		$('.js-results-div').empty();
   	let food = foodEntry.getConsumedFood();
   	let theDate = new Date();
 		let theDay = theDate.toDateString();
@@ -487,7 +453,6 @@ function postGoalsData() {
 			$('header').removeClass('partially-transparent-background');
 			$('body').removeClass('transparent-body');
 		}
-
 	});
 }
 
@@ -515,21 +480,21 @@ function displayTodayProgressData(data) {
 	if (data.length === 0) {
 		$('.nutrition-tracking').empty();
 		$('.nutrition-tracking').append(`
-		<div class='progress-page-header-div'><h2 class='progress-page-header'>What I've Eaten today</h2></div>	
-		<div class='food-today-div'><p class='calories-today' style='color: green'>Calories: 0</p></div>
-		<div class='food-today-div'><p class='fat-today' style='color: green'>Fat: 0g</p></div>
-		<div class='food-today-div'><p class='protein-today' style='color: green'>Protein: 0g</p></div>
-		<div class='food-today-div'><p class='carbs-today' style='color: green'>Carbs: 0g</p></div>
-	`);
+			<div class='progress-page-header-div'><h2 class='progress-page-header'>What I've Eaten today</h2><button class='show-info show-info-today-progress'>?</button></div>	
+			<div class='food-today-div'><p class='calories-today' style='color: green'>Calories: 0</p></div>
+			<div class='food-today-div'><p class='fat-today' style='color: green'>Fat: 0g</p></div>
+			<div class='food-today-div'><p class='protein-today' style='color: green'>Protein: 0g</p></div>
+			<div class='food-today-div'><p class='carbs-today' style='color: green'>Carbs: 0g</p></div>
+		`);
 	} else {
 			$('.nutrition-tracking').empty();
 			$('.nutrition-tracking').append(`
-			<div class='progress-page-header-div'><h2 class='progress-page-header'>What I've Eaten today</h2></div>	
-			<div class='food-today-div'><p class='calories-today'>Calories: ${data[0].consumedCalories}</p></div>	
-			<div class='food-today-div'><p class='fat-today'>Fat: ${data[0].consumedFat} g</p></div>	
-			<div class='food-today-div'><p class='protein-today'>Protein: ${data[0].consumedProtein} g</p></div>	
-			<div class='food-today-div'><p class='carbs-today'>Carbs: ${data[0].consumedCarbs} g</p></div>	
-		`);
+				<div class='progress-page-header-div'><h2 class='progress-page-header'>What I've Eaten today</h2><button class='show-info show-info-today-progress'>?</button></div>	
+				<div class='food-today-div'><p class='calories-today'>Calories: ${data[0].consumedCalories}</p></div>	
+				<div class='food-today-div'><p class='fat-today'>Fat: ${data[0].consumedFat} g</p></div>	
+				<div class='food-today-div'><p class='protein-today'>Protein: ${data[0].consumedProtein} g</p></div>	
+				<div class='food-today-div'><p class='carbs-today'>Carbs: ${data[0].consumedCarbs} g</p></div>	
+			`);
 
 			if (data[0].caloriesResult === 'met goal') {
 				$('.calories-today').addClass('red-color');
@@ -565,17 +530,7 @@ function displayTodayProgressData(data) {
 	}		
 }
 
-/*function displayTodayProgressData(data) {
-	if (data.length === 0) {
-		$('.nutrition-tracking').empty();
-		$('.nutrition-tracking').append(`
-			<div class='green-color'>Calories: 0</div>
-			<div>Fat: 0 g</div>
-			<div>Protein: 0 g</div>
-			<div>Carbs: 0 g</div>
-		`);
-	}
-}*/
+
 
 function getLongTermProgressData(callback) {
 	$.ajax({
@@ -593,15 +548,14 @@ function getLongTermProgressData(callback) {
 function displayLongTermProgressData(data) {
 	$('.long-term-progress').empty();
 	$('.long-term-progress').append(`
-			<div class='progress-page-header-div'><h2 class='progress-page-header'>My Long Term Progress</h2></div>
-			<div class='long-term-goals-div'><p class='long-term-progress-paragraph'>Met Calories Goals: ${data.timesMetCaloriesGoals} times</p></div>
-			<div class='long-term-goals-div'><p class='long-term-progress-paragraph'>Met Fat Goals: ${data.timesMetFatGoals} times</p></div>
-			<div class='long-term-goals-div'><p class='long-term-progress-paragraph'>Met Protein Goals: ${data.timesMetProteinGoals} times</p></div>
-			<div class='long-term-goals-div'><p class='long-term-progress-paragraph'>Met Carbs Goals: ${data.timesMetCarbsGoals} times</p></div>
-			<div class='long-term-goals-div'><p class='long-term-progress-paragraph'>Met All Goals: ${data.timesMetAllGoals} times</p></div>
-			<div class='long-term-goals-div'><p class='long-term-progress-paragraph'>Met At Least One Goal: ${data.timesMetAtLeastOneGoal} times</p></div>
-			<div class='long-term-goals-div'><p class='long-term-progress-paragraph'>Days I've Been Tracking Current Goal: ${data.daysGoalsHaveBeenTracked} day(s)</p></div>
-		
+		<div class='progress-page-header-div'><h2 class='progress-page-header'>My Long Term Progress</h2><button class='show-info show-info-long-term-progress'>?</button></div>
+		<div class='long-term-goals-div'><p class='long-term-progress-paragraph'>Met Calories Goals: ${data.timesMetCaloriesGoals} times</p></div>
+		<div class='long-term-goals-div'><p class='long-term-progress-paragraph'>Met Fat Goals: ${data.timesMetFatGoals} times</p></div>
+		<div class='long-term-goals-div'><p class='long-term-progress-paragraph'>Met Protein Goals: ${data.timesMetProteinGoals} times</p></div>
+		<div class='long-term-goals-div'><p class='long-term-progress-paragraph'>Met Carbs Goals: ${data.timesMetCarbsGoals} times</p></div>
+		<div class='long-term-goals-div'><p class='long-term-progress-paragraph'>Met All Goals: ${data.timesMetAllGoals} times</p></div>
+		<div class='long-term-goals-div'><p class='long-term-progress-paragraph'>Met At Least One Goal: ${data.timesMetAtLeastOneGoal} times</p></div>
+		<div class='long-term-goals-div'><p class='long-term-progress-paragraph'>Days I've Been Tracking Current Goal: ${data.daysGoalsHaveBeenTracked} day(s)</p></div>
 	`);
 }
 
@@ -614,7 +568,6 @@ function handleClickMyProgress() {
 		getLongTermProgressData(displayLongTermProgressData);
 		$('.progress-page').removeClass('hidden');
 	});
-	
 }
 
 function handleClickMyGoalsPage() {
@@ -630,12 +583,12 @@ function handleSubmitGoals() {
 	$('.nutrients-goals-form').submit(function(event) {
 		event.preventDefault();
 		postGoalsData();
-		
 	});
 }
 
 function handleSeeAllFoodButton() {
 	$('.see-all-food-button').on('click', function(event) {
+		$('body').addClass('transparent-body');
 		$('.food-entries').empty();
 		$('.progress-page, header').addClass('transparent-background');
 		$('.pop-outer-food-entries').fadeIn();
@@ -644,9 +597,10 @@ function handleSeeAllFoodButton() {
 }
 
 function handleCloseFoodList() {
-	$('.close-food-entries').on('click', function(event) {
+	$('.food-entries').on('click', '.close-entries', function(event) {
 		$('.pop-outer-food-entries').fadeOut();
 		$('.progress-page, header').removeClass('transparent-background');
+		$('body').removeClass('transparent-body');
 	});
 }
 
@@ -666,13 +620,16 @@ function getFoodList(callback) {
 function displayFoodList(data) {
 	if (data.length === 0) {
 		$('.food-entries').append(`
-			<div>
-				<h2 class='food-list-text-header'>No Food Eaten Today</h2>
+			<div class='no-food-container'>
+				<div class='no-food-content'>
+					<button class='close-no-food-header close-entries'>X</button>
+					<h2 class='no-food-header'>No Food Eaten Today</h2>
+				<div>	
 			</div>	
-	`);
+		`);
 	} else {
 		$('.food-entries').append(`
-			<h2 class='food-list-text-header'>Food Eaten Today</h2>
+			<button class='close-food-entries close-entries'>X</button>
 		`);
 		data.forEach(food => {
 			$('.food-entries').append(`
@@ -684,8 +641,8 @@ function displayFoodList(data) {
 					<p class='food-list-paragraph'>Carbs: ${food.consumedCarbs}g</p>
 					<button class='delete-food-button' value=${food._id}>delete</button>
 				</div>	
-		`);
-	});
+			`);
+		});
 	}
 }
 
@@ -723,7 +680,55 @@ function handleClickSignUp() {
 	});
 }
 
+function handleShowMoreInfoTodayProgress() {
+	$('.nutrition-tracking').on('click', '.show-info-today-progress', function(event) {
+		$('header, .progress-page').addClass('partially-transparent-background');
+		$('body').addClass('.transparent-body');
+		$('.more-info-results').empty();
+		$('.more-info-results').append(`
+			<p>
+				This keeps track of all nutrition consumed on the current day. Green means you are below your target goal, red means you are within your target goal, and a line through means you are above your target goal. If you change your goal, this will reset to zero along with all statistics, so only change your goal if you are absolutely sure.
+			</p>
+		`);
+		$('.pop-outer-more-info').fadeIn();
+	});
+}
+
+function handleShowMoreInfoLongTermProgress() {
+	$('.long-term-progress').on('click', '.show-info-long-term-progress', function(event) {
+		$('header, .progress-page').addClass('partially-transparent-background');
+		$('body').addClass('.transparent-body');
+		$('.more-info-results').empty();
+		$('.more-info-results').append(`
+			<p>
+				This keeps track of all your progress towards your current goal. It will reset to zero when you change your goal.
+			</p>
+		`);
+		$('.pop-outer-more-info').fadeIn();
+	});
+}
+
+function handleCloseShowMoreInfo() {
+	$('.more-info-content').on('click', '.close-more-info', function(event) {
+		$('header, .progress-page').removeClass('partially-transparent-background');
+		$('body').addClass('.transparent-body');
+		$('.pop-outer-more-info').fadeOut();
+	});
+}
+
+function handleCloseGoalsModal() {
+	$('.pop-inner-goals').on('click', '.close-goals-modal', function(event) {
+		$('header, .goals-page').removeClass('partially-transparent-background');
+		$('body').removeClass('transparent-body');
+		$('.pop-outer-goals').fadeOut();
+	});
+}
+
 function initApp() {
+	handleCloseGoalsModal();
+	handleCloseShowMoreInfo();
+	handleShowMoreInfoTodayProgress();
+	handleShowMoreInfoLongTermProgress();
 	handleClickSignUp();
 	handleCloseGoalsPopUp()
 	handleCloseErrorMessage();
