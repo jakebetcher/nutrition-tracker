@@ -26,7 +26,6 @@ router.get('/', jwtAuth, (req, res) => {
 	function sendStats(stats) {
 		res.json(stats);
 	}
-
 	statObject.returnGoalStats(req.user._id, sendStats);
 })
 

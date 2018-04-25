@@ -39,24 +39,19 @@ router.post('/', jwtAuth, (req, res) => {
   .find({user: req.user._id})
   .sort({"date": -1})
   .limit(1)
-  .then(theGoal => {
-    
-    let entry = new Entry({
-    goal: theGoal[0]._id,
-    user: req.user._id,
-    foodName: req.body.foodName,
-    consumedCalories: req.body.consumedCalories,
-    consumedFat: req.body.consumedFat,
-    consumedProtein: req.body.consumedProtein,
-    consumedCarbs: req.body.consumedCarbs,
-    date: req.body.date,
-    day: req.body.day
-
-  });
-
-  entry.save();
-  return entry;
-})
+  .then(theGoal => { 
+    return Entry.create({
+      goal: theGoal[0]._id,
+      user: req.user._id,
+      foodName: req.body.foodName,
+      consumedCalories: req.body.consumedCalories,
+      consumedFat: req.body.consumedFat,
+      consumedProtein: req.body.consumedProtein,
+      consumedCarbs: req.body.consumedCarbs,
+      date: req.body.date,
+      day: req.body.day
+    });
+  })
   .then(entry => res.status(201).json(entry))
   .catch(err => {
     console.log(err);

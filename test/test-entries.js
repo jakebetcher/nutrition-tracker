@@ -1,4 +1,6 @@
-/*'use strict';
+'use strict';
+
+require('dotenv').config();
 
 const chai = require('chai');
 const chaiHttp = require('chai-http');
@@ -8,9 +10,8 @@ const mongoose = require('mongoose');
 
 const expect = chai.expect;
 
-
-
-const { Entry } = require('../models');
+const { Goal } = require('../goals');
+const { Entry } = require('../entries');
 const { User } = require('../users');
 const { closeServer, runServer, app } = require('../server');
 const { JWT_SECRET, TEST_DATABASE_URL } = require('../config');
@@ -26,94 +27,18 @@ function tearDownDb() {
   });
 }
 
-  const explicitUsername = 'exampleUsername1234';
-  const explicitPassword = 'examplePass';
-  const explicitFirstName = 'Example';
-  const explicitLastName = 'User';
+const explicitUsername = 'exampleUsername1234';
+const explicitPassword = 'examplePass';
+const explicitFirstName = 'Example';
+const explicitLastName = 'User';
 
-  const exampleUsers = [];
-  for (let i=0; i<10; i++) {
-  	exampleUsers.push({
-  		username: faker.internet.userName(),
-  		password: 'examplePass',
-  		firstName: faker.name.firstName(),
-  		lastName: faker.name.lastName()
-  	})
-  }
+describe('entries API Resource', function() {
 
-  
-
-
-function seedEntryData() {
-  console.info('seeding entry data');
-  const seedData = [];
-  exampleUsers.forEach(user => {
-  	seedData.push({
-  		username: user.username,
-  		consumedCalories: faker.random.number(1000),
-      consumedFat: faker.random.number(50),
-      consumedProtein: faker.random.number(50),
-      consumedCarbs: faker.random.number(70)
-  	});
-  });
-  return Entry.insertMany(seedData);
-}
-
-function createUsers() {
-	exampleUsers.forEach(user => {
-		return User.hashPassword(user.password).then(password =>
-      User.create({
-        username: user.username,
-        password,
-        firstName: user.firstName,
-        lastName: user.lastName
-      })
-    );
-	});
-}
-  
-
-
-
-describe('entries API resource', function() {
-	 
-  before(function () {
+	before(function () {
     return runServer(TEST_DATABASE_URL);
   });
 
-  beforeEach(function () {
-    return seedEntryData();
-  });
-
-  beforeEach(function () {
-    /*return User.hashPassword(password).then(password =>
-      User.create({
-        username,
-        password,
-        firstName,
-        lastName
-      })
-    );
-    createUsers();
-  });
-
-  beforeEach(function () {
-    return User.hashPassword(explicitPassword).then(password =>
-      User.create({
-        username: explicitUsername,
-        password: explicitPassword,
-        firstName: explicitFirstName,
-        lastName: explicitLastName
-      })
-    );
-  });
-
    afterEach(function () {
-    return User.remove({});
-  });
-
-  afterEach(function () {
-    
     return tearDownDb();
   });
 
@@ -121,120 +46,21 @@ describe('entries API resource', function() {
     return closeServer();
   });
 
-
-describe('protected GET Endpoint', function() {
-	it('Should reject requests with no credentials', function () {
-      return chai
-        .request(app)
-        .get('/entries/protected')
-        .then(() =>
-          expect.fail(null, null, 'Request should not succeed')
-        )
-        .catch(err => {
-          if (err instanceof chai.AssertionError) {
-            throw err;
-          }
-
-          const res = err.response;
-          expect(res).to.have.status(401);
-        });
-    });
-
-it('Should reject requests with an expired token', function () {
-      const token = jwt.sign(
-        {
-          user: {
-            username: exampleUsers[0].username,
-            firstName: exampleUsers[0].firstName,
-            lastName: exampleUsers[0].lastName
-          },
-          exp: Math.floor(Date.now() / 1000) - 10 // Expired ten seconds ago
-        },
-        JWT_SECRET,
-        {
-          algorithm: 'HS256',
-          subject: exampleUsers[0].username
-        }
-      );
-
-      return chai
-        .request(app)
-        .get('/entries/protected')
-        .set('authorization', `Bearer ${token}`)
-        .then(() =>
-          expect.fail(null, null, 'Request should not succeed')
-        )
-        .catch(err => {
-          if (err instanceof chai.AssertionError) {
-            throw err;
-          }
-
-          const res = err.response;
-          expect(res).to.have.status(401);
-        });
-        });
-    it('Should send protected data', function () {
-      let resEntries;
-      const token = jwt.sign(
-        {
-          user: {
-            username: exampleUsers[1].username,
-            firstName: exampleUsers[1].firstName,
-            lastName: exampleUsers[1].lastName
-          }
-        },
-        JWT_SECRET,
-        {
-          algorithm: 'HS256',
-          subject: exampleUsers[1].username,
-          expiresIn: '7d'
-        }
-      );
-
-      return chai
-        .request(app)
-        .get('/entries/protected')
-
-        .set('authorization', `Bearer ${token}`)
-        .then(res => {
-        	//console.log(res.body);
-          expect(res).to.have.status(200);
-          expect(res.body).to.be.an('array');
-
-          res.body.forEach(function(entry) {
-				expect(entry).to.be.a('object');
-				expect(entry).to.include.keys('_id', 'username', 'consumedCalories', 'consumedFat', 'consumedProtein', 'consumedCarbs');
-			});
-			resEntries = res.body[0];
-			return Entry.findById(resEntries._id);
-		})
-		.then(function(entry) {
-			expect(resEntries.username).to.equal(entry.username);
-			expect(resEntries._id).to.equal(`${entry._id}`);
-			expect(resEntries.timesMetCaloriesGoals).to.equal(entry.timesMetCaloriesGoals);
-			expect(resEntries.consumedCalories).to.equal(entry.consumedCalories);
-			expect(resEntries.consumedFat).to.equal(entry.consumedFat);
-			expect(resEntries.consumedProtein).to.equal(entry.consumedProtein);
-			expect(resEntries.consumedCarbs).to.equal(entry.consumedCarbs);
-		});
-          
-        });
-    });
-    
-describe('protected POST endpoint', function() {
-	it('should reject requests with no credentials', function() {
-		const newEntry = {
-				username: explicitUsername,
+  describe('protected POST Endpoint', function() {
+  	it('Should reject requests with no credentials', function () {
+      const newEntry = {
+				foodName: 'example food',
 				consumedCalories: faker.random.number(1000),
-        consumedFat: faker.random.number(50),
-        consumedProtein: faker.random.number(50),
-        consumedCarbs: faker.random.number(70)
+	      consumedFat: faker.random.number(50),
+	      consumedProtein: faker.random.number(50),
+	      consumedCarbs: faker.random.number(70)
 			};
 
-		return chai.request(app)
-		.post('/entries/protected')
-		.send(newEntry)
-		.then(() =>
+      return chai
+        .request(app)
+        .post('/entries/')
+        .send(newEntry)
+        .then(() =>
           expect.fail(null, null, 'Request should not succeed')
         )
         .catch(err => {
@@ -246,8 +72,157 @@ describe('protected POST endpoint', function() {
           expect(res).to.have.status(401);
         });
     });
-	it('should reject requests with an expired token', function() {
-		const token = jwt.sign(
+
+    it('should reject requests with an expired token', function() {
+    	const anotherNewEntry = {
+    		foodName: 'example food',
+				consumedCalories: faker.random.number(1000),
+	      consumedFat: faker.random.number(50),
+	      consumedProtein: faker.random.number(50),
+	      consumedCarbs: faker.random.number(70)
+    	};
+
+    	const token = jwt.sign(
+	      {
+	        user: {
+	          username: explicitUsername,
+	          firstName: explicitFirstName,
+	          lastName: explicitLastName
+	        },
+	        exp: Math.floor(Date.now() / 1000) - 10 // Expired ten seconds ago
+	      },
+	      JWT_SECRET,
+	      {
+	        algorithm: 'HS256',
+	        subject: explicitUsername
+	      }
+	    );
+
+	    return chai
+	      .request(app)
+	      .post('/entries/')
+	      .send(anotherNewEntry)
+	      .set('authorization', `Bearer ${token}`)
+	      .then(() =>
+	        expect.fail(null, null, 'Request should not succeed')
+	      )
+	      .catch(err => {
+	        if (err instanceof chai.AssertionError) {
+	          throw err;
+	        }
+
+	        const res = err.response;
+	        expect(res).to.have.status(401);
+	      });
+    });
+
+    it('should create a new entry', function() {
+    	let thirdNewEntry;
+      return User.hashPassword(explicitPassword)
+      .then(password => {
+        return User.create({
+          username: explicitUsername,
+          password: password,
+          firstName: explicitFirstName,
+          lastName: explicitLastName
+        });
+      })
+      .then(user => {
+				return Goal.create({
+          user: user._id,
+          calories: {
+            amount: faker.random.number(3000),
+            range: faker.random.number(400)
+          },
+          fat: {
+            amount: faker.random.number(200),
+            range: faker.random.number(30)
+          },
+          protein: {
+            amount: faker.random.number(200),
+            range: faker.random.number(40)
+          },
+          carbs: {
+            amount: faker.random.number(200),
+            range: faker.random.number(40)
+          }
+        });  
+      })
+      .then(goal => {
+      	let theDate = new Date();
+				let theDay = theDate.toDateString();
+      	thirdNewEntry = {
+					user: goal.user,
+					goal: goal._id,
+					foodName: 'example food',
+					date: theDate,
+					day: theDay,
+					consumedCalories: faker.random.number(1000),
+		      consumedFat: faker.random.number(50),
+		      consumedProtein: faker.random.number(50),
+		      consumedCarbs: faker.random.number(70)	
+				};
+
+        const token = jwt.sign(
+          {
+            user: {
+              _id: goal.user,
+              username: explicitUsername,
+              firstName: explicitFirstName,
+              lastName: explicitLastName
+            }
+          },
+          JWT_SECRET,
+          {
+            algorithm: 'HS256',
+            subject: explicitUsername,
+            expiresIn: '7d'
+          }
+        );
+
+        return chai
+          .request(app)
+          .post('/entries/')
+          .send(thirdNewEntry)
+          .set('authorization', `Bearer ${token}`)
+      })
+      .then(function(res) {
+      	expect(res).to.have.status(201);
+      	expect(res).to.be.json;
+        expect(res.body).to.be.a('object');
+        expect(res.body).to.include.keys('_id', 'user', 'foodName', 'goal', 'consumedCalories', 'consumedFat', 'consumedProtein', 'consumedCarbs', 'day', 'date');
+        return Entry.findById(res.body._id);
+      })
+      .then(function(entry) {
+      	expect(`${entry.user}`).to.equal(`${thirdNewEntry.user}`);
+      	expect(`${entry.goal}`).to.equal(`${thirdNewEntry.goal}`);
+				expect(entry.consumedCalories).to.equal(thirdNewEntry.consumedCalories);
+				expect(entry.consumedFat).to.equal(thirdNewEntry.consumedFat);
+				expect(entry.consumedProtein).to.equal(thirdNewEntry.consumedProtein);
+				expect(entry.consumedCarbs).to.equal(thirdNewEntry.consumedCarbs);
+      });
+    });
+  });
+
+	describe('protected GET endpoint (list)', function() {
+		it('Should reject requests with no credentials', function () {
+      return chai
+        .request(app)
+        .get('/entries/list')
+        .then(() =>
+          expect.fail(null, null, 'Request should not succeed')
+        )
+        .catch(err => {
+          if (err instanceof chai.AssertionError) {
+            throw err;
+          }
+          const res = err.response;
+          expect(res).to.have.status(401);
+        });
+    });
+
+    it('Should reject requests with an expired token', function () {
+      const token = jwt.sign(
         {
           user: {
             username: explicitUsername,
@@ -263,18 +238,9 @@ describe('protected POST endpoint', function() {
         }
       );
 
-		const anotherNewEntry = {
-			username: explicitUsername,
-			consumedCalories: faker.random.number(1000),
-      consumedFat: faker.random.number(50),
-      consumedProtein: faker.random.number(50),
-      consumedCarbs: faker.random.number(70)
-		};
-
-		return chai
+      return chai
         .request(app)
-        .post('/entries/protected')
-        .send(anotherNewEntry)
+        .get('/entries/list')
         .set('authorization', `Bearer ${token}`)
         .then(() =>
           expect.fail(null, null, 'Request should not succeed')
@@ -287,233 +253,141 @@ describe('protected POST endpoint', function() {
           const res = err.response;
           expect(res).to.have.status(401);
         });
-	
+    });
 
+    it('should send protected data', function() {
+    	let resEntries;
+    	return User.hashPassword(explicitPassword)
+      .then(password => {
+        return User.create({
+          username: explicitUsername,
+          password: password,
+          firstName: explicitFirstName,
+          lastName: explicitLastName
+        });
+      })
+      .then(user => {
+				return Goal.create({
+          user: user._id,
+          calories: {
+            amount: faker.random.number(3000),
+            range: faker.random.number(400)
+          },
+          fat: {
+            amount: faker.random.number(200),
+            range: faker.random.number(30)
+          },
+          protein: {
+            amount: faker.random.number(200),
+            range: faker.random.number(40)
+          },
+          carbs: {
+            amount: faker.random.number(200),
+            range: faker.random.number(40)
+          }
+        });  
+      })
+      .then(goal => {
+      	let theDate = new Date();
+				let theDay = theDate.toDateString();
+      	return Entry.create({
+      		user: goal.user,
+					goal: goal._id,
+					foodName: 'example food',
+					date: theDate,
+					day: theDay,
+					consumedCalories: faker.random.number(1000),
+		      consumedFat: faker.random.number(50),
+		      consumedProtein: faker.random.number(50),
+		      consumedCarbs: faker.random.number(70)
+      	});
+      })
+      .then(entry => {
+      	const token = jwt.sign(
+          {
+            user: { 
+              _id: entry.user,
+              username: explicitUsername,
+              firstName: explicitFirstName,
+              lastName: explicitLastName
+            }
+          },
+          JWT_SECRET,
+          {
+            algorithm: 'HS256',
+            subject: explicitUsername,
+            expiresIn: '7d'
+          }
+        );
 
-	  
-		});
-	it('should create a new entry', function() {
-		const thirdNewEntry = {
-			username: explicitUsername,
-			consumedCalories: faker.random.number(1000),
-      consumedFat: faker.random.number(50),
-      consumedProtein: faker.random.number(50),
-      consumedCarbs: faker.random.number(70)	
-		};
+        return chai
+          .request(app)
+          .get('/entries/list')
+          .set('authorization', `Bearer ${token}`)
+      })
+      .then(res => {
+      	expect(res).to.have.status(200);
+        expect(res.body).to.be.an('array');
 
+        res.body.forEach(function(entry) {
+          expect(entry).to.be.a('object');
+          expect(entry).to.include.keys('_id', 'user', 'goal', 'consumedCalories', 'consumedFat', 'consumedProtein', 'consumedCarbs', 'date', 'day');
+        });
 
-		const token = jwt.sign(
+        resEntries = res.body[0];
+        return Entry.findById(resEntries._id);
+      })
+      .then(entry => {
+      	expect(`${entry.user}`).to.equal(`${resEntries.user}`);
+      	expect(`${entry.goal}`).to.equal(`${resEntries.goal}`);
+				expect(entry.consumedCalories).to.equal(resEntries.consumedCalories);
+				expect(entry.consumedFat).to.equal(resEntries.consumedFat);
+				expect(entry.consumedProtein).to.equal(resEntries.consumedProtein);
+				expect(entry.consumedCarbs).to.equal(resEntries.consumedCarbs);
+      });
+    });
+	});
+
+	describe('protected Get Endpoint (total)', function() {
+
+    it('Should reject requests with no credentials', function () {
+      return chai
+        .request(app)
+        .get('/entries/total')
+        .then(() =>
+          expect.fail(null, null, 'Request should not succeed')
+        )
+        .catch(err => {
+          if (err instanceof chai.AssertionError) {
+            throw err;
+          }
+          const res = err.response;
+          expect(res).to.have.status(401);
+        });
+    });  
+
+    it('Should reject requests with an expired token', function () {
+      const token = jwt.sign(
         {
           user: {
             username: explicitUsername,
             firstName: explicitFirstName,
             lastName: explicitLastName
-          }
-        },
-        JWT_SECRET,
-        {
-          algorithm: 'HS256',
-          subject: explicitUsername,
-          expiresIn: '7d'
-        }
-      );
-
-
-		return chai
-        .request(app)
-        .post('/entries/protected')
-        .send(thirdNewEntry)
-        .set('authorization', `Bearer ${token}`)
-
-        .then(function(res) {
-			expect(res).to.have.status(201);
-      		expect(res).to.be.json;
-      		expect(res.body).to.be.a('object');
-      		expect(res.body).to.include.keys('_id', 'username', 'consumedCalories', 'consumedFat', 'consumedProtein', 'consumedCarbs');
-      		return Entry.findById(res.body._id);
-
-		})
-		.then(function(entry) {
-			expect(entry.username).to.equal(thirdNewEntry.username);
-			expect(entry.consumedCalories).to.equal(thirdNewEntry.consumedCalories);
-			expect(entry.consumedFat).to.equal(thirdNewEntry.consumedFat);
-			expect(entry.consumedProtein).to.equal(thirdNewEntry.consumedProtein);
-			expect(entry.consumedCarbs).to.equal(thirdNewEntry.consumedCarbs);
-		});
-	});
-
-
-
-	});
-
-	describe('protected PUT Endpoint', function() {
-		it('should reject requests with no credentials', function() {
-			const updatedEntry = {
-				consumedCalories: 1500,
-        consumedFat: 75,
-        consumedProtein: 70,
-        consumedCarbs: 80
-			};
-
-			return Entry
-			.findOne({username: exampleUsers[0].username})
-			.then(entry => {
-				return chai.request(app)
-				.put('/entries/protected')
-        .send(updatedEntry)
-			})
-			.then(() =>
-          expect.fail(null, null, 'Request should not succeed')
-        )
-        .catch(err => {
-          if (err instanceof chai.AssertionError) {
-            throw err;
-          }
-
-          const res = err.response;
-          expect(res).to.have.status(401);
-        });
-		});
-		it('should reject requests with an expired token', function() {
-			const updatedEntry = {
-        consumedCalories: 1500,
-        consumedFat: 75,
-        consumedProtein: 70,
-        consumedCarbs: 80
-      };
-
-			const token = jwt.sign(
-        	{
-          	user: {
-            	username: explicitUsername,
-            	firstName: explicitFirstName,
-            	lastName: explicitLastName
-          	},
-          	exp: Math.floor(Date.now() / 1000) - 10 // Expired ten seconds ago
-        	},
-        	JWT_SECRET,
-        	{
-          	algorithm: 'HS256',
-          	subject: explicitUsername
-        	}
-      	);
-
-			return Entry
-			.findOne({username: exampleUsers[1].username})
-			.then(entry => {
-				return chai.request(app)
-				.put('/entries/protected')
-        .send(updatedEntry)
-				.set('authorization', `Bearer ${token}`)
-			})
-			.then(() =>
-          expect.fail(null, null, 'Request should not succeed')
-        )
-        .catch(err => {
-          if (err instanceof chai.AssertionError) {
-            throw err;
-          }
-
-          const res = err.response;
-          expect(res).to.have.status(401);
-        });
-
-		});
-
-		it('should update fields you send over', function() {
-			const updatedEntry = {
-        consumedCalories: 1500,
-        consumedFat: 75,
-        consumedProtein: 70,
-        consumedCarbs: 80
-      };
-
-			const token = jwt.sign(
-        {
-          user: {
-            username: exampleUsers[2].username,
-            firstName: exampleUsers[2].firstName,
-            lastName: exampleUsers[2].lastName
-          }
-        },
-        JWT_SECRET,
-        {
-          algorithm: 'HS256',
-          subject: exampleUsers[2].username,
-          expiresIn: '7d'
-        }
-      );
-
-			return Entry
-			.findOne({username: exampleUsers[2].username})
-			.then(entry => {
-				return chai.request(app)
-				.put('/entries/protected')
-				.send(updatedEntry)
-				.set('authorization', `Bearer ${token}`)
-			})
-			.then(function(res) {
-			expect(res).to.have.status(204);
-
-			return Entry.findOne({username: exampleUsers[2].username});
-		})
-		.then(function(entry) {
-			expect(entry.consumedCalories).to.equal(updatedEntry.consumedCalories);
-			expect(entry.consumedFat).to.equal(updatedEntry.consumedFat);
-      expect(entry.consumedProtein).to.equal(updatedEntry.consumedProtein);
-      expect(entry.consumedCarbs).to.equal(updatedEntry.consumedCarbs);
-		});
-
-		});
-	});
-
-  describe('protected DELETE Endpoint', function() {
-    it('should reject requests with no credentials', function() {
-      return Entry
-      .findOne({username: exampleUsers[3].username})
-      .then(entry => {
-        return chai.request(app)
-        .delete('/entries/protected')
-      })
-      .then(() =>
-          expect.fail(null, null, 'Request should not succeed')
-        )
-        .catch(err => {
-          if (err instanceof chai.AssertionError) {
-            throw err;
-          }
-
-          const res = err.response;
-          expect(res).to.have.status(401);
-        });
-    });
-
-    it('should reject requests with an invalid token', function() {
-      const token = jwt.sign(
-        {
-          user: {
-            username: exampleUsers[3].username,
-            firstName: exampleUsers[3].firstName,
-            lastName: exampleUsers[3].lastName
           },
           exp: Math.floor(Date.now() / 1000) - 10 // Expired ten seconds ago
         },
         JWT_SECRET,
         {
           algorithm: 'HS256',
-          subject: exampleUsers[3].username
+          subject: explicitUsername
         }
       );
 
-
-      return Entry
-      .findOne({username: exampleUsers[3].username})
-      .then(entry => {
-        return chai.request(app)
-        .delete('/entries/protected')
+      return chai
+        .request(app)
+        .get('/entries/total')
         .set('authorization', `Bearer ${token}`)
-      })
-      .then(() =>
+        .then(() =>
           expect.fail(null, null, 'Request should not succeed')
         )
         .catch(err => {
@@ -524,41 +398,266 @@ describe('protected POST endpoint', function() {
           const res = err.response;
           expect(res).to.have.status(401);
         });
-
     });
 
-    it('should delete an entry', function() {
+    it('should send protected Data', function() {
+    	let theDate = new Date();
+			let theDay = theDate.toDateString();
+			let entry1 = {
+				foodName: 'example food',
+				date: theDate,
+				day: theDay,
+				consumedCalories: 300,
+	      consumedFat: 20,
+	      consumedProtein: 15,
+	      consumedCarbs: 18
+			};
+
+			let entry2 = {
+				foodName: 'example food',
+				date: theDate,
+				day: theDay,
+				consumedCalories: 250,
+	      consumedFat: 18,
+	      consumedProtein: 13,
+	      consumedCarbs: 16
+			};
+
+			return User.hashPassword(explicitPassword)
+      .then(password => {
+        return User.create({
+          username: explicitUsername,
+          password: password,
+          firstName: explicitFirstName,
+          lastName: explicitLastName
+        });
+      })
+      .then(user => {
+				return Goal.create({
+          user: user._id,
+          calories: {
+            amount: faker.random.number(3000),
+            range: faker.random.number(400)
+          },
+          fat: {
+            amount: faker.random.number(200),
+            range: faker.random.number(30)
+          },
+          protein: {
+            amount: faker.random.number(200),
+            range: faker.random.number(40)
+          },
+          carbs: {
+            amount: faker.random.number(200),
+            range: faker.random.number(40)
+          }
+        });  
+      })
+      .then(goal => {
+      	entry1.user = goal.user;
+      	entry1.goal = goal._id
+      	entry2.user = goal.user;
+      	entry2.goal = goal._id;
+
+      	return Entry.create(entry1);
+      })
+      .then(entry => {
+      	return Entry.create(entry2);
+      })
+      .then(entry => {
+      	const token = jwt.sign(
+          {
+            user: { 
+              _id: entry.user,
+              username: explicitUsername,
+              firstName: explicitFirstName,
+              lastName: explicitLastName
+            }
+          },
+          JWT_SECRET,
+          {
+            algorithm: 'HS256',
+            subject: explicitUsername,
+            expiresIn: '7d'
+          }
+        );
+
+        return chai
+          .request(app)
+          .get('/entries/total')
+          .set('authorization', `Bearer ${token}`)
+      })
+      .then(res => {
+      	expect(res).to.have.status(200);
+        expect(res.body).to.be.an('array');
+
+        res.body.forEach(function(entry) {
+          expect(entry).to.be.a('object');
+          expect(entry).to.include.keys('_id', 'consumedCalories', 'consumedCalories', 'consumedFat', 'consumedProtein', 'consumedCarbs');
+          expect(entry.consumedCalories).to.equal(entry1.consumedCalories + entry2.consumedCalories);
+          expect(entry.consumedFat).to.equal(entry1.consumedFat + entry2.consumedFat);
+          expect(entry.consumedProtein).to.equal(entry1.consumedProtein + entry2.consumedProtein);
+          expect(entry.consumedProtein).to.equal(entry1.consumedProtein + entry2.consumedProtein);
+        });
+      });
+    });
+	});
+
+	describe('protected DELETE Endpoint', function() {
+		let entryId;
+		let userId;
+
+		beforeEach(function() {
+    	return User.hashPassword(explicitPassword)
+      .then(password => {
+        return User.create({
+          username: explicitUsername,
+          password: password,
+          firstName: explicitFirstName,
+          lastName: explicitLastName
+        });
+      })
+      .then(user => {
+      	userId = user._id;
+				return Goal.create({
+          user: user._id,
+          calories: {
+            amount: faker.random.number(3000),
+            range: faker.random.number(400)
+          },
+          fat: {
+            amount: faker.random.number(200),
+            range: faker.random.number(30)
+          },
+          protein: {
+            amount: faker.random.number(200),
+            range: faker.random.number(40)
+          },
+          carbs: {
+            amount: faker.random.number(200),
+            range: faker.random.number(40)
+          }
+        });  
+      })
+      .then(goal => {
+      	let theDate = new Date();
+				let theDay = theDate.toDateString();
+      	return Entry.create({
+      		user: goal.user,
+					goal: goal._id,
+					foodName: 'example food',
+					date: theDate,
+					day: theDay,
+					consumedCalories: faker.random.number(1000),
+		      consumedFat: faker.random.number(50),
+		      consumedProtein: faker.random.number(50),
+		      consumedCarbs: faker.random.number(70)
+      	});
+      })
+      .then(entry => {
+      	entryId = entry._id;
+      });
+    });
+
+
+		it('Should reject requests with no credentials', function () {
+      return chai
+        .request(app)
+        .delete(`/entries/${entryId}`)
+        .then(() =>
+          expect.fail(null, null, 'Request should not succeed')
+        )
+        .catch(err => {
+          if (err instanceof chai.AssertionError) {
+            throw err;
+          }
+          const res = err.response;
+          expect(res).to.have.status(401);
+        });
+    });  
+
+    it('Should reject requests with an expired token', function () {
       const token = jwt.sign(
         {
           user: {
-            username: exampleUsers[3].username,
-            firstName: exampleUsers[3].firstName,
-            lastName: exampleUsers[3].lastName
-          }
+            username: explicitUsername,
+            firstName: explicitFirstName,
+            lastName: explicitLastName
+          },
+          exp: Math.floor(Date.now() / 1000) - 10 // Expired ten seconds ago
         },
         JWT_SECRET,
         {
           algorithm: 'HS256',
-          subject: exampleUsers[3].username,
-          expiresIn: '7d'
+          subject: explicitUsername
         }
       );
 
-      return Entry
-      .findOne({username: exampleUsers[3].username})
-      .then(entry => {
-        return chai.request(app)
-        .delete('/entries/protected')
+      return chai
+        .request(app)
+        .delete(`/entries/${entryId}`)
         .set('authorization', `Bearer ${token}`)
-      })
-      .then(function(res) {
-        expect(res).to.have.status(204);
-        return Entry.findOne({username: exampleUsers[3].username})
-      })
-      .then(entry => {
-        expect(entry).to.not.exist;
-      })
+        .then(() =>
+          expect.fail(null, null, 'Request should not succeed')
+        )
+        .catch(err => {
+          if (err instanceof chai.AssertionError) {
+            throw err;
+          }
+
+          const res = err.response;
+          expect(res).to.have.status(401);
+        });
     });
-  });
-});*/
-  
+
+    it('should delete an entry', function() {
+    	const token = jwt.sign(
+          {
+            user: { 
+              _id: userId,
+              username: explicitUsername,
+              firstName: explicitFirstName,
+              lastName: explicitLastName
+            }
+          },
+          JWT_SECRET,
+          {
+            algorithm: 'HS256',
+            subject: explicitUsername,
+            expiresIn: '7d'
+          }
+        );
+
+    	let entry;
+
+      return Entry
+        .findOne()
+        .then(function(_entry) {
+          entry = _entry;
+          return chai.request(app)
+          .delete(`/entries/${entry.id}`)
+          .set('authorization', `Bearer ${token}`)
+        })
+        .then(function(res) {
+          expect(res).to.have.status(204);
+          return Entry.findById(entry.id);
+        })
+        .then(function(_entry) {
+          expect(_entry).to.not.exist;
+        });
+    });
+	}); 
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
