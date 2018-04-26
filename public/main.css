@@ -2,7 +2,6 @@
   box-sizing: border-box;
 }
 
-
 .hidden {
 	display: none;
 }
@@ -69,7 +68,6 @@ body {
 	text-align: right;
 }
 
-
 .splash-page-inner {
 	font-family: 'Raleway', sans-serif;
 	color: white;
@@ -103,8 +101,6 @@ body {
 	border: none;
 	background-size: cover;
 }
-
-
 
 header {
 	margin: 0px;
@@ -148,8 +144,6 @@ button:hover {
   font-size: 18px;
 }
 
-
-
 h1 {
 	font-family: 'Roboto', sans-serif;
 	font-size: 35px;
@@ -173,7 +167,6 @@ h1 {
 .delete-food-button {
 	margin-top: 20px;
 }
-
 
 .main-button {
 	width: 100%;
@@ -208,7 +201,6 @@ h1 {
   align-items: center;
   justify-content: center;
 }
-
 
 .login-field {
 	margin-bottom: 15px;
@@ -333,8 +325,6 @@ h1 {
 	text-align: center;
 }
 
-
-
 .pop-inner {
   text-align: center;
   width: 100%;
@@ -359,8 +349,6 @@ h1 {
 	margin-bottom: 10px;
   font-weight: bold;
 }
-
-
 
 .pop-inner-content {
 	margin-left: auto;
@@ -410,7 +398,6 @@ h1 {
 	text-align: center;
 }
 
-
 .pop-inner-goals, .pop-inner-food-entries {
   text-align: center;
   padding: 25px;
@@ -442,7 +429,6 @@ h1 {
 	margin-right: auto;
 }
 
-
 .pop-inner-food-entries {
 	display: inline-block;
 	text-align: center;
@@ -457,10 +443,6 @@ h1 {
   margin-right: auto;
   max-width: 600px;
 }
-
-/*.food-list-text-header, .food-list-paragraph, .food-list-name {
-	color: #4B5842;
-}*/
 
 .food-list-name {
 	font-size: 16px;
@@ -639,9 +621,6 @@ h1 {
 
 
 @media only screen and (min-width: 770px) {
-	/*.goals-list-div {
-	min-width: 60%;
-}*/
 
 	.splash-page-inner {
 		max-width: 50%;
@@ -667,10 +646,7 @@ h1 {
 
 
 @media only screen and (min-width: 960px) {
-	 /*.goals-list-div {
-	min-width: 60%;
-}*/
-
+	
 	 .splash-page-inner {
 		max-width: 40%;
 	}
@@ -729,9 +705,6 @@ h1 {
 	margin: 0px;
 	padding: 0px;
 }
-
-
-
 
 .transparent-background {
 	opacity: 0;

@@ -87,7 +87,6 @@ function onLogInFormSubmit() {
 
 function logIn() {
 	let theUser = storeUserInfoLogIn();
-
 	$.ajax({
 		url: '/api/auth/login',
 		dataType: 'json',
@@ -118,9 +117,7 @@ function logIn() {
 			$('header, .login-form-div').addClass('partially-transparent-background');
 			$('.pop-outer-error-box').fadeIn();
 		}
-
 	});
-
 }
 
 function handleCloseErrorMessage() {
@@ -213,13 +210,10 @@ function displayGoals(data) {
 	`);
 }
 
-
 function handleSignUpForm() {
 	$('.signup-form').submit(function(event) {
 		event.preventDefault();
-		signUp();
-		
-		
+		signUp();		
 	});
 }
 
@@ -236,9 +230,9 @@ function storeTheFood() {
 }
 
 function onFoodSearchFormSubmit () {
-        $('.nutrition-search-form').val('');
-        return true; 
-    }
+  $('.nutrition-search-form').val('');
+  return true; 
+ }
 
 function handleNutritionSearchClick() {
 	$('header').on('click', '.food-search-header-link', function(event) {
@@ -272,13 +266,11 @@ function displayGoalsModal() {
 	$('.goals-page').on('click', '.edit-goals-button', function(event) {
 		$('header, .goals-page').addClass('partially-transparent-background');
 		$('body').addClass('transparent-body');
-		$('close-goals-modal-div').empty();
+		$('.close-goals-modal-div').empty();
 		$('.close-goals-modal-div').prepend(`<button class='close-goals-modal'>X</button>`);
 		$('.pop-outer-goals').fadeIn();
 	});
 }
-
-
 
 function getDataFromAPI(callback) {
 	const food = storeTheFood();
@@ -529,8 +521,6 @@ function displayTodayProgressData(data) {
 			}
 	}		
 }
-
-
 
 function getLongTermProgressData(callback) {
 	$.ajax({

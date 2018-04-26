@@ -89,7 +89,6 @@ const statObject = {
 						timesMetAtLeastOneGoal: timesMetAtLeastOneGoal,
 						daysGoalsHaveBeenTracked: daysGoalsHaveBeenTracked
 					}
-
 					callback(stats);
     	});
 		});
