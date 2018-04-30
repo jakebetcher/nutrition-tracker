@@ -105,7 +105,8 @@ function logIn() {
 				`);
 			localStorage.setItem('token', data.authToken);
 			$('.signup-div').addClass('hidden');
-	
+			
+			getGoals(checkForGoals);
 			getGoals(displayGoals);
 			$('.goals-page').removeClass('hidden');
 		},
@@ -188,6 +189,14 @@ function getGoals(callback) {
 		},
 		success: callback
 	});
+}
+
+function checkForGoals(data) {
+	if (data.length === 0) {
+		$('header').addClass('partially-transparent-background');
+		$('body').addClass('transparent-body');
+		$('.pop-outer-goals').fadeIn();
+	}
 }
 
 function displayGoals(data) {

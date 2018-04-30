@@ -405,6 +405,10 @@ h1 {
   font-size: 30px;
 }
 
+.pop-inner-goals {
+	margin-top: 80px;
+}
+
 
 .pop-outer-food-entries, .pop-outer {
 	text-align: center;
