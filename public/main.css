@@ -122,10 +122,12 @@ header {
 
 a:hover {
 	color: #A7A7A9;
+	cursor: pointer;
 }
 
 button:hover {
-	opacity: .5;
+	background-color: dimgrey;
+	cursor: pointer;
 }
 
 .results-div {
