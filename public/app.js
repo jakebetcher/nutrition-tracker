@@ -43,6 +43,7 @@ const foodEntry = (function() {
 	});
 })();
 
+
 function storeGoals() {
 	const goals = {
 		caloriesAmount: $('#calories-amount').val(),
@@ -723,7 +724,28 @@ function handleCloseGoalsModal() {
 	});
 }
 
+function handleCloseSignup() {
+	$('.close-signup-button').on('click', function(event) {
+		$('.pop-outer-signup').fadeOut();
+		$('.splash-page-div').removeClass('hidden');
+		$('header').removeClass('partially-transparent-background');
+		$('body').removeClass('transparent-body');
+	});
+}
+
+function handleCloseLogin() {
+	$('.close-login-button').on('click', function(event) {
+		$('.pop-outer-login').fadeOut();
+		$('.splash-page-div').removeClass('hidden');
+		$('header').removeClass('partially-transparent-background');
+		$('body').removeClass('transparent-body');
+	});
+}
+
+
 function initApp() {
+	handleCloseLogin();
+	handleCloseSignup();
 	handleCloseGoalsModal();
 	handleCloseShowMoreInfo();
 	handleShowMoreInfoTodayProgress();

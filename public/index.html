@@ -28,6 +28,7 @@
 		<div class='pop-outer-signup'>
 			<div class='signup-div'>
 				<form class='signup-form' onsubmit="return onSignupFormSubmit()">
+					<button class='close-signup-button' type='button'>X</button>
 					<legend class='signup-legend'>Register Here</legend>
 						<div class='signup-field'>
 							<input name='first-name' id='first-name' class='signup-input first-name-input' placeholder='First Name' required>
@@ -49,7 +50,8 @@
 
 		<div class='pop-outer-login'>
 			<div class='login-form-div hidden' id='login-div'>
-				<form class='login-form' onsubmit="return onLogInFormSubmit()" >
+				<form class='login-form' id='login-form-id' onsubmit="return onLogInFormSubmit()" >
+					<button class='close-login-button' type='button'>X</button>
 					<legend class='login-legend'>Log In.</legend>
 
 						<div class='login-field'>

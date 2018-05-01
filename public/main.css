@@ -525,11 +525,16 @@ h1 {
 	font-size: 32px;
 }
 
-.close-no-food-header, .close-error-message, .close-more-info {
+.close-no-food-header, .close-error-message, .close-more-info, .close-signup-button, .close-login-button {
 	color: black;
 	font-size: 22px;
 	border: none;
 	background: transparent;
+}
+
+.close-signup-button, .close-login-button {
+	position: relative;
+	bottom: 20px;
 }
 
 .goals-page, .progress-page, .nutrition-tracking, .long-term-progress, .progress-page-header {
