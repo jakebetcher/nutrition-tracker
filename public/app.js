@@ -742,8 +742,69 @@ function handleCloseLogin() {
 	});
 }
 
+function handleClickDemo() {
+	$('.trigger-demo').on('click', function(event) {
+		logInWithDemo();
+	});
+}
+
+function logInWithDemo() {
+	const theUser = {
+		username: 'guestuser1234',
+		password: 'password1234'
+	}
+	$.ajax({
+		url: '/api/auth/login',
+		dataType: 'json',
+		method: 'POST',
+		contentType: 'application/json',
+		data: JSON.stringify(theUser),
+		success: function(data) {
+			localStorage.setItem('token', data.authToken);
+			$('header').removeClass('partially-transparent-background');
+			$('body').removeClass('transparent-body');
+			$('.pop-outer-login').fadeOut();
+			$('nav').append(`
+				<a class='header-link goals-link' href='#goals-page'>My Goals | </a>
+				<a class='header-link progress-link' href='#progress-page'>My Progress | </a>
+				<a class='header-link food-search-header-link' href='#food-search-page'>Food Search</a>
+			`);
+			$('.splash-page-div').addClass('hidden');
+			
+			getGoals(checkForGoals);
+			getGoals(displayGoals);
+			$('.goals-page').removeClass('hidden');
+		}
+	});
+}
+
+function handleShowInfoGoals() {
+	$('.show-info-goals').on('click', function(event) {
+		$('.close-goals-modal').addClass('transparent-background');
+		$('.more-info-results-goals').empty();
+		$('.more-info-results-goals').append(`
+			<p>
+				The amount will represent your target goal. The range is the leeway you give yourself. If the amount for calories is 2000 and range is 100, then you will meet your goal if your consume between 1900 and 2100 calories. Everytime you change your goal, your statistics will reset, so only change your goal if you're absolutely sure.
+			</p>
+		`);
+		$('.pop-outer-goals').fadeOut();
+		$('.pop-outer-more-info-goals').fadeIn();
+	});
+}
+
+function handleCloseShowInfoGoals() {
+	$('.close-more-info-goals').on('click', function(event) {
+		$('.pop-outer-more-info-goals').fadeOut();
+		$('.close-goals-modal-div').empty();
+		$('.close-goals-modal-div').prepend(`<button class='close-goals-modal'>X</button>`);
+		$('.pop-outer-goals').fadeIn();
+	});
+}
 
 function initApp() {
+	handleCloseShowInfoGoals();
+	handleShowInfoGoals();
+	handleClickDemo();
 	handleCloseLogin();
 	handleCloseSignup();
 	handleCloseGoalsModal();

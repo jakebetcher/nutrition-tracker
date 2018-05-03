@@ -18,9 +18,16 @@
 		<div class='splash-page-div'>
 			<div class='splash-page-flex'>
 				<div class='splash-page-inner'>
-					<h2 class='splash-page-header'>Set Nutritional Goals for Calories and Macro Nutrients and Track Them on a Daily Basis</h2>
+					<h2 class='splash-page-header'>Set Nutritional Goals &amp;<br> Track Them Daily</h2>
 					<button class='trigger-signup'>Sign Up</button>
 					<button class='trigger-login'>Log In</button>
+					<button class='trigger-demo'>Try Demo Account</button>
+					<p>
+						Nutrition Tracker allows you to set nutritional goals for calories, protein, fat, and carbs. Search for foods to add and track your daily intake to see if you are meeting your goals. 
+					</p>
+					<p>
+						Doing this, you'll become more aware of what you're really eating, and start living a healthier life. 
+					</p>	
 				</div>	
 			</div>		
 		</div>
@@ -34,7 +41,7 @@
 							<input name='first-name' id='first-name' class='signup-input first-name-input' placeholder='First Name' required>
 						</div>
 						<div class='signup-field'>
-							<input name='last-name' id='last-name' class='signup-input last-name-input' placeholder='Last Name' required>-
+							<input name='last-name' id='last-name' class='signup-input last-name-input' placeholder='Last Name' required>
 						</div>
 
 						<div class='signup-field'>
@@ -130,13 +137,23 @@
 			</div>	
 		</div>	
 
+		<div class='pop-outer-more-info-goals'>
+			<div class='pop-inner-more-info-goals'>
+				<div class='more-info-content-goals'>
+					<button class='close-more-info-goals'>X</button>
+					<div class='more-info-results-goals'>
+					</div>
+				</div>
+			</div>	
+		</div>	
+
 
 
 			<div class="pop-outer-goals">
 				<div class='pop-inner-goals'>
 					<div class='close-goals-modal-div'></div>
 					<form class='nutrients-goals-form'>
-						<legend class='goals-legend'>Enter Your Goals Here</legend>
+						<div><legend class='goals-legend'>Enter Your Goals Here <button type='button' class='show-info show-info-goals'>?</button></legend></div>
 						<div class='goals-field'>
 							<h3 class='goals-form-nutrient-header'>Calories</h3>
 							<input name='calories-amount' id='calories-amount' type='number' class='goals-input' required placeholder='Amount'>

@@ -21,6 +21,10 @@ body {
   background-size: cover;
 }
 
+p:first-of-type {
+	margin-top: 50px;
+}
+
 .transparent-body {
 	background-image: linear-gradient(
       rgba(0, 0, 0, 0.7),
@@ -75,20 +79,25 @@ body {
 	max-width: 80%;
 	margin-left: auto;
 	margin-right: auto;
+	text-align: center;
 }
 
 .splash-page-header {
-	font-size: 20px
+	font-size: 20px;
+
 }
 
-.trigger-login, .trigger-signup {
-	width: 40%;
+.trigger-login, .trigger-signup, .trigger-demo {
+	width: 80%;
 	font-size: 18px;
 	color: white;
 	padding: 10px;
 	border-radius: 6px;
 	background-color: darkslategrey;
+	margin-top: 10px;
 }
+
+
 
 .edit-goals-button {
 	background: url('https://cdn2.iconfinder.com/data/icons/flat-ui-icons-24-px/24/new-24-512.png') no-repeat scroll 0 0 transparent;
@@ -314,7 +323,7 @@ h1 {
 	font-size: 20px;
 }
 
-.pop-outer, .pop-outer-goals, .pop-outer-food-entries, .pop-outer-error-box, .pop-outer-signup, .pop-outer-login, .pop-outer-more-info {
+.pop-outer, .pop-outer-goals, .pop-outer-food-entries, .pop-outer-error-box, .pop-outer-signup, .pop-outer-login, .pop-outer-more-info, .pop-outer-more-info-goals {
   position: fixed;
   top: 0;
   left: 0;
@@ -381,14 +390,14 @@ h1 {
   padding: 5px;
 }
 
-.pop-inner-error-box, .pop-inner-more-info {
+.pop-inner-error-box, .pop-inner-more-info, .pop-inner-more-info-goals {
 	display: flex;
   align-items: center;
   justify-content: center;
   height: 100vh;
 }
 
-.error-content, .more-info-content {
+.error-content, .more-info-content, .more-info-content-goals {
 	background-color: white;
 	width: 85%;
 	max-width: 400px;
@@ -396,7 +405,7 @@ h1 {
 	border: 1px solid silver;
 }
 
-.error-content, .more-info-content {
+.error-content, .more-info-content, .more-info-content-goals {
 	text-align: center;
 }
 
@@ -525,7 +534,7 @@ h1 {
 	font-size: 32px;
 }
 
-.close-no-food-header, .close-error-message, .close-more-info, .close-signup-button, .close-login-button {
+.close-no-food-header, .close-error-message, .close-more-info, .close-signup-button, .close-login-button, .close-more-info-goals {
 	color: black;
 	font-size: 22px;
 	border: none;
