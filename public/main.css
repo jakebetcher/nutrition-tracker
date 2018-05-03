@@ -21,7 +21,7 @@ body {
   background-size: cover;
 }
 
-p:first-of-type {
+.splash-page-inner > p:first-of-type {
 	margin-top: 50px;
 }
 
@@ -104,6 +104,16 @@ p:first-of-type {
 	background-color: white;
   border-radius: 2px;
 	color: #000000;
+	height: 25px;
+	width: 25px;
+	margin-left: 10px;
+	border: none;
+	background-size: cover;
+}
+
+.close-signup-button, .close-login-button, .close-error-message, .close-more-info, .close-more-info-goals {
+	background: url('https://cdn4.iconfinder.com/data/icons/ionicons/512/icon-close-round-256.png');
+  border-radius: 2px;
 	height: 25px;
 	width: 25px;
 	margin-left: 10px;
@@ -534,7 +544,7 @@ h1 {
 	font-size: 32px;
 }
 
-.close-no-food-header, .close-error-message, .close-more-info, .close-signup-button, .close-login-button, .close-more-info-goals {
+.close-no-food-header {
 	color: black;
 	font-size: 22px;
 	border: none;
